@@ -73,6 +73,7 @@
 // module.exports = userController;
 
 const accountM = require("../models/account.models.js");
+const bcrypt = require("bcrypt");
 
 const accountC = {
   getAll: async (req, res) => {
@@ -104,6 +105,19 @@ const accountC = {
     try {
       const { rows } = await accountM.getbyEmail(req.body.Email);
 
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(rows[0].Pw, salt);
+
+      let isMatch = await bcrypt.compare(req.body.Pw, hashedPassword);
+      if (!isMatch) {
+        return res.json({
+          errors: [
+            {
+              msg: "Invalid credentials",
+            },
+          ],
+        });
+      }
       if (rows && rows.length > 0) {
         return res.json({ msg: "OK", data: rows });
       } else {
@@ -129,7 +143,9 @@ const accountC = {
   postSignup: async (req, res) => {
     const { Email, Pw, Role } = req.body;
     try {
-      const { rows } = await accountM.addUser(Email, Pw, Role);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(Pw, salt);
+      const { rows } = await accountM.addUser(Email, hashedPassword, Role);
 
       if (rows && rows.length > 0) {
         return res.json({ msg: "OK", data: rows });
