@@ -101,43 +101,33 @@ const accountC = {
       });
     }
   },
+
   postLogin: async (req, res) => {
-    try {
-      const { rows } = await accountM.getbyEmail(req.body.Email);
+    const { rows } = await accountM.getbyEmail(req.body.Email);
 
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(rows[0].Pw, salt);
-
-      let isMatch = await bcrypt.compare(req.body.Pw, hashedPassword);
+    // console.log(rows[0].Pw);
+    // console.log(req.body.Pw);
+    if (rows && rows.length > 0) {
+      let isMatch = await bcrypt.compare(req.body.Pw, rows[0].Pw);
       if (!isMatch) {
         return res.json({
           errors: [
             {
-              msg: "Invalid credentials",
+              msg: "Email or password is invalid",
             },
           ],
         });
       }
-      if (rows && rows.length > 0) {
-        return res.json({ msg: "OK", data: rows });
-      } else {
-        return res.json({
-          errors: [
-            {
-              msg: "Invalid credentials",
-            },
-          ],
-        });
-      }
-    } catch (error) {
+    } else {
       return res.json({
         errors: [
           {
-            msg: "Invalid credentials",
+            msg: "Email or password is invalid",
           },
         ],
       });
     }
+    return res.json({ msg: "OK", data: rows });
   },
 
   postSignup: async (req, res) => {
