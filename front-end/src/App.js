@@ -1,5 +1,5 @@
-import {Routes, Route, Navigate, Link} from 'react-router-dom';
-import { Navbar, Container, Image, Nav} from 'react-bootstrap';
+import {Routes, Route, Navigate} from 'react-router-dom';
+//import { Navbar, Container, Image, Nav} from 'react-bootstrap';
 import LandingPage from './views/LandingPage';
 import Home from './views/Home';
 import Login from './views/Login';

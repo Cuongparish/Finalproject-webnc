@@ -12,7 +12,7 @@ const Signup = () => {
       <Col xs={8} className='right-content vh-100'>
         <Container className="navigator d-flex justify-content-between align-items-center">
           <a href="/" className="button btn-back"><i class="fa fa-chevron-left" aria-hidden="true"></i> Return Home </a>
-          <span>Already a Member?<a href="/" className="fw-bold"> LOGIN NOW </a></span>
+          <span>Already a Member?<a href="/login" className="fw-bold"> LOGIN NOW </a></span>
         </Container>
         <Container className="text-center">
           <h3 className="mt-5 fw-bold">BECOME AN EXCLUSIVE MEMBERS</h3>
