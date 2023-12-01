@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500&display=swap');
+
+*{
+  padding: 0;
+  margin: 0;
+  font-family: 'Zen+Kaku+Gothic+Antique', sans-serif;
+}
+
+.left-content {
+  background-image: linear-gradient(#340f4f, #57217d, #2d1440);
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.top-logo, .middle-logo, #brand_name{
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#brand_name {
+  top: 140px;
+  width: 80%;
+}
+
+.middle-logo {
+  width: 100%;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.info-text{
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%);
+}
+
+.button {
+  text-decoration: none;
+  padding: 10px 20px;
+  display: inline-block;
+}
+
+.btn-get-started {
+  position: relative;
+  background-color: #3f145e;
+  color: #ffffff;
+}
+
+.btn-get-started::before {
+  content: '';
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.304);
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  z-index: 1;
+  transition: 0.5s;
+  
+}
+.btn-get-started:hover::before {
+  width: 100%;
+  transition: 0.5s;
+}
+
+.text-content {
+  padding: 0 20%;
+}
+
+.text-content > h1, p {
+  margin: 0;
+  padding: 5px 0;
+}
+
+.btn-back {
+  font-size: 20px;
+  vertical-align: middle;
+  color: #000000;
+}
