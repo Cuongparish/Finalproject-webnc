@@ -1,6 +1,8 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
+//const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
+const socialUser = require("../models/socialaccout.models");
 
 passport.use(
     new GoogleStrategy(
@@ -10,14 +12,16 @@ passport.use(
             callbackURL: "/auth/google/callback",
             scope: ["profile", "email"],
         },
-        function (accessToken, refreshToken, profile, callback) {
-            // user = profile._json;
-            // if(user)
-            // {
-            // 	if(!socialUser.getbyEmail(user.email)){
-            // 		socialUser.addUser(user.email);
-            // 	}
-            // }
+        async function (accessToken, refreshToken, profile, callback) {
+            const user = profile._json;
+            if(user)
+            {
+                const finduser = await socialUser.getbyEmail(user.email);
+                console.log(finduser);
+            	if(finduser.rows.length === 0){
+            		socialUser.addUser(user.email);
+            	}
+            }
             callback(null, profile);
         }
     )
@@ -31,11 +35,20 @@ passport.use(
             callbackURL: "/auth/facebook/callback",
             scope: ["profile", "email"],
         },
-        function (accessToken, refreshToken, profile, callback) {
-            console.log(profile);
+        async function (accessToken, refreshToken, profile, callback) {
+            const user = profile._json;
+            if(user)
+            {
+                const finduser = await socialUser.getbyEmail(user.email);
+                console.log(finduser);
+            	if(finduser.rows.length === 0){
+            		socialUser.addUser(user.email);
+            	}
+            }
             callback(null, profile);
         }
-    ));
+    )
+);
 
 passport.serializeUser((user, done) => {
     done(null, user);

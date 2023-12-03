@@ -1,10 +1,10 @@
 import React from "react";
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import LeftBanner from "../components/LeftBanner.";
+import AuthService from "../service/auth.service";
 
 const Login = () => {
   return (
-
     <Row className="landing-page vh-100 g-0">
       <Col xs={4} className='left-content text-center vh-100'>
           <LeftBanner />
@@ -41,11 +41,11 @@ const Login = () => {
           <p>Having Issues with your Password?</p>
           <p className="fs-5">OR LOGIN WITH</p>
           <Row className="justify-content-md-center my-4">
-            <Button as={Col} lg={2} type="submit" className='bg-dark p-2'>
+            <Button as={Col} lg={2} type="submit" className='bg-dark p-2' onClick={AuthService.googleAuth}>
               Google
             </Button>
             <Col lg={1}></Col>
-            <Button as={Col} lg={2} type="submit" className='bg-dark p-2'>
+            <Button as={Col} lg={2} type="submit" className='bg-dark p-2' onClick={AuthService.facebookAuth}>
               Facebook
             </Button>
             </Row>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import LeftBanner from "../components/LeftBanner.";
+import AuthService from "../service/auth.service";
 
 const Signup = () => {
   return (
@@ -77,11 +78,11 @@ const Signup = () => {
 
           <p>OR</p>
           <Row className="justify-content-md-center my-4">
-            <Button as={Col} lg={2} type="submit" className='bg-dark p-2'>
+            <Button as={Col} lg={2} type="submit" className='bg-dark p-2' onClick={AuthService.googleAuth}>
               Google
             </Button>
             <Col lg={1}></Col>
-            <Button as={Col} lg={2} type="submit" className='bg-dark p-2'>
+            <Button as={Col} lg={2} type="submit" className='bg-dark p-2' onClick={AuthService.facebookAuth}>
               Facebook
             </Button>
             </Row>

@@ -35,5 +35,5 @@ app.use("/api/v1/user", accountRouter);
 app.use("/auth", authRouter);
 
 app.listen(process.env.PORT, () =>
-  console.log("Server is running on port 5000")
+	console.log("Server is running on port 5000")
 );
