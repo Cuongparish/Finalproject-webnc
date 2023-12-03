@@ -86,10 +86,13 @@ async function hanldSendEmail(EmailAddress_User, newPassword) {
       pass: process.env.EMAIL_PASSWORD,
     },
   });
-
+  console.log(EmailAddress_User);
   var info = await transporter.sendMail({
-    from: `${EmailAddress_User}`,
+    from: `ADMIN ${EmailAddress_User}`,
     to: process.env.EMAIL_USERNAME,
+
+    // from: process.env.EMAIL_USERNAME,
+    // to: `${EmailAddress_User}`,
     subject: "Reset Password",
     text: `Mật khẩu mới của tài khoản là: ${newPassword}`, // plain text body
     html: `Mật khẩu mới của tài khoản là:<b>${newPassword}</b>`,
@@ -154,6 +157,15 @@ const accountC = {
 
   postSignup: async (req, res) => {
     const { Email, Pw, Role } = req.body;
+    if (!Email || !Pw) {
+      return res.json({
+        errors: [
+          {
+            msg: "Thieu truong du lieu",
+          },
+        ],
+      });
+    }
     try {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(Pw, salt);
@@ -182,10 +194,21 @@ const accountC = {
   },
 
   postResetPW: async (req, res) => {
+    if (!req.body.Email || !req.body.Pw) {
+      return res.json({
+        errors: [
+          {
+            msg: "Thieu truong du lieu",
+          },
+        ],
+      });
+    }
+
     //const employee = await employeeM.getEmpByIdAcc(user.idAccount);
     let newPassword = (Math.random() + 1).toString(36).substring(6);
     // console.log(employee.Email, newPassword);
-    const Email = "haisaki@gmail.com";
+    const Email = req.body.Email;
+
     var sendEmail = await hanldSendEmail(Email, newPassword);
     return res.json({ msg: "OK" });
   },
