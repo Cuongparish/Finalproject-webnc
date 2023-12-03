@@ -1,11 +1,12 @@
-import {Routes, Route, Navigate} from 'react-router-dom';
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 //import { Navbar, Container, Image, Nav} from 'react-bootstrap';
-import LandingPage from './views/LandingPage';
-import Home from './views/Home';
-import Login from './views/Login';
-import Signup from './views/Signup';
+import LandingPage from "./views/LandingPage";
+import Home from "./views/Home";
+import Login from "./views/Login";
+import Signup from "./views/Signup";
+import ResetPW from "./views/ResetPW";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const API_URL = "http://localhost:5000";
@@ -13,19 +14,19 @@ const API_URL = "http://localhost:5000";
 function App() {
   const [user, setUser] = useState(null);
 
-	const getSocialUser = async () => {
-		try {
-			const url = `${API_URL}/auth/login/success`;
-			const { data } = await axios.get(url, { withCredentials: true });
-			setUser(data.user._json);
-		} catch (err) {
-			console.log(err);
-		}
-	};
+  const getSocialUser = async () => {
+    try {
+      const url = `${API_URL}/auth/login/success`;
+      const { data } = await axios.get(url, { withCredentials: true });
+      setUser(data.user._json);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-	useEffect(() => {
-		getSocialUser();
-	}, []);
+  useEffect(() => {
+    getSocialUser();
+  }, []);
 
   return (
     <>
@@ -57,9 +58,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/introduction" />} />
         <Route path="/introduction" exact element={<LandingPage />} />
-        <Route path="/home" exact element={<Home user={user}/>} />
+        <Route path="/home" exact element={<Home user={user} />} />
         <Route path="/login" exact element={<Login />} />
         <Route path="/signup" exact element={<Signup />} />
+        <Route path="/resetPW" exact element={<ResetPW />} />
       </Routes>
       {/* <div className="container">
 			<Routes>

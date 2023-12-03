@@ -15,6 +15,12 @@ const Login = () => {
             <i class="fa fa-chevron-left" aria-hidden="true"></i> Return Home{" "}
           </a>
           <span>
+            <a href="/LOGIN" className="fw-bold">
+              {" "}
+              LOGIN NOW{" "}
+            </a>
+          </span>
+          <span>
             Not a Member?
             <a href="/signup" className="fw-bold">
               {" "}
@@ -34,12 +40,15 @@ const Login = () => {
                   </InputGroup.Text>
                   <Form.Control
                     controlId="formBasicName"
-                    type="text"
-                    placeholder="Johnson Doe"
+                    type="email"
+                    placeholder="example@email.com"
                   />
                 </InputGroup>
               </Col>
             </Row>
+            <Button as={Col} lg={1} type="submit" className="bg-dark mb-2">
+              Send
+            </Button>
             <Row className="justify-content-md-center mb-2">
               <Col lg={4}>
                 <InputGroup className="m-2">
@@ -49,41 +58,15 @@ const Login = () => {
                   <Form.Control
                     controlId="formBasicGender"
                     type="text"
-                    placeholder="Male"
+                    placeholder=""
                   />
                 </InputGroup>
               </Col>
             </Row>
-            <Button as={Col} lg={3} type="submit" className="bg-dark mb-2">
-              Log in
+            <Button as={Col} lg={1} type="submit" className="bg-dark mb-2">
+              Verify
             </Button>
           </Form>
-          <a href="/ResetPW">
-            <p>Having Issues with your Password?</p>
-          </a>
-
-          <p className="fs-5">OR LOGIN WITH</p>
-          <Row className="justify-content-md-center my-4">
-            <Button
-              as={Col}
-              lg={2}
-              type="submit"
-              className="bg-dark p-2"
-              onClick={AuthService.googleAuth}
-            >
-              Google
-            </Button>
-            <Col lg={1}></Col>
-            <Button
-              as={Col}
-              lg={2}
-              type="submit"
-              className="bg-dark p-2"
-              onClick={AuthService.facebookAuth}
-            >
-              Facebook
-            </Button>
-          </Row>
         </Container>
       </Col>
     </Row>
