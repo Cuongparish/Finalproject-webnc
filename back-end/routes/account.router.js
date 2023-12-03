@@ -12,6 +12,7 @@ router.put("/profile", accountController.postEditUser);
 
 router.post("/signup", accountController.postSignup);
 
+router.post("/sendEmail", accountController.postResetPW);
 // // router.get("/:id", bookController.getById)
 // // router.put("/:id", bookController.updateById)
 // // router.delete("/:id", bookController.deleteById)

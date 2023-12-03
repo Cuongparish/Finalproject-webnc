@@ -74,6 +74,28 @@
 
 const accountM = require("../models/account.models.js");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
+require("dotenv").config;
+
+async function hanldSendEmail(EmailAddress_User, newPassword) {
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  var info = await transporter.sendMail({
+    from: `${EmailAddress_User}`,
+    to: process.env.EMAIL_USERNAME,
+    subject: "Reset Password",
+    text: `Mật khẩu mới của tài khoản là: ${newPassword}`, // plain text body
+    html: `Mật khẩu mới của tài khoản là:<b>${newPassword}</b>`,
+  });
+  return info;
+}
 
 const accountC = {
   getAll: async (req, res) => {
@@ -157,6 +179,15 @@ const accountC = {
         ],
       });
     }
+  },
+
+  postResetPW: async (req, res) => {
+    //const employee = await employeeM.getEmpByIdAcc(user.idAccount);
+    let newPassword = (Math.random() + 1).toString(36).substring(6);
+    // console.log(employee.Email, newPassword);
+    const Email = "haisaki@gmail.com";
+    var sendEmail = await hanldSendEmail(Email, newPassword);
+    return res.json({ msg: "OK" });
   },
 
   postEditUser: async (req, res) => {
