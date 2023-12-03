@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 import LeftBanner from "../components/LeftBanner.";
-import AuthService from "../service/auth.service";
+// import AuthService from "../service/auth.service";
 
 const Signup = () => {
   return (
