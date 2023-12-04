@@ -194,7 +194,7 @@ const accountC = {
   },
 
   postResetPW: async (req, res) => {
-    if (!req.body.Email || !req.body.Pw) {
+    if (!req.body.Email) {
       return res.json({
         errors: [
           {
@@ -203,11 +203,12 @@ const accountC = {
         ],
       });
     }
-
-    //const employee = await employeeM.getEmpByIdAcc(user.idAccount);
     let newPassword = (Math.random() + 1).toString(36).substring(6);
-    // console.log(employee.Email, newPassword);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
     const Email = req.body.Email;
+    const { rows } = await accountM.resetPW(Email, hashedPassword);
 
     var sendEmail = await hanldSendEmail(Email, newPassword);
     return res.json({ msg: "OK" });

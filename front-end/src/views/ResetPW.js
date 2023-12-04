@@ -32,7 +32,7 @@ const Login = () => {
           <h3 className="mt-5 fw-bold">WELCOME BACK EXCLUSIVE MEMBER</h3>
           <h6 className="mb-5">LOGIN TO CONTINUE</h6>
           <Form>
-            <Row className="justify-content-md-center mb-2">
+            <Row className="justify-content-md-center mb-4">
               <Col lg={4}>
                 <InputGroup className="m-2 ml-4">
                   <InputGroup.Text>
@@ -48,23 +48,6 @@ const Login = () => {
             </Row>
             <Button as={Col} lg={1} type="submit" className="bg-dark mb-2">
               Send
-            </Button>
-            <Row className="justify-content-md-center mb-2">
-              <Col lg={4}>
-                <InputGroup className="m-2">
-                  <InputGroup.Text>
-                    <i class="fa fa-venus-mars" aria-hidden="true"></i>
-                  </InputGroup.Text>
-                  <Form.Control
-                    controlId="formBasicGender"
-                    type="text"
-                    placeholder=""
-                  />
-                </InputGroup>
-              </Col>
-            </Row>
-            <Button as={Col} lg={1} type="submit" className="bg-dark mb-2">
-              Verify
             </Button>
           </Form>
         </Container>

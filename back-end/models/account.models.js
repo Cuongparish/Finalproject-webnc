@@ -27,4 +27,10 @@ module.exports = {
     const { rows } = await postgre.query(sql, [Email, Pw, Role]);
     return { rows };
   },
+
+  resetPW: async (Email, Pw) => {
+    const sql = `UPDATE "User" SET "Pw" = $2  where "Email" = $1 RETURNING *`;
+    const { rows } = await postgre.query(sql, [Email, Pw]);
+    return { rows };
+  },
 };
