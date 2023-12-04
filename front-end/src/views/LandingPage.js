@@ -11,7 +11,7 @@ const LandingPage = () => {
       </Col>
       <Col xs={8} className="right-content text-center vh-100">
         <Image
-          src={process.env.PUBLIC_URL + "/images/content.png"}
+          src={process.env.PUBLIC_URL + "Images/content.png"}
           className="d-inline-block"
           alt=""
           fluid
