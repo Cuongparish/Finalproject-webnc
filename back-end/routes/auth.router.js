@@ -45,12 +45,6 @@ router.get(
   })
 );
 
-// router.get('/login', function (req, res) {
-// 	res.render('login');
-// });
-
-
-
 router.post(
   "/login",
   passport.authenticate("local", {
@@ -58,8 +52,6 @@ router.post(
     failureRedirect: "login/failed",
   }),
   (req, res) => {
-    // If you use "Content-Type": "application/json"
-    // req.isAuthenticated is true if authentication was success else it is false
     console.log(req.user);
     res.json({ data: req.user});
   });

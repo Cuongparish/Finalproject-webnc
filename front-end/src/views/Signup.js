@@ -1,9 +1,62 @@
-import React from "react";
-import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
+import React, { useState } from "react";
+import { Container, Row, Col, Form, Button, InputGroup, Alert } from "react-bootstrap";
 import LeftBanner from "../components/LeftBanner.";
-// import AuthService from "../service/auth.service";
+import SignupService from "../service/signup.service";
+import { useNavigate } from "react-router-dom";
+
+
 
 const Signup = () => {
+  const [Email, setEmail] = useState();
+  const [Pw, setPw] = useState();
+  const [Role, setRole] = useState();
+  const [Verify, setVerify] = useState();
+  const [VerifyMail, setVerifyMail] = useState();
+  const [showAlert, setShowAlert] = useState(false);
+
+  const navigate = useNavigate();
+
+  const hanldeSignup = async (e) => {
+    e.preventDefault();
+    try {
+      await SignupService.signup(Email, Pw, Role).then(
+        (res) => {
+          console.log("Verify mail: ", res);
+          setVerifyMail(res);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+
+    if (Verify === VerifyMail) {
+      try {
+        await SignupService.verify(Email, Pw, Role).then(
+          (res) => {
+            console.log(res)
+            navigate("/login");
+            window.location.reload();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    else {
+      setShowAlert(true);
+    }
+  }
+
   return (
     <Row className="landing-page vh-100 g-0">
       <Col xs={4} className="left-content text-center vh-100">
@@ -63,6 +116,7 @@ const Signup = () => {
                     controlId="formBasicEmail"
                     type="email"
                     placeholder="example@email.com"
+                    onChange={e => setEmail(e.target.value)}
                   />
                 </InputGroup>
               </Col>
@@ -86,6 +140,7 @@ const Signup = () => {
                     controlId="formBasicPassword"
                     type="password"
                     placeholder="Password"
+                    onChange={e => setPw(e.target.value)}
                   />
                 </InputGroup>
               </Col>
@@ -125,6 +180,7 @@ const Signup = () => {
               lg={4}
               type="submit"
               className="bg-dark mb-2"
+              onClick={hanldeSignup}
             >
               Become a Member
             </Button>
@@ -132,19 +188,34 @@ const Signup = () => {
 
           <Row className="justify-content-md-center my-4">
             <Col lg={-1}></Col>
-            <Button as={Col} lg={1} type="submit" className="bg-dark p-3">
+            <Button as={Col} lg={1} type="submit" className="bg-dark p-3" onClick={handleVerify}>
               Verify
             </Button>
 
             <Col lg={4}>
               <InputGroup className="m-2">
-                {/* <InputGroup.Text>
+                <InputGroup.Text>
                   <i class="fa fa-user-o" aria-hidden="true"></i>
-                </InputGroup.Text> */}
-                <Form.Control controlId="formBasicVerify" type="text" />
+                </InputGroup.Text>
+                <Form.Control 
+                  controlId="formBasicVerify" 
+                  type="text" 
+                  placeholder="Verify code"
+                  onChange={e => setVerify(e.target.value)} 
+                />
               </InputGroup>
             </Col>
           </Row>
+
+          {showAlert && (
+            <Alert
+              variant="danger"
+              onClose={() => setShowAlert(false)}
+              dismissible
+            >
+              Mã xác thực không đúng
+            </Alert>
+          )}
         </Container>
       </Col>
     </Row>

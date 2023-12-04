@@ -167,26 +167,12 @@ const accountC = {
       });
     }
     try {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(Pw, salt);
-      const { rows } = await accountM.addUser(Email, hashedPassword, Role);
+      //const { rows } = await accountM.addUser(Email, hashedPassword, Role);
       const content = "Mã xác nhận là : ";
 
-      let verify1 = (Math.random() + 1).toString(36).substring(6);
-      rows.push({ verify: verify1 });
-      var sendEmail = await hanldSendEmail(Email, verify1, content);
-
-      if (rows && rows.length > 0) {
-        return res.json({ msg: "OK", data: rows });
-      } else {
-        return res.json({
-          errors: [
-            {
-              msg: "Invalid credentials",
-            },
-          ],
-        });
-      }
+      let verify = (Math.random() + 1).toString(36).substring(6);
+      var sendEmail = await hanldSendEmail(Email, verify, content);
+      return res.json({ msg: "OK", data: verify });
     } catch (error) {
       return res.json({
         errors: [
@@ -196,6 +182,16 @@ const accountC = {
         ],
       });
     }
+  },
+
+  postVerify: async (req, res) => {
+    const { Email, Pw, Role } = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(Pw, salt);
+    const { rows } = await accountM.addUser(Email, hashedPassword, Role);
+
+    return res.json({ msg: "OK", data: rows });
   },
 
   postResetPW: async (req, res) => {

@@ -1,9 +1,32 @@
-import React from "react";
+import React, {useState} from "react";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 import LeftBanner from "../components/LeftBanner.";
-import AuthService from "../service/auth.service";
+import SignupService from "../service/signup.service";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const ResetPW = () => {
+  const [Email, setEmail] = useState();
+
+  const navigate = useNavigate();
+
+  const handleReset = async (e) => {
+    e.preventDefault();
+    try {
+      await SignupService.resetPw(Email).then(
+        (res) => {
+          //console.log(res)
+          navigate("/login");
+          window.location.reload();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <Row className="landing-page vh-100 g-0">
       <Col xs={4} className="left-content text-center vh-100">
@@ -46,12 +69,13 @@ const Login = () => {
                   <Form.Control
                     controlId="formBasicName"
                     type="email"
-                    placeholder="example@email.com"
+                    placeholder="example@gmail.com"
+                    onChange={e => setEmail(e.target.value)}
                   />
                 </InputGroup>
               </Col>
             </Row>
-            <Button as={Col} lg={1} type="submit" className="bg-dark mb-2">
+            <Button as={Col} lg={1} type="submit" className="bg-dark mb-2" onClick={handleReset}>
               Send
             </Button>
           </Form>
@@ -61,4 +85,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPW;

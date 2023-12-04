@@ -5,7 +5,7 @@ import AuthService from "../service/auth.service";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-const [Email, setEmail] = useState("");
+  const [Email, setEmail] = useState("");
   const [Pw, setPw] = useState("");
 
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const [Email, setEmail] = useState("");
           const user = res;
           console.log(JSON.stringify(user));
           localStorage.setItem("user", JSON.stringify(user));
-          navigate("/");
+          navigate("/home");
           window.location.reload();
         },
         (error) => {

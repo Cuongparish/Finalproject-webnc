@@ -13,6 +13,8 @@ router.put("/profile", accountController.postEditUser);
 router.post("/signup", accountController.postSignup);
 
 router.post("/resetPW", accountController.postResetPW);
+
+router.post("/verify", accountController.postVerify);
 // // router.get("/:id", bookController.getById)
 // // router.put("/:id", bookController.updateById)
 // // router.delete("/:id", bookController.deleteById)

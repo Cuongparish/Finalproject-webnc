@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "https://finalproject-webnc.vercel.app";
 
 const googleAuth = () => {
     window.open(
@@ -15,16 +15,6 @@ const facebookAuth = () => {
         "_self"
     );
 };
-
-// const localAuth = async (Email, Pw) => {
-//     try {
-//       const res = await axios.post(`${API_URL}/auth/login`, { Email, Pw });
-//       console.log(res);
-//       return res;
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
 
 const localAuth = (Email, Pw) => {
     return axios.post(`${API_URL}/auth/login`, { Email, Pw }).then(

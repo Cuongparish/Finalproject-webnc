@@ -2,11 +2,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 //import { Navbar, Container, Image, Nav} from 'react-bootstrap';
-//import LandingPage from "./views/LandingPage";
+
+import LandingPage from "./views/LandingPage";
 import Home from "./views/Home";
 import Login from "./views/Login";
 import Signup from "./views/Signup";
-//import ResetPW from "./views/ResetPW";
+import ResetPW from "./views/ResetPW";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./service/auth.service"
 
@@ -39,58 +41,33 @@ function App() {
 
   return (
     <>
-      {/* <Navbar expand="lg" bg="dark" data-bs-theme="dark" fixed="top">
-        <Container>
-          <Navbar.Brand as={Link} to="/home">
-              <Image src={process.env.PUBLIC_URL + '/images/logo.png'}
-                className="d-inline-block align-top"
-                alt=""
-                width={200}
-            /> 
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-              <Nav>
-                <Nav.Link as={Link} to="/home">
-                  <div className="btn-custom">Home</div>
-                </Nav.Link>
-                <Nav.Link as={Link} to="/login">
-                  <div className="btn-custom">Log In</div>
-                </Nav.Link>
-                <Nav.Link as={Link} to="/signup">
-                  <div className="btn-custom">Sign Up</div>
-                </Nav.Link>
-              </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>*/}
-      {/* <Routes>
-        <Route path="/" element={<Navigate to="/introduction" />} />
-        <Route path="/introduction" exact element={<LandingPage />} />
-        <Route path="/home" exact element={<Home user={user} />} />
-        <Route path="/login" exact element={<Login />} />
-        <Route path="/signup" exact element={<Signup />} />
-        <Route path="/resetPW" exact element={<ResetPW />} />
-      </Routes> */}
       <div className="container">
-			<Routes>
-        <Route exact path="/logout" element = {<Navigate to="/login" />}/>
+        <Routes>
+			  <Route path="/" element={<Navigate to="/introduction" />} />
+        <Route path="/introduction" exact element={<LandingPage />} />
 				<Route
 					exact
-					path="/"
+					path="/home"
 					element={user ? <Home user={user} /> : <Navigate to="/login" />}
 				/>
 				<Route
 					exact
 					path="/login"
-					element={user ? <Navigate to="/" /> : <Login />}
+					element={user ? <Navigate to="/home" /> : <Login />}
 				/>
 				<Route
+          exact
 					path="/signup"
-					element={user ? <Navigate to="/" /> : <Signup />}
+					element={user ? <Navigate to="/home" /> : <Signup />}
 				/>
+        <Route
+          exact
+          path="/ResetPw"
+          element= {<ResetPW />}
+        />
+        <Route exact path="/logout" element = {<Navigate to="/login" />}/>
 			</Routes>
-		</div>
+      </div>
     </>
   );
 }
