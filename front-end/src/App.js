@@ -2,12 +2,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 //import { Navbar, Container, Image, Nav} from 'react-bootstrap';
-import LandingPage from "./views/LandingPage";
+//import LandingPage from "./views/LandingPage";
 import Home from "./views/Home";
 import Login from "./views/Login";
 import Signup from "./views/Signup";
-import ResetPW from "./views/ResetPW";
+//import ResetPW from "./views/ResetPW";
 import "bootstrap/dist/css/bootstrap.min.css";
+import AuthService from "./service/auth.service"
 
 const API_URL = "http://localhost:5000";
 
@@ -26,6 +27,14 @@ function App() {
 
   useEffect(() => {
     getSocialUser();
+  }, []);
+
+  useEffect(() => {
+    const localUser = AuthService.getLocalUser;
+
+    if (localUser) {
+      setUser(localUser);
+    }
   }, []);
 
   return (
@@ -55,16 +64,17 @@ function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>*/}
-      <Routes>
+      {/* <Routes>
         <Route path="/" element={<Navigate to="/introduction" />} />
         <Route path="/introduction" exact element={<LandingPage />} />
         <Route path="/home" exact element={<Home user={user} />} />
         <Route path="/login" exact element={<Login />} />
         <Route path="/signup" exact element={<Signup />} />
         <Route path="/resetPW" exact element={<ResetPW />} />
-      </Routes>
-      {/* <div className="container">
+      </Routes> */}
+      <div className="container">
 			<Routes>
+        <Route exact path="/logout" element = {<Navigate to="/login" />}/>
 				<Route
 					exact
 					path="/"
@@ -80,7 +90,7 @@ function App() {
 					element={user ? <Navigate to="/" /> : <Signup />}
 				/>
 			</Routes>
-		</div> */}
+		</div>
     </>
   );
 }

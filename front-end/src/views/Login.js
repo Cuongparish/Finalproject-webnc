@@ -1,9 +1,36 @@
-import React from "react";
+import React, {useState} from "react";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 import LeftBanner from "../components/LeftBanner.";
 import AuthService from "../service/auth.service";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+const [Email, setEmail] = useState("");
+  const [Pw, setPw] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      await AuthService.localAuth(Email, Pw).then(
+        (res) => {
+          //console.log(res)
+          const user = res;
+          console.log(JSON.stringify(user));
+          localStorage.setItem("user", JSON.stringify(user));
+          navigate("/");
+          window.location.reload();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Row className="landing-page vh-100 g-0">
       <Col xs={4} className="left-content text-center vh-100">
@@ -33,9 +60,10 @@ const Login = () => {
                     <i class="fa fa-user-o" aria-hidden="true"></i>
                   </InputGroup.Text>
                   <Form.Control
-                    controlId="formBasicName"
-                    type="text"
-                    placeholder="Johnson Doe"
+                    controlId="formBasicEmail"
+                    type="email"
+                    placeholder="Email"
+                    onChange={e => setEmail(e.target.value)}
                   />
                 </InputGroup>
               </Col>
@@ -47,14 +75,15 @@ const Login = () => {
                     <i class="fa fa-venus-mars" aria-hidden="true"></i>
                   </InputGroup.Text>
                   <Form.Control
-                    controlId="formBasicGender"
+                    controlId="formBasicPassword"
                     type="password"
                     placeholder="Password"
+                    onChange={e => setPw(e.target.value)}
                   />
                 </InputGroup>
               </Col>
             </Row>
-            <Button as={Col} lg={3} type="submit" className="bg-dark mb-2">
+            <Button as={Col} lg={3} type="submit" className="bg-dark mb-2" onClick={handleLogin}>
               Log in
             </Button>
           </Form>

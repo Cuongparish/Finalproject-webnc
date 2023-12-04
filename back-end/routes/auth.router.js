@@ -3,6 +3,7 @@ const passport = require("passport");
 require("dotenv").config();
 
 router.get("/login/success", (req, res) => {
+  //console.log(req.user);
   if (req.user) {
     res.status(200).json({
       error: false,
@@ -48,13 +49,20 @@ router.get(
 // 	res.render('login');
 // });
 
+
+
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "login/success",
+    //successRedirect: process.env.CLIENT_URL,
     failureRedirect: "login/failed",
-  })
-);
+  }),
+  (req, res) => {
+    // If you use "Content-Type": "application/json"
+    // req.isAuthenticated is true if authentication was success else it is false
+    console.log(req.user);
+    res.json({ data: req.user});
+  });
 
 router.get("/logout", (req, res) => {
   req.logout();

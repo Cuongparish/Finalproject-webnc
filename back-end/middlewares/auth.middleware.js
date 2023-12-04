@@ -77,6 +77,8 @@ passport.use(
       } else {
         return done(null, false, { msg: "Email or password is invalid" });
       }
+      //console.log(user);
+      req.user = user;
 
       return done(null, user);
     }

@@ -4,6 +4,7 @@ import { Row, Col, Image, Nav, NavDropdown, Card, Button } from 'react-bootstrap
 import { FaBars, FaHome } from "react-icons/fa";
 import { RxEnter } from "react-icons/rx";
 import { ImCancelCircle } from "react-icons/im";
+import AuthService from "../service/auth.service";
 import '../App.css';
 
 const Home = () => {
@@ -23,7 +24,7 @@ const Home = () => {
                 </Col>
                 <Col xs md={{ span: 2, offset: 1 }} className='text-end'>
                     <a href='/' className='mx-4 btn-member'>Member</a>
-                    <a href='/logout' className='button btn-logout'>Log Out</a>
+                    <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a>
                 </Col>
             </Row>
 
