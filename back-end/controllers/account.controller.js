@@ -77,7 +77,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 require("dotenv").config;
 
-async function hanldSendEmail(EmailAddress_User, newPassword) {
+async function hanldSendEmail(EmailAddress_User, newPassword, content) {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -86,7 +86,7 @@ async function hanldSendEmail(EmailAddress_User, newPassword) {
       pass: process.env.EMAIL_PASSWORD,
     },
   });
-  console.log(EmailAddress_User);
+  //console.log(EmailAddress_User);
   var info = await transporter.sendMail({
     from: `ADMIN ${EmailAddress_User}`,
     to: process.env.EMAIL_USERNAME,
@@ -94,8 +94,8 @@ async function hanldSendEmail(EmailAddress_User, newPassword) {
     // from: process.env.EMAIL_USERNAME,
     // to: `${EmailAddress_User}`,
     subject: "Reset Password",
-    text: `Mật khẩu mới của tài khoản là: ${newPassword}`, // plain text body
-    html: `Mật khẩu mới của tài khoản là:<b>${newPassword}</b>`,
+    text: `${content} ${newPassword}`, // plain text body
+    html: `${content}<b>${newPassword}</b>`,
   });
   return info;
 }
@@ -170,6 +170,11 @@ const accountC = {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(Pw, salt);
       const { rows } = await accountM.addUser(Email, hashedPassword, Role);
+      const content = "Mã xác nhận là : ";
+
+      let verify1 = (Math.random() + 1).toString(36).substring(6);
+      rows.push({ verify: verify1 });
+      var sendEmail = await hanldSendEmail(Email, verify1, content);
 
       if (rows && rows.length > 0) {
         return res.json({ msg: "OK", data: rows });
@@ -209,9 +214,10 @@ const accountC = {
 
     const Email = req.body.Email;
     const { rows } = await accountM.resetPW(Email, hashedPassword);
+    const content = "Mật khẩu mới của tài khoản là: ";
 
-    var sendEmail = await hanldSendEmail(Email, newPassword);
-    return res.json({ msg: "OK" });
+    var sendEmail = await hanldSendEmail(Email, newPassword, content);
+    return res.json({ msg: "OK", data: rows });
   },
 
   postEditUser: async (req, res) => {
