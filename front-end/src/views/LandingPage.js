@@ -18,24 +18,23 @@ const LandingPage = () => {
           // style={{ maxHeight: "40px", maxWidth: "1000px" }}
         />
         <div className="text-content fw-bold">
-          <h2 style={{ marginTop: "20px" }}>
+          <h3 style={{ marginTop: "20px" }}>
             MAKE YOUR GRADE SUMMARY EASIER AND FASTER
-          </h2>
+          </h3>
 
-          <p1 style={{ marginTop: "20px" }}>
+          <p5 style={{ marginTop: "20px" }}>
             The application supports easily restructuring scores, creating
             scoreboards, easily tracking scores, and quickly receiving appeal
             requests from students
-          </p1>
-
-          <a
-            className="button btn-get-started "
-            href="/login"
-            style={{ marginTop: "20px" }}
-          >
-            Get Started
-          </a>
+          </p5>
         </div>
+        <a
+          className="button btn-get-started "
+          href="/login"
+          style={{ marginTop: "20px" }}
+        >
+          Get Started
+        </a>
       </Col>
     </Row>
   );
