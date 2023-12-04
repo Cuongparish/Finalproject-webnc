@@ -13,27 +13,27 @@ const accountRouter = require("./routes/account.router");
 const authRouter = require("./routes/auth.router");
 
 app.use(
-	cookieSession({
-		name: "session",
-		keys: ["cyberwolve"],
-		maxAge: 24 * 60 * 60 * 100,
-	})
+  cookieSession({
+    name: "session",
+    keys: ["cyberwolve"],
+    maxAge: 24 * 60 * 60 * 100,
+  })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(
-	cors({
-		origin: "http://localhost:3000",
-		methods: "GET,POST,PUT,DELETE",
-		credentials: true,
-	})
-);
+// app.use(
+// 	cors({
+// 		origin: "http://localhost:3000",
+// 		methods: "GET,POST,PUT,DELETE",
+// 		credentials: true,
+// 	})
+// );
 
 app.use("/api/v1/user", accountRouter);
 app.use("/auth", authRouter);
 
 app.listen(process.env.PORT, () =>
-	console.log("Server is running on port 5000")
+  console.log("Server is running on port 5000")
 );
