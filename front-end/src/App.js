@@ -41,29 +41,27 @@ function App() {
 
   return (
     <>
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Navigate to="/introduction" />} />
-          <Route path="/introduction" exact element={<LandingPage />} />
-          <Route
-            exact
-            path="/home"
-            element={user ? <Home user={user} /> : <Navigate to="/login" />}
-          />
-          <Route
-            exact
-            path="/login"
-            element={user ? <Navigate to="/home" /> : <Login />}
-          />
-          <Route
-            exact
-            path="/signup"
-            element={user ? <Navigate to="/home" /> : <Signup />}
-          />
-          <Route exact path="/ResetPw" element={<ResetPW />} />
-          <Route exact path="/logout" element={<Navigate to="/login" />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Navigate to="/introduction" />} />
+        <Route path="/introduction" exact element={<LandingPage />} />
+        <Route
+          exact
+          path="/home"
+          element={user ? <Home user={user} /> : <Navigate to="/login" />}
+        />
+        <Route
+          exact
+          path="/login"
+          element={user ? <Navigate to="/home" /> : <Login />}
+        />
+        <Route
+          exact
+          path="/signup"
+          element={user ? <Navigate to="/home" /> : <Signup />}
+        />
+        <Route exact path="/ResetPw" element={<ResetPW />} />
+        <Route exact path="/logout" element={<Navigate to="/login" />} />
+      </Routes>
     </>
   );
 }
