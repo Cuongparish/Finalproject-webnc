@@ -29,10 +29,15 @@ const Login = () => {
           </span>
         </Container>
         <Container className="text-center">
-          <h3 className="mt-5 fw-bold">WELCOME BACK EXCLUSIVE MEMBER</h3>
-          <h6 className="mb-5">LOGIN TO CONTINUE</h6>
+          <h3 className="mt-5 fw-bold">FORGOT PASSWORD</h3>
+          <h6 style={{ marginTop: "150px" }}>
+            Please enter the email of your account!
+          </h6>
           <Form>
-            <Row className="justify-content-md-center mb-4">
+            <Row
+              className="justify-content-md-center mb-4"
+              style={{ marginTop: "10px" }}
+            >
               <Col lg={4}>
                 <InputGroup className="m-2 ml-4">
                   <InputGroup.Text>

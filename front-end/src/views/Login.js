@@ -48,8 +48,8 @@ const Login = () => {
                   </InputGroup.Text>
                   <Form.Control
                     controlId="formBasicGender"
-                    type="text"
-                    placeholder="Male"
+                    type="password"
+                    placeholder="Password"
                   />
                 </InputGroup>
               </Col>

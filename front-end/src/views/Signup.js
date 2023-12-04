@@ -113,7 +113,19 @@ const Signup = () => {
                 </Form.Group>
               </Col>
             </Row>
-            <Button as={Col} lg={4} type="submit" className="bg-dark mb-2">
+
+            <h9>
+              The confirmation code will be sent to the email you registered
+              with as soon as you click the "Become a Member".
+            </h9>
+
+            <Button
+              style={{ marginTop: "20px" }}
+              as={Col}
+              lg={4}
+              type="submit"
+              className="bg-dark mb-2"
+            >
               Become a Member
             </Button>
           </Form>
