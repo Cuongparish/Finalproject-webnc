@@ -9,7 +9,11 @@ import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const [Email, setEmail] = useState();
   const [Pw, setPw] = useState();
-  const [Role, setRole] = useState();
+  //const [Role, setRole] = useState();
+  const [FullName, setFullName] = useState();
+  const [Sex, setSex] = useState();
+  const [DOB, setDOB] = useState();
+  const [Phone, setPhone] = useState();
   const [Verify, setVerify] = useState();
   const [VerifyMail, setVerifyMail] = useState();
   const [showAlert, setShowAlert] = useState(false);
@@ -19,7 +23,7 @@ const Signup = () => {
   const hanldeSignup = async (e) => {
     e.preventDefault();
     try {
-      await SignupService.signup(Email, Pw, Role).then(
+      await SignupService.signup(Email, Pw, FullName, Sex, DOB, Phone).then(
         (res) => {
           console.log("Verify mail: ", res);
           setVerifyMail(res);
@@ -38,7 +42,7 @@ const Signup = () => {
 
     if (Verify === VerifyMail) {
       try {
-        await SignupService.verify(Email, Pw, Role).then(
+        await SignupService.verify(Email, Pw, FullName, Sex, DOB, Phone).then(
           (res) => {
             console.log(res)
             navigate("/login");
@@ -89,6 +93,7 @@ const Signup = () => {
                     controlId="formBasicName"
                     type="text"
                     placeholder="Johnson Doe"
+                    onChange={e => setFullName(e.target.value)}
                   />
                 </InputGroup>
               </Col>
@@ -102,6 +107,7 @@ const Signup = () => {
                     controlId="formBasicGender"
                     type="text"
                     placeholder="Male"
+                    onChange={e => setSex(e.target.value)}
                   />
                 </InputGroup>
               </Col>
@@ -126,7 +132,7 @@ const Signup = () => {
                   <InputGroup.Text>
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                   </InputGroup.Text>
-                  <Form.Control controlId="formBasicDOB" type="date" />
+                  <Form.Control controlId="formBasicDOB" type="date" onChange={e => setDOB(e.target.value)}/>
                 </InputGroup>
               </Col>
             </Row>
@@ -154,6 +160,7 @@ const Signup = () => {
                     controlId="formBasicEmail"
                     type="number"
                     placeholder="0123456789"
+                    onChange={e => setPhone(e.target.value)}
                   />
                 </InputGroup>
               </Col>

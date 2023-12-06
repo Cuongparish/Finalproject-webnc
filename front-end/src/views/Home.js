@@ -8,6 +8,7 @@ import AuthService from "../service/auth.service";
 import '../App.css';
 
 const Home = () => {
+    
     return (
         <>
             <Row className='justify-content-center py-3 menu-top align-items-center'>
