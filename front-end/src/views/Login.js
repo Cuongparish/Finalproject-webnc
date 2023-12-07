@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 import LeftBanner from "../components/LeftBanner.";
 import AuthService from "../service/auth.service";
@@ -53,7 +53,7 @@ const Login = () => {
           <h3 className="mt-5 fw-bold">WELCOME BACK EXCLUSIVE MEMBER</h3>
           <h6 className="mb-5">LOGIN TO CONTINUE</h6>
           <Form>
-            <Row className="justify-content-md-center mb-2">
+            <Row className="justify-content-md-center text-start mb-2">
               <Col lg={4}>
                 <Form.Group className="m-2" controlId="mail">
                   <Form.Label className="fw-bold">Mail:</Form.Label>
@@ -67,7 +67,7 @@ const Login = () => {
                 </Form.Group>
               </Col>
             </Row>
-            <Row className="justify-content-md-center mb-2">
+            <Row className="justify-content-md-center text-start mb-2">
               <Col lg={4}>
                 <Form.Group className="m-2" controlId="password">
                   <Form.Label className="fw-bold">Password:</Form.Label>

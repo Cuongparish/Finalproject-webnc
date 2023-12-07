@@ -106,13 +106,22 @@ const Signup = () => {
               <Col lg={4}>
                 <Form.Group className="m-2" controlId="gender">
                   <Form.Label className="fw-bold">Gender:</Form.Label>
-                  <Form.Control
+                  {/* <Form.Control
                     controlId="formBasicGender"
                     type="text"
                     placeholder="Male"
                     onChange={(e) => setSex(e.target.value)}
                     className="border-2 border-black"
-                  />
+                  /> */}
+                   <Form.Select
+                    defaultValue="Male"
+                    className="border-2 border-black"
+                    value={Sex}
+                    onChange={(e) => setSex(e.target.value)}
+                  >
+                    <option>Male</option>
+                    <option>Female</option>
+                  </Form.Select>
                 </Form.Group>
               </Col>
             </Row>
@@ -175,7 +184,6 @@ const Signup = () => {
                   <Form.Check
                     type="checkbox"
                     label="I Accept The Terms & Conditions"
-                    className="border-5 border-black"
                   />
                 </Form.Group>
               </Col>
@@ -199,7 +207,7 @@ const Signup = () => {
           </Form>
           <Row className="justify-content-md-center my-4 align-items-center">
             <Form.Label as={Col} lg={2} className="fw-bold mb-0 p-0">
-              Phone number:
+              Your Code:
             </Form.Label>
             <Col lg={4}>
               <Form.Group controlId="phone">
