@@ -189,8 +189,15 @@ const accountC = {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(Pw, salt);
-    const { rows } = await accountM.addUser(Email, hashedPassword, FullName, Sex, DOB, Phone);
 
+    const { rows } = await accountM.addUser(
+      Email,
+      hashedPassword,
+      FullName,
+      Sex,
+      DOB,
+      Phone
+    );
     return res.json({ msg: "OK", data: rows });
   },
 

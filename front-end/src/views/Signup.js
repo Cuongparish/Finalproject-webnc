@@ -1,10 +1,17 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button, InputGroup, Alert } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  InputGroup,
+  Alert,
+} from "react-bootstrap";
 import LeftBanner from "../components/LeftBanner.";
 import SignupService from "../service/signup.service";
 import { useNavigate } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
-
 
 const Signup = () => {
   const [Email, setEmail] = useState();
@@ -35,7 +42,7 @@ const Signup = () => {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -44,7 +51,7 @@ const Signup = () => {
       try {
         await SignupService.verify(Email, Pw, FullName, Sex, DOB, Phone).then(
           (res) => {
-            console.log(res)
+            console.log(res);
             navigate("/login");
             window.location.reload();
           },
@@ -55,11 +62,10 @@ const Signup = () => {
       } catch (err) {
         console.log(err);
       }
-    }
-    else {
+    } else {
       setShowAlert(true);
     }
-  }
+  };
 
   return (
     <Row className="landing-page vh-100 g-0">
@@ -91,7 +97,7 @@ const Signup = () => {
                     controlId="formBasicName"
                     type="text"
                     placeholder="Johnson Doe"
-                    onChange={e => setFullName(e.target.value)}
+                    onChange={(e) => setFullName(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
@@ -104,7 +110,7 @@ const Signup = () => {
                     controlId="formBasicGender"
                     type="text"
                     placeholder="Male"
-                    onChange={e => setSex(e.target.value)}
+                    onChange={(e) => setSex(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
@@ -118,7 +124,7 @@ const Signup = () => {
                     controlId="formBasicEmail"
                     type="email"
                     placeholder="example@email.com"
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
@@ -127,7 +133,12 @@ const Signup = () => {
               <Col lg={4}>
                 <Form.Group className="m-2" controlId="dob">
                   <Form.Label className="fw-bold">Date of Birth:</Form.Label>
-                  <Form.Control controlId="formBasicDOB" type="date" className="border-2 border-black" onChange={e => setDOB(e.target.value)}/>
+                  <Form.Control
+                    controlId="formBasicDOB"
+                    type="date"
+                    className="border-2 border-black"
+                    onChange={(e) => setDOB(e.target.value)}
+                  />
                 </Form.Group>
               </Col>
             </Row>
@@ -139,7 +150,7 @@ const Signup = () => {
                     controlId="formBasicPassword"
                     type="password"
                     placeholder="Password"
-                    onChange={e => setPw(e.target.value)}
+                    onChange={(e) => setPw(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
@@ -152,7 +163,7 @@ const Signup = () => {
                     controlId="formBasicphone"
                     type="tel"
                     placeholder="0123456789"
-                    onChange={e => setPhone(e.target.value)}
+                    onChange={(e) => setPhone(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
@@ -164,7 +175,7 @@ const Signup = () => {
                   <Form.Check
                     type="checkbox"
                     label="I Accept The Terms & Conditions"
-                    className="border-2 border-black"
+                    className="border-5 border-black"
                   />
                 </Form.Group>
               </Col>
@@ -187,19 +198,27 @@ const Signup = () => {
             </Button>
           </Form>
           <Row className="justify-content-md-center my-4 align-items-center">
-            <Form.Label as={Col} lg={2} className="fw-bold mb-0 p-0">Phone number:</Form.Label>
+            <Form.Label as={Col} lg={2} className="fw-bold mb-0 p-0">
+              Phone number:
+            </Form.Label>
             <Col lg={4}>
               <Form.Group controlId="phone">
-                <Form.Control 
-                controlId="formBasicVerify" 
-                type="text" 
-                placeholder="Verify code"
-                onChange={e => setVerify(e.target.value)} 
-                className="border-2 border-black"
-              />
+                <Form.Control
+                  controlId="formBasicVerify"
+                  type="text"
+                  placeholder="Verify code"
+                  onChange={(e) => setVerify(e.target.value)}
+                  className="border-2 border-black"
+                />
               </Form.Group>
             </Col>
-            <Button as={Col} lg={1} type="submit" className="bg-dark p-3" onClick={handleVerify}>
+            <Button
+              as={Col}
+              lg={1}
+              type="submit"
+              className="bg-dark p-3"
+              onClick={handleVerify}
+            >
               Verify
             </Button>
           </Row>

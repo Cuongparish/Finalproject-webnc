@@ -10,6 +10,7 @@ require("./middlewares/auth.middleware");
 app.use(express.json());
 
 const accountRouter = require("./routes/account.router");
+const classRouter = require("./routes/class.router");
 const authRouter = require("./routes/auth.router");
 
 app.use(
@@ -22,16 +23,17 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+// origin: "https://frontend-finalproject-webnc.vercel.app",
 app.use(
   cors({
-    origin: "https://frontend-finalproject-webnc.vercel.app",
+    origin: "http://localhost:3000",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
 );
 
 app.use("/api/v1/user", accountRouter);
+app.use("/api/v1/user", classRouter);
 app.use("/auth", authRouter);
 
 app.listen(process.env.PORT, () =>
