@@ -41,4 +41,40 @@ module.exports = {
     return { rows };
     // const { rows } = await postgre.query('select * from  where book_id = $1', [req.params.id])
   },
+
+  getStudent_inClass: async (req, res) => {
+    const { rows } = await postgre.query(
+      `SELECT "User".*
+      FROM "HocSinh"
+      JOIN "HocSinhLopHoc" ON "HocSinh"."idHocSinh" = "HocSinhLopHoc"."idHocSinh"
+      JOIN "LopHoc" ON "HocSinhLopHoc"."idLop" = "LopHoc"."idLop"
+      JOIN "User" ON "HocSinh"."idUser" = "User"."idUser" 
+      WHERE "LopHoc"."MaLop" = $1;`,
+      [req.params.malop]
+    );
+    return { rows };
+  },
+
+  getTeacher_inClass: async (req, res) => {
+    const { rows } = await postgre.query(
+      `SELECT "User".*
+      FROM "GiaoVien"
+      JOIN "GiaoVienLopHoc" ON "GiaoVien"."idGiaoVien" = "GiaoVienLopHoc"."idGiaoVien"
+      JOIN "LopHoc" ON "GiaoVienLopHoc"."idLop" = "LopHoc"."idLop"
+      JOIN "User" ON "GiaoVien"."idUser" = "User"."idUser" 
+      WHERE "LopHoc"."MaLop" = $1;`,
+      [req.params.malop]
+    );
+    return { rows };
+  },
+
+  getDetail_inClass: async (req, res) => {
+    const { rows } = await postgre.query(
+      `SELECT "LopHoc".*
+      FROM "LopHoc"
+      WHERE "LopHoc"."MaLop" = $1;`,
+      [req.params.malop]
+    );
+    return { rows };
+  },
 };
