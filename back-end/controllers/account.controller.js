@@ -156,8 +156,8 @@ const accountC = {
   },
 
   postSignup: async (req, res) => {
-    const { Email, Pw, Role } = req.body;
-    if (!Email || !Pw) {
+    const { Email, Pw, FullName, Sex, DOB, Phone } = req.body;
+    if (!Email || !Pw || !FullName || !Sex || !DOB || !Phone) {
       return res.json({
         errors: [
           {
@@ -185,11 +185,11 @@ const accountC = {
   },
 
   postVerify: async (req, res) => {
-    const { Email, Pw, Role } = req.body;
+    const { Email, Pw, FullName, Sex, DOB, Phone } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(Pw, salt);
-    const { rows } = await accountM.addUser(Email, hashedPassword, Role);
+    const { rows } = await accountM.addUser(Email, hashedPassword, FullName, Sex, DOB, Phone);
 
     return res.json({ msg: "OK", data: rows });
   },

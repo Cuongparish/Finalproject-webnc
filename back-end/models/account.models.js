@@ -20,11 +20,11 @@ module.exports = {
     return { rows };
   },
 
-  addUser: async (Email, Pw, Role) => {
+  addUser: async (Email, Pw, FullName, Sex, DOB, Phone) => {
     const sql = `INSERT INTO "User"(
-      "Email", "Pw", "Role")
-      VALUES ($1, $2, $3) RETURNING *`;
-    const { rows } = await postgre.query(sql, [Email, Pw, Role]);
+      "Email", "Pw", "FullName", "Sex", "DOB", "Phone")
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+    const { rows } = await postgre.query(sql, [Email, Pw, FullName, Sex, DOB, Phone]);
     return { rows };
   },
 

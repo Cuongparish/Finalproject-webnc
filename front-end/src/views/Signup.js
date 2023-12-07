@@ -9,7 +9,11 @@ import { FaChevronLeft } from "react-icons/fa";
 const Signup = () => {
   const [Email, setEmail] = useState();
   const [Pw, setPw] = useState();
-  const [Role, setRole] = useState();
+  //const [Role, setRole] = useState();
+  const [FullName, setFullName] = useState();
+  const [Sex, setSex] = useState();
+  const [DOB, setDOB] = useState();
+  const [Phone, setPhone] = useState();
   const [Verify, setVerify] = useState();
   const [VerifyMail, setVerifyMail] = useState();
   const [showAlert, setShowAlert] = useState(false);
@@ -19,7 +23,7 @@ const Signup = () => {
   const hanldeSignup = async (e) => {
     e.preventDefault();
     try {
-      await SignupService.signup(Email, Pw, Role).then(
+      await SignupService.signup(Email, Pw, FullName, Sex, DOB, Phone).then(
         (res) => {
           console.log("Verify mail: ", res);
           setVerifyMail(res);
@@ -38,7 +42,7 @@ const Signup = () => {
 
     if (Verify === VerifyMail) {
       try {
-        await SignupService.verify(Email, Pw, Role).then(
+        await SignupService.verify(Email, Pw, FullName, Sex, DOB, Phone).then(
           (res) => {
             console.log(res)
             navigate("/login");
@@ -87,6 +91,7 @@ const Signup = () => {
                     controlId="formBasicName"
                     type="text"
                     placeholder="Johnson Doe"
+                    onChange={e => setFullName(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
@@ -99,6 +104,7 @@ const Signup = () => {
                     controlId="formBasicGender"
                     type="text"
                     placeholder="Male"
+                    onChange={e => setSex(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
@@ -121,7 +127,7 @@ const Signup = () => {
               <Col lg={4}>
                 <Form.Group className="m-2" controlId="dob">
                   <Form.Label className="fw-bold">Date of Birth:</Form.Label>
-                  <Form.Control controlId="formBasicDOB" type="date" className="border-2 border-black" />
+                  <Form.Control controlId="formBasicDOB" type="date" className="border-2 border-black" onChange={e => setDOB(e.target.value)}/>
                 </Form.Group>
               </Col>
             </Row>
@@ -146,6 +152,7 @@ const Signup = () => {
                     controlId="formBasicphone"
                     type="tel"
                     placeholder="0123456789"
+                    onChange={e => setPhone(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
