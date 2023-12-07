@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
+import { FaChevronLeft } from "react-icons/fa";
 import LeftBanner from "../components/LeftBanner.";
 import AuthService from "../service/auth.service";
 import { useNavigate } from "react-router-dom";
@@ -39,7 +40,8 @@ const Login = () => {
       <Col xs={8} className="right-content vh-100">
         <Container className="navigator d-flex justify-content-between align-items-center">
           <a href="/" className="button btn-back">
-            <i class="fa fa-chevron-left" aria-hidden="true"></i> Return Home{" "}
+            {/* <i class="fa fa-chevron-left" aria-hidden="true"></i> Return Home{" "} */}
+            <FaChevronLeft /> Return Home{" "}
           </a>
           <span>
             Not a Member?
