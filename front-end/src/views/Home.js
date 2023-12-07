@@ -15,7 +15,7 @@ const Home = () => {
                     <a href="/home" className="fs-3 btn-menu"><FaBars /></a>
                 </Col>
                 <Col xs md={{ span: 4, offset: 3 }} className='d-flex justify-content-center align-items-center'>
-                    <Image src={process.env.PUBLIC_URL + '/images/logo.png'}
+                    <Image src={process.env.PUBLIC_URL + '/Images/logo.png'}
                     className="d-inline-block mx-2"
                     alt=""
                     width={50}
@@ -49,98 +49,7 @@ const Home = () => {
                 <Col as={Row} md={10} className='d-flex g-0 p-3 right-content'>
                     <Card className="class-item">
                         <Card.Img variant="top"
-                            src={process.env.PUBLIC_URL + '/images/class_bg.png'}
-                            height={80}
-                        />
-                        <Card.Body>
-                            <Card.Title>2309-PTUDWNC-20_3</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">Phát triển ứng dụng web nâng cao</Card.Subtitle>
-                            <Card.Text>Khánh Nguyễn Huy</Card.Text>
-                            <Button variant="primary">Truy cập <RxEnter /></Button>
-                            <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
-                        </Card.Body>
-                    </Card>
-                    <Card className="class-item">
-                        <Card.Img variant="top"
-                            src={process.env.PUBLIC_URL + '/images/class_bg.png'}
-                            height={80}
-                        />
-                        <Card.Body>
-                            <Card.Title>2309-PTUDWNC-20_3</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">Phát triển ứng dụng web nâng cao</Card.Subtitle>
-                            <Card.Text>Khánh Nguyễn Huy</Card.Text>
-                            <Button variant="primary">Truy cập <RxEnter /></Button>
-                            <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
-                        </Card.Body>
-                    </Card>
-                    <Card className="class-item">
-                        <Card.Img variant="top"
-                            src={process.env.PUBLIC_URL + '/images/class_bg.png'}
-                            height={80}
-                        />
-                        <Card.Body>
-                            <Card.Title>2309-PTUDWNC-20_3</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">Phát triển ứng dụng web nâng cao</Card.Subtitle>
-                            <Card.Text>Khánh Nguyễn Huy</Card.Text>
-                            <Button variant="primary">Truy cập <RxEnter /></Button>
-                            <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
-                        </Card.Body>
-                    </Card>
-                    <Card className="class-item">
-                        <Card.Img variant="top"
-                            src={process.env.PUBLIC_URL + '/images/class_bg.png'}
-                            height={80}
-                        />
-                        <Card.Body>
-                            <Card.Title>2309-PTUDWNC-20_3</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">Phát triển ứng dụng web nâng cao</Card.Subtitle>
-                            <Card.Text>Khánh Nguyễn Huy</Card.Text>
-                            <Button variant="primary">Truy cập <RxEnter /></Button>
-                            <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
-                        </Card.Body>
-                    </Card>
-                    <Card className="class-item">
-                        <Card.Img variant="top"
-                            src={process.env.PUBLIC_URL + '/images/class_bg.png'}
-                            height={80}
-                        />
-                        <Card.Body>
-                            <Card.Title>2309-PTUDWNC-20_3</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">Phát triển ứng dụng web nâng cao</Card.Subtitle>
-                            <Card.Text>Khánh Nguyễn Huy</Card.Text>
-                            <Button variant="primary">Truy cập <RxEnter /></Button>
-                            <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
-                        </Card.Body>
-                    </Card>
-                    <Card className="class-item">
-                        <Card.Img variant="top"
-                            src={process.env.PUBLIC_URL + '/images/class_bg.png'}
-                            height={80}
-                        />
-                        <Card.Body>
-                            <Card.Title>2309-PTUDWNC-20_3</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">Phát triển ứng dụng web nâng cao</Card.Subtitle>
-                            <Card.Text>Khánh Nguyễn Huy</Card.Text>
-                            <Button variant="primary">Truy cập <RxEnter /></Button>
-                            <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
-                        </Card.Body>
-                    </Card>
-                    <Card className="class-item">
-                        <Card.Img variant="top"
-                            src={process.env.PUBLIC_URL + '/images/class_bg.png'}
-                            height={80}
-                        />
-                        <Card.Body>
-                            <Card.Title>2309-PTUDWNC-20_3</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">Phát triển ứng dụng web nâng cao</Card.Subtitle>
-                            <Card.Text>Khánh Nguyễn Huy</Card.Text>
-                            <Button variant="primary">Truy cập <RxEnter /></Button>
-                            <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
-                        </Card.Body>
-                    </Card>
-                    <Card className="class-item">
-                        <Card.Img variant="top"
-                            src={process.env.PUBLIC_URL + '/images/class_bg.png'}
+                            src={process.env.PUBLIC_URL + '/Images/class_bg.png'}
                             height={80}
                         />
                         <Card.Body>

@@ -55,32 +55,30 @@ const Login = () => {
           <Form>
             <Row className="justify-content-md-center mb-2">
               <Col lg={4}>
-                <InputGroup className="m-2 ml-4">
-                  <InputGroup.Text>
-                    <i class="fa fa-user-o" aria-hidden="true"></i>
-                  </InputGroup.Text>
+                <Form.Group className="m-2" controlId="mail">
+                  <Form.Label className="fw-bold">Mail:</Form.Label>
                   <Form.Control
                     controlId="formBasicEmail"
                     type="email"
                     placeholder="Email"
                     onChange={e => setEmail(e.target.value)}
+                    className="border-2 border-black"
                   />
-                </InputGroup>
+                </Form.Group>
               </Col>
             </Row>
             <Row className="justify-content-md-center mb-2">
               <Col lg={4}>
-                <InputGroup className="m-2">
-                  <InputGroup.Text>
-                    <i class="fa fa-venus-mars" aria-hidden="true"></i>
-                  </InputGroup.Text>
+                <Form.Group className="m-2" controlId="password">
+                  <Form.Label className="fw-bold">Password:</Form.Label>
                   <Form.Control
                     controlId="formBasicPassword"
                     type="password"
                     placeholder="Password"
                     onChange={e => setPw(e.target.value)}
+                    className="border-2 border-black"
                   />
-                </InputGroup>
+                </Form.Group>
               </Col>
             </Row>
             <Button as={Col} lg={3} type="submit" className="bg-dark mb-2" onClick={handleLogin}>
