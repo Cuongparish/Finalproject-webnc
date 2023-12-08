@@ -45,16 +45,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/introduction" />} />
         <Route path="/introduction" exact element={<LandingPage />} />
-        {/* <Route
-          exact
-          path="/home"
-          element={user ? <Home user={user} /> : <Navigate to="/login" />}
-        /> */}
         <Route
           exact
           path="/home"
-          element={<Home user={user} />}
+          element={user ? <Home user={user} /> : <Navigate to="/login" />}
         />
+        {/* <Route
+          exact
+          path="/home"
+          element={<Home user={user} />}
+        /> */}
         <Route
           exact
           path="/login"

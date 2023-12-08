@@ -106,11 +106,6 @@
   background-image: linear-gradient(to left, #340f4f, #6a5b76, #2d1440);
 }
 
-.menu-left > .accordion-button {
-  background: none;
-}
-
-
 .element-left.nav-link {
   font-size: 25px;
   color: #ffffff;
@@ -194,3 +189,38 @@
   background-color: rgb(228,247,251);
 }
 
+/* .menu-left {
+  /* position: sticky;
+  top: 0; 
+  position: absolute;
+  left: -250px; /* Kích thước khi thu gọn */
+  /* width: 250px; 
+  height: 100%;
+  background-image: linear-gradient(to left, #340f4f, #6a5b76, #2d1440);
+  /* transition: left 0.3s ease; Hiệu ứng di chuyển 
+  transform: translateX(100%);
+  z-index: 1000;
+}
+
+.menu-left.show {
+  left: 0px;
+  /* width: 100%; 
+}
+
+.right-content {
+  transition: margin-left 0.3s ease; /* Hiệu ứng di chuyển 
+}
+
+.menu-left.show + .right-content {
+  margin-left: 250px; /* Khoảng cách di chuyển khi sidebar mở rộng 
+} */
+
+/* .menu-left .element-left {
+  color: #fff;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.menu-left .element-left:hover {
+  background-color: #444;
+} */
