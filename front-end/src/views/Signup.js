@@ -121,6 +121,7 @@ const Signup = () => {
                   >
                     <option>Male</option>
                     <option>Female</option>
+                    <option>Other</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
