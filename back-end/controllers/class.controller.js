@@ -109,6 +109,7 @@ const classC = {
   getDetailinClass: async (req, res) => {
     // const { rows: teacherRows } = await classM.getTeacher_inClass(req, res);
     // console.log(teacherRows);
+
     try {
       const { rows } = await classM.getDetail_inClass(req, res);
 
@@ -133,6 +134,25 @@ const classC = {
       });
     }
   },
+
+  addUserinClass: async (req, res) => {
+    // const { iduser, tenlop, chude, phong, malop } = req.body;
+    if (req.query.role === "hs") {
+      const { rows } = await classM.AddStudent_inClass(req, res);
+      return res.json({ msg: "them hoc sinh vao lop thanh cong", data: rows });
+    }
+
+    if (req.query.role === "gv") {
+      const { rows } = await classM.AddTeacher_inClass(req, res);
+      return res.json({ msg: "them giao vien vao lop thanh cong", data: rows });
+    }
+  },
+
+  // addTeacherinClass: async (req, res) => {
+  //   // const { iduser, tenlop, chude, phong, malop } = req.body;
+  //   const { rows } = await classM.AddTeacher_inClass(req, res);
+  //   return res.json({ msg: "them giao vien vao lop thanh cong", data: rows });
+  // },
 };
 
 module.exports = classC;

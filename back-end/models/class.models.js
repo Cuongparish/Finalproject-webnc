@@ -39,7 +39,6 @@ module.exports = {
       ]
     );
     return { rows };
-    // const { rows } = await postgre.query('select * from  where book_id = $1', [req.params.id])
   },
 
   getStudent_inClass: async (req, res) => {
@@ -75,6 +74,22 @@ module.exports = {
       WHERE "LopHoc"."MaLop" = $1;`,
       [req.params.malop]
     );
+    return { rows };
+  },
+
+  AddStudent_inClass: async (req, res) => {
+    const { rows } = await postgre.query("CALL addstudent($1, $2)", [
+      req.body.idUser,
+      req.params.malop,
+    ]);
+    return { rows };
+  },
+
+  AddTeacher_inClass: async (req, res) => {
+    const { rows } = await postgre.query("CALL addteacher($1, $2)", [
+      req.body.idUser,
+      req.params.malop,
+    ]);
     return { rows };
   },
 };

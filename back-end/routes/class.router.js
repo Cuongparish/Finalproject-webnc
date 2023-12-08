@@ -7,12 +7,15 @@ const classController = require("../controllers/class.controller");
 router.get("/:id", classController.getClass);
 
 // tao 1 lop hoc
-router.get("/:id/createClass", classController.postCreateClass);
+router.post("/:id/createClass", classController.postCreateClass);
 
 // danh sach hoc sinh va giao vien trong 1 lop hoc
 router.get("/:malop/listUserinClass", classController.getListUserinClass);
 
 // chi tiet cua 1 lop hoc
 router.get("/:malop/detailClass", classController.getDetailinClass);
+
+// xac nhan tham gia lop hoc
+router.post("/:malop/joinClass?", classController.addUserinClass);
 
 module.exports = router;
