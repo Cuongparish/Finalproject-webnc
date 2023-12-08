@@ -1,9 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600&display=swap');
 
 *{
   padding: 0;
   margin: 0;
-  font-family: 'Zen+Kaku+Gothic+Antique', sans-serif;
+  font-family: 'Albert+Sans', sans-serif;
+}
+
+#root {
+  overflow: hidden;
 }
 
 .left-content {
@@ -189,3 +193,28 @@
   background-color: rgb(228,247,251);
 }
 
+.detail-news {
+  padding: 0 15%;
+  margin-bottom: 20px;
+}
+
+.banner-news {
+  position: relative;
+  height: 250px;
+  border-radius: 15px;
+  background-image: url("../public/Images/detail_class_bg.png");
+}
+
+.banner-news > h1 {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.banner-members {
+  padding: 0 15%;
+  margin-bottom: 20px;
+}

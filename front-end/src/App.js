@@ -8,6 +8,7 @@ import Home from "./views/Home";
 import Login from "./views/Login";
 import Signup from "./views/Signup";
 import ResetPW from "./views/ResetPW";
+import DetailClass from "./views/DetailClass";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./service/auth.service";
@@ -60,6 +61,7 @@ function App() {
           path="/signup"
           element={user ? <Navigate to="/home" /> : <Signup />}
         />
+        <Route exact path="/detail-class" element={<DetailClass />} />
         <Route exact path="/ResetPw" element={<ResetPW />} />
         <Route exact path="/logout" element={<Navigate to="/login" />} />
       </Routes>
