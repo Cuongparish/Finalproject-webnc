@@ -12,7 +12,7 @@ const facebookAuth = () => {
 
 const localAuth = (Email, Pw) => {
   return axios.post(`${API_URL}/auth/login`, { Email, Pw }).then((res) => {
-    console.log(res.data.data.rows[0]);
+    //console.log(res.data.data.rows[0]);
     return res.data.data.rows[0];
   });
 };

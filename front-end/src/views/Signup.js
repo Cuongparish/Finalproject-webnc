@@ -18,7 +18,7 @@ const Signup = () => {
   const [Pw, setPw] = useState();
   //const [Role, setRole] = useState();
   const [FullName, setFullName] = useState();
-  const [Sex, setSex] = useState();
+  const [Sex, setSex] = useState("Male");
   const [DOB, setDOB] = useState();
   const [Phone, setPhone] = useState();
   const [Verify, setVerify] = useState();

@@ -38,8 +38,9 @@ const classC = {
 
   postCreateClass: async (req, res) => {
     try {
-      const { rows } = await classM.postCreateClass(req, res);
-      return res.json({ msg: "Tạo lớp học thành công", data: rows });
+      let malop = (Math.random() + 1).toString(36).substring(6);
+      const { rows } = await classM.postCreateClass(req, res, malop);
+      return res.json({ msg: "Tạo lớp học thành công", data: malop });
     } catch (error) {
       console.error("Lỗi khi tạo lớp:", error);
       return res.status(500).json({ msg: "Đã xảy ra lỗi khi tạo lớp" });

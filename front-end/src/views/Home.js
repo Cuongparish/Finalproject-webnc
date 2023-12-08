@@ -2,10 +2,34 @@ import { React, useState } from 'react';
 import { Row, Col, Image, Nav, NavDropdown, Dropdown, Modal, Button, Form, Accordion } from 'react-bootstrap';
 import { FaBars, FaHome, FaPlus } from "react-icons/fa";
 import ClassRoom from '../components/ClassRoom';
-// import AuthService from "../service/auth.service";
+import AuthService from "../service/auth.service";
+import ClassService from "../service/class.service";
 import '../App.css';
 
-const Home = () => {
+const Home = (props) => {
+    const user = props.user;
+    //console.log(user);
+
+    const [TenLop, setTenLop] = useState();
+    const [ChuDe, setChuDe] = useState();
+    const [Phong, setPhong] = useState();
+
+    const handleCreateClass = async (e) => {
+        e.preventDefault();
+    try {
+      await ClassService.CreateClass(user.idUser, TenLop, ChuDe, Phong).then(
+        (res) => {
+          console.log("res: ", res);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    }
+
     const [join_show, setJoinShow] = useState(false);
     const handleJoinClose = () => setJoinShow(false);
     const handleJoinShow = () => setJoinShow(true);
@@ -40,8 +64,8 @@ const Home = () => {
                         </Dropdown.Menu>
                     </Dropdown>
 
-                    <a href='/' className='mx-2 btn-member'>Member</a>
-                    <a href='/logout' className='button btn-logout'>Log Out</a>
+                    <a href='/home' className='mx-2 btn-member'>Member</a>
+                    <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a>
                     {/* <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a> */}
                 </Col>
             </Row>
@@ -118,7 +142,7 @@ const Home = () => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleCreateClose}>
+                    <Button variant="primary" onClick={handleJoinClose}>
                         Tham gia
                     </Button>
                 </Modal.Footer>
@@ -133,23 +157,23 @@ const Home = () => {
                     <Form>
                         <Form.Group className="mb-3" controlId="name">
                             <Form.Label>Tên lớp học (bắt buộc)</Form.Label>
-                            <Form.Control type="text" />
+                            <Form.Control type="text"  onChange={(e) => setTenLop(e.target.value)}/>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="topic">
                             <Form.Label>Chủ đề</Form.Label>
-                            <Form.Control type="text" />
+                            <Form.Control type="text" onChange={(e) => setChuDe(e.target.value)}/>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="room_name">
                             <Form.Label>Phòng</Form.Label>
-                            <Form.Control type="text" />
+                            <Form.Control type="text" onChange={(e) => setPhong(e.target.value)}/>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleJoinClose}>
+                    <Button variant="secondary" onClick={handleCreateClose}>
                         Hủy
                     </Button>
-                    <Button variant="primary" onClick={handleJoinClose}>
+                    <Button variant="primary" onClick={handleCreateClass}>
                         Tạo
                     </Button>
                 </Modal.Footer>

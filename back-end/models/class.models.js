@@ -27,15 +27,15 @@ module.exports = {
     // const { rows } = await postgre.query('select * from  where book_id = $1', [req.params.id])
   },
 
-  postCreateClass: async (req, res) => {
+  postCreateClass: async (req, res, malop) => {
     const { rows } = await postgre.query(
       "CALL createclass($1, $2, $3, $4, $5)",
       [
         req.params.id,
-        req.body.tenlop,
-        req.body.chude,
-        req.body.phong,
-        req.body.malop,
+        req.body.TenLop,
+        req.body.ChuDe,
+        req.body.Phong,
+        malop,
       ]
     );
     return { rows };

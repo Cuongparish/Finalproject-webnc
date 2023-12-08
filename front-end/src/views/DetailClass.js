@@ -4,6 +4,7 @@ import { FaBars, FaHome, FaRegCopy, FaLink, FaUserPlus } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiCircleMore } from "react-icons/ci";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AuthService from "../service/auth.service";
 import '../App.css';
 
 const DetailClass = () => {
@@ -30,8 +31,8 @@ const DetailClass = () => {
                     <h3 className='mb-0'>Grade Management</h3>
                 </Col>
                 <Col xs md={{ span: 2, offset: 1 }} className='d-flex justify-content-end align-items-center'>
-                    <a href='/' className='mx-2 btn-member'>Member</a>
-                    <a href='/logout' className='button btn-logout'>Log Out</a>
+                    <a href='/home' className='mx-2 btn-member'>Member</a>
+                    <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a>
                     {/* <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a> */}
                 </Col>
             </Row>
