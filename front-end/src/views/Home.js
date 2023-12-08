@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { Row, Col, Image, Nav, NavDropdown, Dropdown, Modal, Button, Form } from 'react-bootstrap';
+import { Row, Col, Image, Nav, NavDropdown, Dropdown, Modal, Button, Form, Accordion } from 'react-bootstrap';
 import { FaBars, FaHome, FaPlus } from "react-icons/fa";
 import ClassRoom from '../components/ClassRoom';
 // import AuthService from "../service/auth.service";
@@ -9,11 +9,11 @@ const Home = () => {
     const [join_show, setJoinShow] = useState(false);
     const handleJoinClose = () => setJoinShow(false);
     const handleJoinShow = () => setJoinShow(true);
-    
+
     const [create_show, setCreateShow] = useState(false);
     const handleCreateClose = () => setCreateShow(false);
     const handleCreateShow = () => setCreateShow(true);
-    
+
     return (
         <>
             <Row className='justify-content-center py-3 menu-top align-items-center'>
@@ -22,9 +22,9 @@ const Home = () => {
                 </Col>
                 <Col xs md={{ span: 4, offset: 3 }} className='d-flex justify-content-center align-items-center'>
                     <Image src={process.env.PUBLIC_URL + '/Images/logo.png'}
-                    className="d-inline-block mx-2"
-                    alt=""
-                    width={50}
+                        className="d-inline-block mx-2"
+                        alt=""
+                        width={50}
                     />
                     <h3 className='mb-0'>Grade Management</h3>
                 </Col>
@@ -54,13 +54,34 @@ const Home = () => {
                         </Nav.Link>
                         {/* <Nav.Link eventKey="link-1">Các</Nav.Link>
                         <Nav.Link eventKey="link-2">Link</Nav.Link> */}
-                        <NavDropdown title={<span><FaHome className='mx-2' /> Các lớp tham gia </span>} id="nav-dropdown">
+                        {/* <NavDropdown title={<span><FaHome className='mx-2' /> Các lớp tham gia </span>} id="nav-dropdown">
                             <NavDropdown.Item eventKey="2.1">Web nâng cao</NavDropdown.Item>
                             <NavDropdown.Item eventKey="2.2">Web cơ bản</NavDropdown.Item>
                             <NavDropdown.Item eventKey="2.3">Cơ sở dữ liệu</NavDropdown.Item>
                             {/* <NavDropdown.Divider />
-                            <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item> */}
-                        </NavDropdown>
+                            <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item> 
+                        </NavDropdown> */}
+
+                        <Accordion defaultActiveKey={['0', '1']} alwaysOpen flush>
+                            <Accordion.Item className='menu-left text-white' eventKey="0">
+                                <Accordion.Header>Giảng dạy</Accordion.Header>
+                                <Accordion.Body>
+                                    <Row>
+                                        <div>Hello</div>
+                                        <div>World</div>
+                                    </Row>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item className='menu-left text-white' eventKey="1">
+                                <Accordion.Header>Theo học</Accordion.Header>
+                                <Accordion.Body>
+                                    <Row>
+                                        <div>Hello</div>
+                                        <div>World</div>
+                                    </Row>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
                     </Nav>
                 </Col>
 
@@ -72,7 +93,7 @@ const Home = () => {
                     <ClassRoom />
                 </Col>
             </Row>
-            
+
             {/* Modal Join Class */}
             <Modal show={join_show} onHide={handleJoinClose}>
                 <Modal.Header closeButton>
@@ -81,20 +102,20 @@ const Home = () => {
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3" controlId="name">
-                            <Form.Label className='mb-0' style={{ fontSize: '20px'}}>Mã lớp</Form.Label>
+                            <Form.Label className='mb-0' style={{ fontSize: '20px' }}>Mã lớp</Form.Label>
                             <Form.Text className='mb-2' style={{ display: 'block' }} muted>
                                 Đề nghị giáo viên của bạn cung cấp mã lớp rồi nhập mã đó vào đây.
                             </Form.Text>
-                            <Form.Control type="text"/>
+                            <Form.Control type="text" />
                         </Form.Group>
                         <Form.Text className='mb-2' style={{ display: 'block' }} muted>
                             <span className='fw-bold'>Cách đăng nhập bằng mã lớp học:</span>
-                                <ul>
-                                    <li>Sử dụng tài khoản được cấp phép</li>
-                                    <li>Sử dụng mã lớp học gồm 5-7 chữ cái hoặc số, không có dấu cách hoặc ký hiệu</li>
-                                </ul>
+                            <ul>
+                                <li>Sử dụng tài khoản được cấp phép</li>
+                                <li>Sử dụng mã lớp học gồm 5-7 chữ cái hoặc số, không có dấu cách hoặc ký hiệu</li>
+                            </ul>
                         </Form.Text>
-                        </Form>
+                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleCreateClose}>
@@ -112,15 +133,15 @@ const Home = () => {
                     <Form>
                         <Form.Group className="mb-3" controlId="name">
                             <Form.Label>Tên lớp học (bắt buộc)</Form.Label>
-                            <Form.Control type="text"/>
+                            <Form.Control type="text" />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="topic">
                             <Form.Label>Chủ đề</Form.Label>
-                            <Form.Control type="text"/>
+                            <Form.Control type="text" />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="room_name">
                             <Form.Label>Phòng</Form.Label>
-                            <Form.Control type="text"/>
+                            <Form.Control type="text" />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
