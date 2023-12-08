@@ -36,44 +36,17 @@ const classC = {
     }
   },
 
-  // getTeacher: async (req, res) => {
-  //   try {
-  //     const { rows } = await classM.getTeacherinClass(req, res);
-
-  //     if (rows && rows.length > 0) {
-  //       res.json({ msg: "OKkkkk", data: rows });
-  //     } else {
-  //       res.json({
-  //         errors: [
-  //           {
-  //             msg: "Invalid credentials",
-  //           },
-  //         ],
-  //       });
-  //     }
-  //   } catch (error) {
-  //     res.json({
-  //       errors: [
-  //         {
-  //           msg: "Invalid credentials",
-  //         },
-  //       ],
-  //     });
-  //   }
-  // },
-
   postCreateClass: async (req, res) => {
-    // const { iduser, tenlop, chude, phong, malop } = req.body;
-    const { rows } = await classM.postCreateClass(req, res);
-
-    // console.log(rows[0].Pw);
-    // console.log(req.body.Pw);
-    return res.json({ msg: "OK", data: rows });
+    try {
+      const { rows } = await classM.postCreateClass(req, res);
+      return res.json({ msg: "Tạo lớp học thành công", data: rows });
+    } catch (error) {
+      console.error("Lỗi khi tạo lớp:", error);
+      return res.status(500).json({ msg: "Đã xảy ra lỗi khi tạo lớp" });
+    }
   },
 
   getListUserinClass: async (req, res) => {
-    // const { rows: teacherRows } = await classM.getTeacher_inClass(req, res);
-    // console.log(teacherRows);
     try {
       const { rows: teacherRows } = await classM.getTeacher_inClass(req, res);
       var data = [];
@@ -99,7 +72,7 @@ const classC = {
       res.json({
         errors: [
           {
-            msg: "Invalid credentials",
+            msg: "Lấy danh sách thất bại",
           },
         ],
       });
@@ -107,9 +80,6 @@ const classC = {
   },
 
   getDetailinClass: async (req, res) => {
-    // const { rows: teacherRows } = await classM.getTeacher_inClass(req, res);
-    // console.log(teacherRows);
-
     try {
       const { rows } = await classM.getDetail_inClass(req, res);
 
@@ -119,7 +89,7 @@ const classC = {
         res.json({
           errors: [
             {
-              msg: "Invalid credentials",
+              msg: "Ma lop ban nhap khong ton tai",
             },
           ],
         });
@@ -128,7 +98,7 @@ const classC = {
       res.json({
         errors: [
           {
-            msg: "Invalid credentials",
+            msg: "Lay danh sach that bai",
           },
         ],
       });
@@ -137,22 +107,27 @@ const classC = {
 
   addUserinClass: async (req, res) => {
     // const { iduser, tenlop, chude, phong, malop } = req.body;
-    if (req.query.role === "hs") {
-      const { rows } = await classM.AddStudent_inClass(req, res);
-      return res.json({ msg: "them hoc sinh vao lop thanh cong", data: rows });
-    }
+    try {
+      if (req.query.role === "hs") {
+        const { rows } = await classM.AddStudent_inClass(req, res);
+        return res.json({
+          msg: "them hoc sinh vao lop thanh cong",
+          data: rows,
+        });
+      }
 
-    if (req.query.role === "gv") {
-      const { rows } = await classM.AddTeacher_inClass(req, res);
-      return res.json({ msg: "them giao vien vao lop thanh cong", data: rows });
+      if (req.query.role === "gv") {
+        const { rows } = await classM.AddTeacher_inClass(req, res);
+        return res.json({
+          msg: "them giao vien vao lop thanh cong",
+          data: rows,
+        });
+      }
+    } catch (error) {
+      //console.error("Lỗi :", error);
+      return res.status(500).json({ msg: "Lỗi thêm user vào lớp học" });
     }
   },
-
-  // addTeacherinClass: async (req, res) => {
-  //   // const { iduser, tenlop, chude, phong, malop } = req.body;
-  //   const { rows } = await classM.AddTeacher_inClass(req, res);
-  //   return res.json({ msg: "them giao vien vao lop thanh cong", data: rows });
-  // },
 };
 
 module.exports = classC;

@@ -1,39 +1,46 @@
--- Database: webnc
-
--- DROP DATABASE IF EXISTS webnc;
-
-CREATE DATABASE webnc
-    WITH
-    OWNER = postgres
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'English_United States.1252'
-    LC_CTYPE = 'English_United States.1252'
-    LOCALE_PROVIDER = 'libc'
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1
-    IS_TEMPLATE = False;
-	
-	
-	
 -- Table: public.User
 
 -- DROP TABLE IF EXISTS public."User";
 
 CREATE TABLE IF NOT EXISTS public."User"
 (
-    "IdUser" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 999999 CACHE 1 ),
+    "idUser" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
     "Email" character varying COLLATE pg_catalog."default" NOT NULL,
-    "Pw" character varying COLLATE pg_catalog."default" NOT NULL,
-    "Role" character varying COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "User_pkey" PRIMARY KEY ("IdUser")
+    "Pw" character varying COLLATE pg_catalog."default",
+    "FullName" character varying COLLATE pg_catalog."default",
+    "DOB" date,
+    "Sex" character varying COLLATE pg_catalog."default",
+    "Phone" character varying COLLATE pg_catalog."default",
+    CONSTRAINT "User_pkey" PRIMARY KEY ("idUser")
 )
 
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."User"
     OWNER to postgres;
-	
-	
+
+
+-- Table: public.HocSinh
+
+-- DROP TABLE IF EXISTS public."HocSinh";
+
+CREATE TABLE IF NOT EXISTS public."HocSinh"
+(
+    "idHocSinh" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
+    "idUser" integer NOT NULL,
+    CONSTRAINT "HocSinh_pkey" PRIMARY KEY ("idHocSinh"),
+    CONSTRAINT "FK_HocSinh_User" FOREIGN KEY ("idUser")
+        REFERENCES public."User" ("idUser") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."HocSinh"
+    OWNER to postgres;
+
+
 
 -- Table: public.GiaoVien
 
@@ -41,14 +48,11 @@ ALTER TABLE IF EXISTS public."User"
 
 CREATE TABLE IF NOT EXISTS public."GiaoVien"
 (
-    "IdGiaoVien" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
-    "FullName" character varying COLLATE pg_catalog."default" NOT NULL,
-    "DOB" character varying COLLATE pg_catalog."default" NOT NULL,
-    "Sex" character varying COLLATE pg_catalog."default" NOT NULL,
-    "IdUser" integer NOT NULL,
-    CONSTRAINT "GiaoVien_pkey" PRIMARY KEY ("IdGiaoVien"),
-    CONSTRAINT "FK_GiaoVien_User" FOREIGN KEY ("IdUser")
-        REFERENCES public."User" ("IdUser") MATCH SIMPLE
+    "idGiaoVien" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
+    "idUser" integer NOT NULL,
+    CONSTRAINT "GiaoVien_pkey" PRIMARY KEY ("idGiaoVien"),
+    CONSTRAINT "FK_GiaoVien_User" FOREIGN KEY ("idUser")
+        REFERENCES public."User" ("idUser") MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -57,29 +61,73 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."GiaoVien"
     OWNER to postgres;
-	
-	
--- Table: public.HocSinh
 
--- DROP TABLE IF EXISTS public."HocSinh";
 
-CREATE TABLE IF NOT EXISTS public."HocSinh"
+-- Table: public.LopHoc
+
+-- DROP TABLE IF EXISTS public."LopHoc";
+
+CREATE TABLE IF NOT EXISTS public."LopHoc"
 (
-    "idHocSinh" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
-    "FullName" character varying COLLATE pg_catalog."default" NOT NULL,
-    "DOB" date NOT NULL,
-    "Sex" character varying COLLATE pg_catalog."default" NOT NULL,
-    "StudentID" character varying COLLATE pg_catalog."default" NOT NULL,
-    "IdUser" integer NOT NULL,
-    CONSTRAINT "HocSinh_pkey" PRIMARY KEY ("idHocSinh"),
-    CONSTRAINT "FK_HocSinh_User" FOREIGN KEY ("IdUser")
-        REFERENCES public."User" ("IdUser") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
+    "idLop" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
+    "TenLop" character varying COLLATE pg_catalog."default" NOT NULL,
+    "ChuDe" character varying COLLATE pg_catalog."default",
+    "Phong" character varying COLLATE pg_catalog."default",
+    "MaLop" character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "LopHoc_pkey" PRIMARY KEY ("idLop")
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."HocSinh"
+ALTER TABLE IF EXISTS public."LopHoc"
+    OWNER to postgres;
+
+
+-- Table: public.GiaoVienLopHoc
+
+-- DROP TABLE IF EXISTS public."GiaoVienLopHoc";
+
+CREATE TABLE IF NOT EXISTS public."GiaoVienLopHoc"
+(
+    "idLop" integer NOT NULL,
+    "idGiaoVien" integer NOT NULL,
+    CONSTRAINT "GiaoVienLopHoc_pkey" PRIMARY KEY ("idLop", "idGiaoVien"),
+    CONSTRAINT "FK_GVLH_GiaoVien" FOREIGN KEY ("idGiaoVien")
+        REFERENCES public."GiaoVien" ("idGiaoVien") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "FK_GVLH_LopHoc" FOREIGN KEY ("idLop")
+        REFERENCES public."LopHoc" ("idLop") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."GiaoVienLopHoc"
+    OWNER to postgres;
+
+
+-- Table: public.HocSinhLopHoc
+
+-- DROP TABLE IF EXISTS public."HocSinhLopHoc";
+
+CREATE TABLE IF NOT EXISTS public."HocSinhLopHoc"
+(
+    "idLop" integer NOT NULL,
+    "idHocSinh" integer NOT NULL,
+    CONSTRAINT "HocSinhLopHoc_pkey" PRIMARY KEY ("idLop", "idHocSinh"),
+    CONSTRAINT "FK_HSLH_HocSinh" FOREIGN KEY ("idHocSinh")
+        REFERENCES public."HocSinh" ("idHocSinh") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "FK_HSLH_LopHoc" FOREIGN KEY ("idLop")
+        REFERENCES public."LopHoc" ("idLop") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."HocSinhLopHoc"
     OWNER to postgres;

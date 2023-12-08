@@ -51,6 +51,11 @@ function App() {
           path="/home"
           element={user ? <Home user={user} /> : <Navigate to="/login" />}
         />
+        {/* <Route
+          exact
+          path="/home"
+          element={<Home user={user} />}
+        /> */}
         <Route
           exact
           path="/login"
