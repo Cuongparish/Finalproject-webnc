@@ -106,6 +106,11 @@
   background-image: linear-gradient(to left, #340f4f, #6a5b76, #2d1440);
 }
 
+.menu-left > .accordion-button {
+  background: none;
+}
+
+
 .element-left.nav-link {
   font-size: 25px;
   color: #ffffff;
