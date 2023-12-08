@@ -4,6 +4,7 @@ import { FaBars, FaHome, FaRegCopy, FaLink, FaUserPlus } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiCircleMore } from "react-icons/ci";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import MenuLeft from '../components/MenuLeft';
 import AuthService from "../service/auth.service";
 import '../App.css';
 
@@ -31,29 +32,13 @@ const DetailClass = () => {
                     <h3 className='mb-0'>Grade Management</h3>
                 </Col>
                 <Col xs md={{ span: 2, offset: 1 }} className='d-flex justify-content-end align-items-center'>
-                    <a href='/home' className='mx-2 btn-member'>Member</a>
+                    <a href='/' className='mx-2 btn-member'>Member</a>
                     <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a>
-                    {/* <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a> */}
                 </Col>
             </Row>
 
             <Row className='g-0'>
-                <Col md={2} className="menu-left">
-                    <Nav defaultActiveKey="/home" className="flex-column">
-                        <Nav.Link href="/home" className="element-left">
-                            <FaHome className='mx-2' /> Màn hình chính
-                        </Nav.Link>
-                        {/* <Nav.Link eventKey="link-1">Các</Nav.Link>
-                        <Nav.Link eventKey="link-2">Link</Nav.Link> */}
-                        <NavDropdown title={<span><FaHome className='mx-2' /> Các lớp tham gia </span>} id="nav-dropdown">
-                            <NavDropdown.Item eventKey="2.1">Web nâng cao</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="2.2">Web cơ bản</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="2.3">Cơ sở dữ liệu</NavDropdown.Item>
-                            {/* <NavDropdown.Divider />
-                            <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item> */}
-                        </NavDropdown>
-                    </Nav>
-                </Col>
+                <MenuLeft />
 
                 <Col md={10}>
                     <div className='w-100 tab-menu'>
