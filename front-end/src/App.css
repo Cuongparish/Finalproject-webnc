@@ -94,6 +94,7 @@
 }
 
 .btn-menu, .btn-member {
+  padding-left: 10px;
   color: #ffffff;
   text-decoration: none;
 }
@@ -107,15 +108,92 @@
 }
 
 .menu-left {
-  background-image: linear-gradient(to left, #340f4f, #6a5b76, #2d1440);
+  border-right: 1px solid #00000070;
+  box-shadow: 2px 0 #0000001c;
 }
 
 .element-left.nav-link {
-  font-size: 25px;
-  color: #ffffff;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
   display: flex;
   align-items: center;
   padding: 10px;
+  margin-right: 20px;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+  transition: 0.3s;
+}
+
+.element-left.nav-link.active {
+  padding-left: 30px;
+  background: #97D6EC;
+}
+
+.element-left.nav-link.active:hover {
+  background: #97D6EC;
+}
+
+a.element-left.nav-link:hover {
+  padding-left: 30px;
+  color: #000000;
+  background: #0000002f;
+  transition: 0.3s;
+}
+
+.list-item.accordion-item {
+  border: none;
+}
+
+.list-header.accordion-header{
+  margin-right: 20px;
+}
+
+.list-header.accordion-header > .accordion-button.collapsed{
+  font-size: 20px;
+  border-top-right-radius: 30px !important;
+  border-bottom-right-radius: 30px !important;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.list-header.accordion-header:hover > .accordion-button.collapsed,
+.list-header.accordion-header > .accordion-button:hover, .body-item.nav-link:hover {
+  background-color: #0000001b;
+  padding-left: 30px;
+  transition: 0.3s;
+  color: #000000;
+}
+
+.list-header.accordion-header > .accordion-button {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+  border-top-right-radius: 30px  !important;
+  border-bottom-right-radius: 30px  !important;
+  background-color: transparent;
+  box-shadow: none;
+  transition: 0.3s;
+}
+
+.list-body.accordion-body {
+  padding: 0;
+}
+
+.body-item.nav-link {
+  font-size: 17px;
+  border-top-right-radius: 30px !important;
+  border-bottom-right-radius: 30px !important;
+  transition: 0.3s;
+  color: #000000;
+  margin-right: 20px;
+}
+
+.body-item.nav-link.active {
+  background-color: #97D6EC;
+  color: #000000;
+  padding-left: 30px;
+  transition: 0.3s;
 }
 
 .class-item {
@@ -193,41 +271,7 @@
   background-color: rgb(228,247,251);
 }
 
-/* .menu-left {
-  /* position: sticky;
-  top: 0; 
-  position: absolute;
-  left: -250px; /* Kích thước khi thu gọn */
-  /* width: 250px; 
-  height: 100%;
-  background-image: linear-gradient(to left, #340f4f, #6a5b76, #2d1440);
-  /* transition: left 0.3s ease; Hiệu ứng di chuyển 
-  transform: translateX(100%);
-  z-index: 1000;
-}
-
-.menu-left.show {
-  left: 0px;
-  /* width: 100%; 
-}
-
-.right-content {
-  transition: margin-left 0.3s ease; /* Hiệu ứng di chuyển 
-}
-
-.menu-left.show + .right-content {
-  margin-left: 250px; /* Khoảng cách di chuyển khi sidebar mở rộng 
-} */
-
-/* .menu-left .element-left {
-  color: #fff;
-  padding: 10px 20px;
-  transition: background-color 0.3s ease;
-}
-
-.menu-left .element-left:hover {
-  background-color: #444;
-} */.detail-news {
+.detail-news {
   padding: 0 15%;
   margin-bottom: 20px;
 }

@@ -1,8 +1,8 @@
 import { React, useState } from 'react';
-import { Row, Col, Image, Nav, NavDropdown, Dropdown, Modal, Button, Form, Accordion } from 'react-bootstrap';
-import { FaBars, FaHome, FaPlus } from "react-icons/fa";
+import { Row, Col, Image, Dropdown, Modal, Button, Form } from 'react-bootstrap';
+import { FaBars, FaPlus } from "react-icons/fa";
 import ClassRoom from '../components/ClassRoom';
-// import AuthService from "../service/auth.service";
+import MenuLeft from '../components/MenuLeft';
 import '../App.css';
 
 const Home = () => {
@@ -47,43 +47,7 @@ const Home = () => {
             </Row>
 
             <Row className='vh-100 g-0'>
-                <Col md={2} className="menu-left">
-                    <Nav defaultActiveKey="/home" className="flex-column">
-                        <Nav.Link href="/home" className="element-left">
-                            <FaHome className='mx-2' /> Màn hình chính
-                        </Nav.Link>
-                        {/* <Nav.Link eventKey="link-1">Các</Nav.Link>
-                        <Nav.Link eventKey="link-2">Link</Nav.Link> */}
-                        {/* <NavDropdown title={<span><FaHome className='mx-2' /> Các lớp tham gia </span>} id="nav-dropdown">
-                            <NavDropdown.Item eventKey="2.1">Web nâng cao</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="2.2">Web cơ bản</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="2.3">Cơ sở dữ liệu</NavDropdown.Item>
-                            {/* <NavDropdown.Divider />
-                            <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item> 
-                        </NavDropdown> */}
-
-                        <Accordion defaultActiveKey={['0', '1']} alwaysOpen flush>
-                            <Accordion.Item className='menu-left text-white' eventKey="0">
-                                <Accordion.Header>Giảng dạy</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row>
-                                        <div>Hello</div>
-                                        <div>World</div>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                            <Accordion.Item className='menu-left text-white' eventKey="1">
-                                <Accordion.Header>Theo học</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row>
-                                        <div>Hello</div>
-                                        <div>World</div>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
-                    </Nav>
-                </Col>
+                <MenuLeft />
 
                 <Col as={Row} md={10} className='d-flex g-0 p-3 right-content'>
                     <ClassRoom />
