@@ -79,7 +79,7 @@ require("dotenv").config;
 
 async function hanldSendEmail(EmailAddress_User, newPassword, content) {
   const transporter = nodemailer.createTransport({
-    service: "Gmail",
+    service: "gmail",
     auth: {
       // TODO: replace `user` and `pass` values from <https://forwardemail.net>
       user: process.env.EMAIL_USERNAME,
@@ -88,11 +88,10 @@ async function hanldSendEmail(EmailAddress_User, newPassword, content) {
   });
   //console.log(EmailAddress_User);
   var info = await transporter.sendMail({
-    from: `ADMIN ${EmailAddress_User}`,
-    to: process.env.EMAIL_USERNAME,
-
+    from: `ADMIN <${process.env.EMAIL_USERNAME}>`,
+    // to: "20120447@student.hcmus.edu.vn",
     // from: process.env.EMAIL_USERNAME,
-    // to: `${EmailAddress_User}`,
+    to: `${EmailAddress_User}`,
     subject: "Reset Password",
     text: `${content} ${newPassword}`, // plain text body
     html: `${content}<b>${newPassword}</b>`,
