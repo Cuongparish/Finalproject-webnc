@@ -37,7 +37,7 @@ const MenuLeft = (props) => {
                             </Accordion.Header>
                             <Accordion.Body className='list-body'>
                                 {StudentClass.map((classItem) => (
-                                    <Nav.Link href="/" className='body-item d-flex align-items-center'>
+                                    <Nav.Link href={`/detail-class/${classItem.MaLop}`} className='body-item d-flex align-items-center'>
                                         <MdClass className='mx-2' /> {classItem.TenLop}
                                     </Nav.Link>
                                 ))}

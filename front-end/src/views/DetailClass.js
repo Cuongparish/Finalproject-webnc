@@ -313,7 +313,7 @@ const DetailClass = (props) => {
                 <Modal.Body>
                     <FloatingLabel
                         controlId="add_teacher"
-                        label="Nhập tên hoặc email"
+                        label="Nhập email của giáo viên"
                         className="mb-3"
                     >
                         <Form.Control id="add_teacher" type="email" placeholder="name@example.com" />
@@ -337,7 +337,7 @@ const DetailClass = (props) => {
                 <Modal.Body>
                     <FloatingLabel
                         controlId="add_student"
-                        label="Nhập tên hoặc email"
+                        label="Nhập email của học sinh"
                         className="mb-3"
                     >
                         <Form.Control id="add_student" type="email" placeholder="name@example.com" />

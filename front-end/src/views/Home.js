@@ -129,7 +129,7 @@ const Home = (props) => {
                 </Col>
             </Row>
 
-            <Row className='vh-100 g-0'>
+            <Row className='h-100 g-0'>
                 <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses}/>
 
                 <Col as={Row} md={10} className='d-flex g-0 p-3 right-content'>
