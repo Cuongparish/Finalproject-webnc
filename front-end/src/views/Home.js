@@ -1,11 +1,13 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { Row, Col, Image, Dropdown, Modal, Button, Form } from 'react-bootstrap';
 import { FaBars, FaPlus } from "react-icons/fa";
-import ClassRoom from '../components/ClassRoom';
+import '../App.css';
+
+import ClassList from '../components/ClassList';
+import MenuLeft from '../components/MenuLeft';
+
 import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
-import MenuLeft from '../components/MenuLeft';
-import '../App.css';
 
 const Home = (props) => {
     const user = props.user;
@@ -15,21 +17,54 @@ const Home = (props) => {
     const [ChuDe, setChuDe] = useState();
     const [Phong, setPhong] = useState();
 
+    const [TeacherClasses, setTeacherClasses] = useState([]);
+    const [StudentClasses, setStudentClasses] = useState([]);
+
     const handleCreateClass = async (e) => {
         e.preventDefault();
-    try {
-      await ClassService.CreateClass(user.idUser, TenLop, ChuDe, Phong).then(
-        (res) => {
-          console.log("res: ", res);
-        },
-        (error) => {
-          console.log(error);
+        try {
+            await ClassService.CreateClass(user.idUser, TenLop, ChuDe, Phong).then(
+                (res) => {
+                    console.log("res: ", res);
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
         }
-      );
-    } catch (err) {
-      console.log(err);
     }
+
+    const GetClassList = async () => {
+        try {
+            await ClassService.GetClass(user.idUser).then(
+                (res) => {
+                    console.log("res[0].data: ", res[0].data);
+                    console.log("res[1].data: ", res[1].data);
+                    if(res[0].data)
+                    {
+                        setTeacherClasses(res[0].data);
+                    }
+                    if(res[1].data)
+                    {
+                        setStudentClasses(res[1].data);
+                    }      
+
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
     }
+
+    useEffect(() => {
+        GetClassList();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
 
     const [join_show, setJoinShow] = useState(false);
     const handleJoinClose = () => setJoinShow(false);
@@ -67,19 +102,15 @@ const Home = (props) => {
 
                     <a href='/home' className='mx-2 btn-member'>Member</a>
                     <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a>
-                    {/* <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a> */}
                 </Col>
             </Row>
 
             <Row className='vh-100 g-0'>
-                <MenuLeft />
+                <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses}/>
 
                 <Col as={Row} md={10} className='d-flex g-0 p-3 right-content'>
-                    <ClassRoom />
-                    <ClassRoom />
-                    <ClassRoom />
-                    <ClassRoom />
-                    <ClassRoom />
+                    <ClassList ClassData = {TeacherClasses}/>
+                    <ClassList ClassData = {StudentClasses}/>
                 </Col>
             </Row>
 
@@ -122,15 +153,15 @@ const Home = (props) => {
                     <Form>
                         <Form.Group className="mb-3" controlId="name">
                             <Form.Label>Tên lớp học (bắt buộc)</Form.Label>
-                            <Form.Control type="text"  onChange={(e) => setTenLop(e.target.value)}/>
+                            <Form.Control type="text" onChange={(e) => setTenLop(e.target.value)} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="topic">
                             <Form.Label>Chủ đề</Form.Label>
-                            <Form.Control type="text" onChange={(e) => setChuDe(e.target.value)}/>
+                            <Form.Control type="text" onChange={(e) => setChuDe(e.target.value)} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="room_name">
                             <Form.Label>Phòng</Form.Label>
-                            <Form.Control type="text" onChange={(e) => setPhong(e.target.value)}/>
+                            <Form.Control type="text" onChange={(e) => setPhong(e.target.value)} />
                         </Form.Group>
                     </Form>
                 </Modal.Body>

@@ -296,3 +296,9 @@ a.element-left.nav-link:hover {
   padding: 0 15%;
   margin-bottom: 20px;
 }
+
+.class-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}

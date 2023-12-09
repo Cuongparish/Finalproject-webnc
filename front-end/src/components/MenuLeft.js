@@ -1,10 +1,13 @@
 import React from 'react';
 import { Col, Nav, Accordion } from 'react-bootstrap';
-import {  FaHome, FaChalkboardTeacher  } from "react-icons/fa";
+import { FaHome, FaChalkboardTeacher } from "react-icons/fa";
 import { MdClass } from "react-icons/md";
 import '../App.css';
 
-const MenuLeft = () => {
+const MenuLeft = (props) => {
+    const TeacherClass = props.TeacherClass;
+    const StudentClass = props.StudentClass;
+
     return (
         <>
             <Col md={2} className="menu-left">
@@ -19,27 +22,25 @@ const MenuLeft = () => {
                                 <FaChalkboardTeacher className='mx-2' /> Giảng dạy
                             </Accordion.Header>
                             <Accordion.Body className='list-body'>
-                                <Nav.Link href="/" className='body-item d-flex align-items-center'>
-                                    <MdClass className='mx-2' /> Web nâng cao
-                                </Nav.Link>
-                                <Nav.Link href="/" className='body-item d-flex align-items-center'>
-                                    <MdClass className='mx-2' /> Web cơ bản
-                                </Nav.Link>
+                                {TeacherClass.map((classItem) => (
+                                    <Nav.Link href="/" className='body-item d-flex align-items-center'>
+                                        <MdClass className='mx-2' /> {classItem.TenLop}
+                                    </Nav.Link>
+                                ))}
                             </Accordion.Body>
                         </Accordion.Item>
                         <hr />
-                        
+
                         <Accordion.Item className='list-item' eventKey="1">
                             <Accordion.Header className='list-header'>
                                 <FaChalkboardTeacher className='mx-2' /> Đã tham gia
                             </Accordion.Header>
                             <Accordion.Body className='list-body'>
-                                <Nav.Link href="/" className='body-item d-flex align-items-center'>
-                                    <MdClass className='mx-2' /> Cơ sở dữ liệu
-                                </Nav.Link>
-                                <Nav.Link href="/" className='body-item d-flex align-items-center'>
-                                    <MdClass className='mx-2' /> Khởi nghiệp
-                                </Nav.Link>
+                                {StudentClass.map((classItem) => (
+                                    <Nav.Link href="/" className='body-item d-flex align-items-center'>
+                                        <MdClass className='mx-2' /> {classItem.TenLop}
+                                    </Nav.Link>
+                                ))}
                             </Accordion.Body>
                         </Accordion.Item>
                         <hr />

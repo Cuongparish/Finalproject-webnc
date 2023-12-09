@@ -7,22 +7,22 @@ require("dotenv").config();
 // });
 
 //Cua cuong
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "final",
-  password: "123456",
-  port: 5432,
-});
-
-//Cua tien
 // const pool = new Pool({
 //   user: "postgres",
 //   host: "localhost",
-//   database: "webnc",
-//   password: "713112411",
+//   database: "final",
+//   password: "123456",
 //   port: 5432,
 // });
+
+//Cua tien
+const pool = new Pool({
+  user: "postgres",
+  host: "localhost",
+  database: "webnc",
+  password: "713112411",
+  port: 5432,
+});
 
 pool.connect((err) => {
   if (err) throw err;
