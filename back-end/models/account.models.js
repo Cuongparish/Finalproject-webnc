@@ -1,8 +1,11 @@
 const postgre = require("./database");
-
+const moment = require("moment");
 module.exports = {
   getAll: async (req, res) => {
     const { rows } = await postgre.query('select * from "User"');
+    rows.forEach((element) => {
+      element.DOB = moment(element.DOB).format("DD-MM-YYYY");
+    });
     return { rows };
   },
 
@@ -10,6 +13,9 @@ module.exports = {
     const { rows } = await postgre.query(
       `select * from "User" where "Email" = '${Email}'`
     );
+    rows.forEach((element) => {
+      element.DOB = moment(element.DOB).format("DD-MM-YYYY");
+    });
     return { rows };
   },
 
@@ -24,7 +30,18 @@ module.exports = {
     const sql = `INSERT INTO "User"(
       "Email", "Pw", "FullName", "Sex", "DOB", "Phone")
       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
-    const { rows } = await postgre.query(sql, [Email, Pw, FullName, Sex, DOB, Phone]);
+    const { rows } = await postgre.query(sql, [
+      Email,
+      Pw,
+      FullName,
+      Sex,
+      DOB,
+      Phone,
+    ]);
+
+    rows.forEach((element) => {
+      element.DOB = moment(element.DOB).format("DD-MM-YYYY");
+    });
     return { rows };
   },
 

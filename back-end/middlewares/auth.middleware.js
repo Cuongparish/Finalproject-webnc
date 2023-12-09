@@ -5,6 +5,7 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const socialUser = require("../models/socialaccout.models");
 const User = require("../models/account.models");
+const moment = require("moment");
 
 require("dotenv").config();
 
@@ -69,6 +70,7 @@ passport.use(
       }
 
       const user = await User.getbyEmail(req.body.Email);
+
       if (user.rows.length > 0) {
         let isMatch = await bcrypt.compare(req.body.Pw, user.rows[0].Pw);
         if (!isMatch) {
@@ -77,7 +79,7 @@ passport.use(
       } else {
         return done(null, false, { msg: "Email or password is invalid" });
       }
-      //console.log(user);
+
       req.user = user;
 
       return done(null, user);

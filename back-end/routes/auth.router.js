@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const passport = require("passport");
 require("dotenv").config();
+const moment = require("moment");
 
 router.get("/login/success", (req, res) => {
   //console.log(req.user);
@@ -52,9 +53,12 @@ router.post(
     failureRedirect: "login/failed",
   }),
   (req, res) => {
+    // req.user.DOB = moment(req.user.DOB).format("DD-MM-YYYY");
+
     console.log(req.user);
-    res.json({ data: req.user});
-  });
+    res.json({ data: req.user });
+  }
+);
 
 router.get("/logout", (req, res) => {
   req.logout();
