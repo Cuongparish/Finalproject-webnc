@@ -22,6 +22,8 @@ const Home = (props) => {
     const [TeacherClasses, setTeacherClasses] = useState([]);
     const [StudentClasses, setStudentClasses] = useState([]);
 
+    const [Classes, setClasses] = useState([]);
+
     const navigate = useNavigate();
 
     const handleCreateClass = async (e) => {
@@ -69,8 +71,24 @@ const Home = (props) => {
 
     useEffect(() => {
         GetClassList();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+
+        if (TeacherClasses && StudentClasses) {
+            // Merge arrays when both TeacherClasses and StudentClasses are not null
+            const merged = [...TeacherClasses, ...StudentClasses];
+            setClasses(merged);
+          } else if (TeacherClasses) {
+            // If TeacherClasses exists and StudentClasses is null, set mergedArray to TeacherClasses
+            setClasses(TeacherClasses);
+          } else if (StudentClasses) {
+            // If StudentClasses exists and TeacherClasses is null, set mergedArray to StudentClasses
+            setClasses(StudentClasses);
+          } else {
+            // If both arrays are null, set mergedArray to an empty array
+            setClasses([]);
+          }
+
+          console.log(Classes);
+      }, [TeacherClasses, StudentClasses]);
 
     const [join_show, setJoinShow] = useState(false);
     const handleJoinClose = () => setJoinShow(false);
@@ -106,7 +124,7 @@ const Home = (props) => {
                         </Dropdown.Menu>
                     </Dropdown>
 
-                    <a href='/home' className='mx-2 btn-member'>Member</a>
+                    <a href='/home' className='mx-2 btn-member'>{user.FullName}</a>
                     <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a>
                 </Col>
             </Row>
@@ -115,8 +133,8 @@ const Home = (props) => {
                 <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses}/>
 
                 <Col as={Row} md={10} className='d-flex g-0 p-3 right-content'>
-                    <ClassList ClassData = {TeacherClasses}/>
-                    <ClassList ClassData = {StudentClasses}/>
+                    <ClassList ClassData = {Classes}/>
+                    {/* <ClassList ClassData = {StudentClasses}/> */}
                 </Col>
             </Row>
 

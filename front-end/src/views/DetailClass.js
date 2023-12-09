@@ -30,20 +30,22 @@ const DetailClass = (props) => {
 
     const [DetailClass, setDetailClass] = useState();
 
+    const [TeacherInClass, setTeacherInClass] = useState([]);
+    const [StudentInClass, setStudentInClass] = useState([]);
+
     useEffect(() => {
         console.log("123");
-        Promise.all([GetClassList(), GetDetailClass()]);
-      }, [user]);
+        Promise.all([GetClassList(), GetDetailClass(), GetListUserInClass()]);
+    }, [user]);
 
-   
-      const GetDetailClass = async () => {
+
+    const GetDetailClass = async () => {
         try {
             console.log("1111");
             await ClassService.GetDetailClass(malop).then(
                 (res) => {
                     console.log("res-detail-class: ", res[0]);
-                    if(res)
-                    {
+                    if (res) {
                         setDetailClass(res[0]);
                     }
                 },
@@ -63,14 +65,37 @@ const DetailClass = (props) => {
                 (res) => {
                     //console.log("res[0].data: ", res[0].data);
                     //console.log("res[1].data: ", res[1].data);
-                    if(res[0].data)
-                    {
+                    if (res[0].data) {
                         setTeacherClasses(res[0].data);
                     }
-                    if(res[1].data)
-                    {
+                    if (res[1].data) {
                         setStudentClasses(res[1].data);
-                    }      
+                    }
+
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const GetListUserInClass = async () => {
+        try {
+            //console.log(1111);
+            await ClassService.GetListUserInClass(malop).then(
+                (res) => {
+                    // console.log("res[0].data: ", res.data[0]);
+                    // console.log("res[1].data: ", res.data[1]);
+                    //console.log("res: ",res[0].data);
+                    if (res[0].data) {
+                        setTeacherInClass(res[0].data);
+                    }
+                    if (res[0].data) {
+                        setStudentInClass(res[1].data);
+                    }
 
                 },
                 (error) => {
@@ -97,7 +122,7 @@ const DetailClass = (props) => {
                     <h3 className='mb-0'>Grade Management</h3>
                 </Col>
                 <Col xs md={{ span: 2, offset: 1 }} className='d-flex justify-content-end align-items-center'>
-                    <a href='/' className='mx-2 btn-member'>Member</a>
+                    <a href='/' className='mx-2 btn-member'>{user?.FullName}</a>
                     <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a>
                 </Col>
             </Row>
@@ -112,7 +137,6 @@ const DetailClass = (props) => {
                                 <div className='detail-news'>
                                     <Row className='banner-news mb-4'>
                                         <h1>{DetailClass?.TenLop}</h1>
-                                        {/* <h1>Hello</h1> */}
                                     </Row>
 
                                     <Row>
@@ -193,7 +217,7 @@ const DetailClass = (props) => {
                                         <Table>
                                             <tbody>
                                                 <tr>
-                                                    <td className="align-middle" style={{ width: '5%' }}>
+                                                    {/* <td className="align-middle" style={{ width: '5%' }}>
                                                         <input
                                                             type="checkbox"
                                                         // value="id_user"
@@ -206,8 +230,20 @@ const DetailClass = (props) => {
                                                         <a onClick="" className='button fs-2 mx-2'>
                                                             <CiCircleMore />
                                                         </a>
-
-                                                    </td>
+                                                    </td> */} 
+                                                    {TeacherInClass?.map((Teacher, index) => (
+                                                        <>
+                                                            <td className="align-middle" style={{ width: '5%' }}>
+                                                                <input
+                                                                    type="checkbox"
+                                                                // value="id_user"
+                                                                // checked={selectedValues.includes('Option 1')}
+                                                                // onChange={() => handleCheckboxChange('Option 1')}
+                                                                />
+                                                            </td>
+                                                            <td className="align-middle" style={{ width: '75%' }}>{Teacher.FullName}</td>
+                                                        </>
+                                                    ))}
                                                 </tr>
                                             </tbody>
                                         </Table>
@@ -225,9 +261,43 @@ const DetailClass = (props) => {
                                         </Col>
                                     </Row>
 
-                                    {/* Table Students */}
-                                    {/* Data */}
-                                    {/* Table Students */}
+                                    <Row className='banner-members mb-4'>
+                                        {/* Table Student */}
+                                        <Table>
+                                            <tbody>
+                                                <tr>
+                                                    {/* <td className="align-middle" style={{ width: '5%' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                        // value="id_user"
+                                                        // checked={selectedValues.includes('Option 1')}
+                                                        // onChange={() => handleCheckboxChange('Option 1')}
+                                                        />
+                                                    </td>
+                                                    <td className="align-middle" style={{ width: '75%' }}>Trường Khoa Phạm</td>
+                                                    <td className="align-middle text-end" style={{ width: '20%' }}>
+                                                        <a onClick="" className='button fs-2 mx-2'>
+                                                            <CiCircleMore />
+                                                        </a>
+                                                    </td> */} 
+                                                    {StudentInClass?.map((Student, index) => (
+                                                        <>
+                                                            <td className="align-middle" style={{ width: '5%' }}>
+                                                                <input
+                                                                    type="checkbox"
+                                                                // value="id_user"
+                                                                // checked={selectedValues.includes('Option 1')}
+                                                                // onChange={() => handleCheckboxChange('Option 1')}
+                                                                />
+                                                            </td>
+                                                            <td className="align-middle" style={{ width: '75%' }}>{Student.FullName}</td>
+                                                        </>
+                                                    ))}
+                                                </tr>
+                                            </tbody>
+                                        </Table>
+                                        {/* Table Student */}
+                                    </Row>
                                 </div>
                             </Tab>
                         </Tabs>

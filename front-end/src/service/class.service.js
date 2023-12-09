@@ -27,10 +27,19 @@ const GetClasses = (idUser) => {
           });
  }
 
+ const GetListUserInClass = (MaLop) => {
+    return axios
+        .get(`${API_URL}/api/v1/user/${MaLop}/listUserinClass`).then((res) => {
+            console.log("res-list-user: ", res.data);
+            return res.data;
+          });
+ }
+
 const ClassService = {
     CreateClass,
     GetClasses,
     GetDetailClass,
+    GetListUserInClass
 }
 
 export default ClassService;
