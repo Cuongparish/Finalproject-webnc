@@ -30,13 +30,7 @@ module.exports = {
   postCreateClass: async (req, res, malop) => {
     const { rows } = await postgre.query(
       "CALL createclass($1, $2, $3, $4, $5)",
-      [
-        req.params.id,
-        req.body.TenLop,
-        req.body.ChuDe,
-        req.body.Phong,
-        malop,
-      ]
+      [req.params.id, req.body.TenLop, req.body.ChuDe, req.body.Phong, malop]
     );
     return { rows };
   },
@@ -77,18 +71,18 @@ module.exports = {
     return { rows };
   },
 
-  AddStudent_inClass: async (req, res) => {
+  AddStudent_inClass: async (iduser, malop) => {
     const { rows } = await postgre.query("CALL addstudent($1, $2)", [
-      req.body.idUser,
-      req.params.malop,
+      iduser,
+      malop,
     ]);
     return { rows };
   },
 
-  AddTeacher_inClass: async (req, res) => {
+  AddTeacher_inClass: async (iduser, malop) => {
     const { rows } = await postgre.query("CALL addteacher($1, $2)", [
-      req.body.idUser,
-      req.params.malop,
+      iduser,
+      malop,
     ]);
     return { rows };
   },

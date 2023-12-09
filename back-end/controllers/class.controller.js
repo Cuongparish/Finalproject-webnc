@@ -108,9 +108,11 @@ const classC = {
 
   addUserinClass: async (req, res) => {
     // const { iduser, tenlop, chude, phong, malop } = req.body;
+    const iduser = req.body.idUser;
+    const malop = req.params.malop;
     try {
       if (req.query.role === "hs") {
-        const { rows } = await classM.AddStudent_inClass(req, res);
+        const { rows } = await classM.AddStudent_inClass(iduser, malop);
         return res.json({
           msg: "them hoc sinh vao lop thanh cong",
           data: rows,
@@ -118,7 +120,7 @@ const classC = {
       }
 
       if (req.query.role === "gv") {
-        const { rows } = await classM.AddTeacher_inClass(req, res);
+        const { rows } = await classM.AddTeacher_inClass(iduser, malop);
         return res.json({
           msg: "them giao vien vao lop thanh cong",
           data: rows,
@@ -126,6 +128,20 @@ const classC = {
       }
     } catch (error) {
       //console.error("Lỗi :", error);
+      return res.status(500).json({ msg: "Lỗi thêm user vào lớp học" });
+    }
+  },
+
+  addStudentinClass: async (req, res) => {
+    const iduser = req.params.id;
+    const malop = req.body.MaLop;
+    try {
+      const { rows } = await classM.AddStudent_inClass(iduser, malop);
+      return res.json({
+        msg: "them hoc sinh vao lop thanh cong",
+        data: rows,
+      });
+    } catch (error) {
       return res.status(500).json({ msg: "Lỗi thêm user vào lớp học" });
     }
   },

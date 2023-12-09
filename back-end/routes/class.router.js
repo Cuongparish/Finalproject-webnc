@@ -15,6 +15,9 @@ router.get("/:malop/listUserinClass", classController.getListUserinClass);
 // chi tiet cua 1 lop hoc
 router.get("/:malop/detailClass", classController.getDetailinClass);
 
+// hoc sinh tham gia lop hoc
+router.post("/:id/studentJoinClass", classController.addStudentinClass);
+
 // xac nhan tham gia lop hoc
 router.post("/:malop/joinClass?", classController.addUserinClass);
 
