@@ -134,7 +134,6 @@ const Home = (props) => {
 
                 <Col as={Row} md={10} className='d-flex g-0 p-3 right-content'>
                     <ClassList ClassData = {Classes}/>
-                    {/* <ClassList ClassData = {StudentClasses}/> */}
                 </Col>
             </Row>
 

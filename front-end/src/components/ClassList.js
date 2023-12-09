@@ -12,6 +12,7 @@ const ClassList = (props) => {
           key={index} // Key should be unique, consider using a unique identifier from your data
           TenLop={classItem.TenLop}
           ChuDe={classItem.ChuDe}
+          MaLop={classItem.MaLop}
         />
       ))}
     </div>

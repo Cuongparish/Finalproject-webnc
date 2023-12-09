@@ -8,6 +8,9 @@ const ClassRoom = (props) => {
   const ChuDe = props.ChuDe;
   //const Phong = props.Phong;
   const TenLop = props.TenLop;
+  const MaLop = props.MaLop;
+
+  const detail_class_link = `/detail-class/${MaLop}`;
 
   return (
     <>
@@ -19,7 +22,7 @@ const ClassRoom = (props) => {
           <Card.Body>
               <Card.Title>{TenLop}</Card.Title>
               <Card.Subtitle className="mb-2 text-muted">{ChuDe}</Card.Subtitle>
-              <Button href="/detail-class" variant="primary">Truy cập <RxEnter /></Button>
+              <Button href={detail_class_link} variant="primary">Truy cập <RxEnter /></Button>
               <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
           </Card.Body>
       </Card>
