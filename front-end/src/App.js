@@ -66,7 +66,7 @@ function App() {
           path="/signup"
           element={user ? <Navigate to="/home" /> : <Signup />}
         />
-        <Route exact path="/detail-class" element={user ? <DetailClass /> : <Navigate to="/login" />} />
+        <Route path="/detail-class/:malop" element={<DetailClass User = {user} />} />
         <Route exact path="/ResetPw" element={<ResetPW />} />
         <Route exact path="/logout" element={<Navigate to="/login" />} />
       </Routes>

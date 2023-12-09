@@ -1,21 +1,86 @@
-import { React, useState } from 'react';
-import { Row, Col, Image, Nav, NavDropdown, Tabs, Tab, Card, FloatingLabel, Form, Modal, Button, Table } from 'react-bootstrap';
-import { FaBars, FaHome, FaRegCopy, FaLink, FaUserPlus } from "react-icons/fa";
+import { React, useState, useEffect } from 'react';
+import { Row, Col, Image, Tabs, Tab, Card, FloatingLabel, Form, Modal, Button, Table } from 'react-bootstrap';
+import { FaBars, FaRegCopy, FaLink, FaUserPlus } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiCircleMore } from "react-icons/ci";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MenuLeft from '../components/MenuLeft';
 import AuthService from "../service/auth.service";
+import ClassService from "../service/class.service";
 import '../App.css';
+import { useParams } from 'react-router-dom';
 
-const DetailClass = () => {
+
+const DetailClass = (props) => {
+    const { malop } = useParams();
+    //console.log("Ma lop: ",malop);
+    //const malop = match.params.malop;
+    const user = props.User;
+
     const [add_teacher, setAddTeacher] = useState(false);
     const handleAddTeacherClose = () => setAddTeacher(false);
     const handleAddTeacherShow = () => setAddTeacher(true);
-    
+
     const [add_student, setAddStudent] = useState(false);
     const handleAddStudentClose = () => setAddStudent(false);
     const handleAddStudentShow = () => setAddStudent(true);
+
+    const [TeacherClasses, setTeacherClasses] = useState([]);
+    const [StudentClasses, setStudentClasses] = useState([]);
+
+    const [DetailClass, setDetailClass] = useState();
+
+    useEffect(() => {
+        console.log("123");
+        Promise.all([GetClassList(), GetDetailClass()]);
+      }, [user]);
+
+   
+      const GetDetailClass = async () => {
+        try {
+            console.log("1111");
+            await ClassService.GetDetailClass(malop).then(
+                (res) => {
+                    console.log("res-detail-class: ", res[0]);
+                    if(res)
+                    {
+                        setDetailClass(res[0]);
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const GetClassList = async () => {
+        try {
+            //console.log(1111);
+            await ClassService.GetClasses(user.idUser).then(
+                (res) => {
+                    //console.log("res[0].data: ", res[0].data);
+                    //console.log("res[1].data: ", res[1].data);
+                    if(res[0].data)
+                    {
+                        setTeacherClasses(res[0].data);
+                    }
+                    if(res[1].data)
+                    {
+                        setStudentClasses(res[1].data);
+                    }      
+
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <>
@@ -25,9 +90,9 @@ const DetailClass = () => {
                 </Col>
                 <Col xs md={{ span: 4, offset: 3 }} className='d-flex justify-content-center align-items-center'>
                     <Image src={process.env.PUBLIC_URL + '/Images/logo.png'}
-                    className="d-inline-block mx-2"
-                    alt=""
-                    width={50}
+                        className="d-inline-block mx-2"
+                        alt=""
+                        width={50}
                     />
                     <h3 className='mb-0'>Grade Management</h3>
                 </Col>
@@ -38,7 +103,7 @@ const DetailClass = () => {
             </Row>
 
             <Row className='g-0'>
-                <MenuLeft />
+                <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses} />
 
                 <Col md={10}>
                     <div className='w-100 tab-menu'>
@@ -46,7 +111,8 @@ const DetailClass = () => {
                             <Tab eventKey="news" id='news' title="Bảng tin">
                                 <div className='detail-news'>
                                     <Row className='banner-news mb-4'>
-                                        <h1>Class Name</h1>
+                                        <h1>{DetailClass?.TenLop}</h1>
+                                        {/* <h1>Hello</h1> */}
                                     </Row>
 
                                     <Row>
@@ -55,14 +121,14 @@ const DetailClass = () => {
                                                 <Card.Header className='fs-6'>Mã lớp</Card.Header>
                                                 <Card.Body>
                                                     <Card.Text className='fs-3 fw-bold'>
-                                                        gib5tyx
+                                                        {malop}
                                                     </Card.Text>
                                                     <Row className='d-flex g-3'>
                                                         <Col>
                                                             <a className='btn-outline-info btn d-flex align-items-center justify-content-center'><FaRegCopy /></a>
                                                         </Col>
                                                         <Col>
-                                                            <a className='btn-outline-success btn d-flex align-items-center justify-content-center'><FaLink /></a>      
+                                                            <a className='btn-outline-success btn d-flex align-items-center justify-content-center'><FaLink /></a>
                                                         </Col>
                                                     </Row>
                                                 </Card.Body>
@@ -87,7 +153,7 @@ const DetailClass = () => {
                                                 label="Thông báo nội dung nào đó cho lớp học của ban"
                                                 className="mb-4"
                                             >
-                                                <Form.Control type="text" placeholder=""/>
+                                                <Form.Control type="text" placeholder="" />
                                             </FloatingLabel>
 
                                             <Card style={{ width: '100%' }}>
@@ -127,20 +193,20 @@ const DetailClass = () => {
                                         <Table>
                                             <tbody>
                                                 <tr>
-                                                    <td className="align-middle"  style={{ width: '5%' }}>
+                                                    <td className="align-middle" style={{ width: '5%' }}>
                                                         <input
                                                             type="checkbox"
-                                                            // value="id_user"
-                                                            // checked={selectedValues.includes('Option 1')}
-                                                            // onChange={() => handleCheckboxChange('Option 1')}
+                                                        // value="id_user"
+                                                        // checked={selectedValues.includes('Option 1')}
+                                                        // onChange={() => handleCheckboxChange('Option 1')}
                                                         />
                                                     </td>
-                                                    <td className="align-middle"  style={{ width: '75%' }}>Trường Khoa Phạm</td>
-                                                    <td className="align-middle text-end"  style={{ width: '20%' }}>
+                                                    <td className="align-middle" style={{ width: '75%' }}>Trường Khoa Phạm</td>
+                                                    <td className="align-middle text-end" style={{ width: '20%' }}>
                                                         <a onClick="" className='button fs-2 mx-2'>
                                                             <CiCircleMore />
                                                         </a>
-                                                    
+
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -192,7 +258,7 @@ const DetailClass = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            
+
             {/* Modal Add Student */}
             <Modal show={add_student} style={{ top: '10%' }} onHide={handleAddStudentClose}>
                 <Modal.Header closeButton>

@@ -1,7 +1,9 @@
 import { React, useState, useEffect } from 'react';
+import { useNavigate} from "react-router-dom";
 import { Row, Col, Image, Dropdown, Modal, Button, Form } from 'react-bootstrap';
 import { FaBars, FaPlus } from "react-icons/fa";
 import '../App.css';
+
 
 import ClassList from '../components/ClassList';
 import MenuLeft from '../components/MenuLeft';
@@ -20,12 +22,16 @@ const Home = (props) => {
     const [TeacherClasses, setTeacherClasses] = useState([]);
     const [StudentClasses, setStudentClasses] = useState([]);
 
+    const navigate = useNavigate();
+
     const handleCreateClass = async (e) => {
         e.preventDefault();
         try {
             await ClassService.CreateClass(user.idUser, TenLop, ChuDe, Phong).then(
                 (res) => {
-                    console.log("res: ", res);
+                    //console.log("res: ", res);
+                    navigate(`/detail-class/${res}`);
+                    window.location.reload();
                 },
                 (error) => {
                     console.log(error);
@@ -38,10 +44,10 @@ const Home = (props) => {
 
     const GetClassList = async () => {
         try {
-            await ClassService.GetClass(user.idUser).then(
+            await ClassService.GetClasses(user.idUser).then(
                 (res) => {
-                    console.log("res[0].data: ", res[0].data);
-                    console.log("res[1].data: ", res[1].data);
+                    //console.log("res[0].data: ", res[0].data);
+                    //console.log("res[1].data: ", res[1].data);
                     if(res[0].data)
                     {
                         setTeacherClasses(res[0].data);

@@ -11,17 +11,26 @@ const CreateClass = (idUser, TenLop, ChuDe, Phong) => {
           });
 }
 
-const GetClass = (idUser) => {
+const GetClasses = (idUser) => {
     return axios
         .get(`${API_URL}/api/v1/user/${idUser}/classes`).then((res) => {
-            console.log("res: ", res);
+            //console.log("res: ", res);
             return res.data;
           });
 }
 
+ const GetDetailClass = (MaLop) => {
+    return axios
+        .get(`${API_URL}/api/v1/user/${MaLop}/detailClass`).then((res) => {
+            //console.log("res-detail-class: ", res);
+            return res.data.data;
+          });
+ }
+
 const ClassService = {
     CreateClass,
-    GetClass,
+    GetClasses,
+    GetDetailClass,
 }
 
 export default ClassService;
