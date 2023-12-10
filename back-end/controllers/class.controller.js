@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config;
 
 async function hanldSendEmail(EmailAddress_User, MaLop, Role, content) {
+  console.log("LOCAL_HOST:", process.env.LOCAL_HOST);
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -13,13 +14,13 @@ async function hanldSendEmail(EmailAddress_User, MaLop, Role, content) {
     },
   });
 
-  console.log("handle : ", MaLop);
   var info = await transporter.sendMail({
     from: `ADMIN <${process.env.EMAIL_USERNAME}>`,
     to: `${EmailAddress_User}`,
     subject: "Invite class",
-    text: `${content} http://localhost:3000/join-class/${MaLop}/${Role}`, // plain text body
-    html: `${content} http://localhost:3000/join-class/${MaLop}/${Role}`,
+    text: `${content} ${process.env.LOCAL_HOST}join-class/${MaLop}/${Role}`, // plain text body
+    html: `${content} ${process.env.LOCAL_HOST}join-class/${MaLop}/${Role}`,
+    // html: `${content} <a href="${process.env.LOCAL_HOST}/join-class/${MaLop}/${Role}">Link</a>`,
   });
   return info;
 }
