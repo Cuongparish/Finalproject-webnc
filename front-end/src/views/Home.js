@@ -106,7 +106,7 @@ const Home = (props) => {
         }
 
         console.log(Classes);
-    }, [TeacherClasses, StudentClasses]);
+    }, []);
 
     const [join_show, setJoinShow] = useState(false);
     const handleJoinClose = () => setJoinShow(false);

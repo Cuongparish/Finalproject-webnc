@@ -2,13 +2,18 @@ import { React, useState, useEffect } from 'react';
 import { Row, Col, Image, Tabs, Tab, Card, FloatingLabel, Form, Modal, Button, Table } from 'react-bootstrap';
 import { FaBars, FaRegCopy, FaLink, FaUserPlus } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
-import { CiCircleMore } from "react-icons/ci";
+import { useParams } from 'react-router-dom';
+//import { CiCircleMore } from "react-icons/ci";
+import copy from 'clipboard-copy';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MenuLeft from '../components/MenuLeft';
+
 import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
+
 import '../App.css';
-import { useParams } from 'react-router-dom';
+
 
 
 const DetailClass = (props) => {
@@ -16,6 +21,8 @@ const DetailClass = (props) => {
     //console.log("Ma lop: ",malop);
     //const malop = match.params.malop;
     const user = props.User;
+
+    // const linktocopy = ""
 
     const [add_teacher, setAddTeacher] = useState(false);
     const handleAddTeacherClose = () => setAddTeacher(false);
@@ -38,6 +45,21 @@ const DetailClass = (props) => {
         Promise.all([GetClassList(), GetDetailClass(), GetListUserInClass()]);
     }, [user]);
 
+    function CopyText(text) {
+        const textToCopy = text;
+      
+        const copyText = () => {
+          copy(textToCopy)
+            .then(() => {
+              alert('Đã sao chép!');
+            })
+            .catch((err) => {
+              alert('Lỗi khi sao chép: ' + err);
+            });
+        };
+      
+        return copyText;
+      }
 
     const GetDetailClass = async () => {
         try {
@@ -138,7 +160,7 @@ const DetailClass = (props) => {
                                     <Row className='banner-news mb-4'>
                                         <h1>{DetailClass?.TenLop}</h1>
                                     </Row>
-
+                                    
                                     <Row>
                                         <Col md={3}>
                                             <Card className="mb-4">
@@ -149,7 +171,7 @@ const DetailClass = (props) => {
                                                     </Card.Text>
                                                     <Row className='d-flex g-3'>
                                                         <Col>
-                                                            <a className='btn-outline-info btn d-flex align-items-center justify-content-center'><FaRegCopy /></a>
+                                                            <a onClick={CopyText(malop)} className='btn-outline-info btn d-flex align-items-center justify-content-center'><FaRegCopy /></a>
                                                         </Col>
                                                         <Col>
                                                             <a className='btn-outline-success btn d-flex align-items-center justify-content-center'><FaLink /></a>

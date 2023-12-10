@@ -43,12 +43,21 @@ const GetClasses = (idUser) => {
           });
  }
 
+ const JoinClassByLink = (idUser, MaLop, Role) => {
+    return axios
+        .post(`${API_URL}/api/v1/user/${MaLop}/joinClass?role=${Role}`, {idUser}).then((res) => {
+            console.log("res: ", res);
+            return res;
+          });
+ }
+
 const ClassService = {
     CreateClass,
     GetClasses,
     GetDetailClass,
     GetListUserInClass,
     JoinClassByCode,
+    JoinClassByLink,
 }
 
 export default ClassService;
