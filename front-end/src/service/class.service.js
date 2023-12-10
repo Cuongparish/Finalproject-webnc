@@ -35,11 +35,20 @@ const GetClasses = (idUser) => {
           });
  }
 
+ const JoinClassByCode = (idUser, MaLop) => {
+    return axios
+        .post(`${API_URL}/api/v1/user/${idUser}/studentJoinClass`, {MaLop}).then((res) => {
+            console.log("res: ", res);
+            return res;
+          });
+ }
+
 const ClassService = {
     CreateClass,
     GetClasses,
     GetDetailClass,
-    GetListUserInClass
+    GetListUserInClass,
+    JoinClassByCode,
 }
 
 export default ClassService;

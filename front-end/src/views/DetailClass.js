@@ -230,10 +230,10 @@ const DetailClass = (props) => {
                                                         <a onClick="" className='button fs-2 mx-2'>
                                                             <CiCircleMore />
                                                         </a>
-                                                    </td> */} 
+                                                    </td> */}
                                                     {TeacherInClass?.map((Teacher, index) => (
-                                                        <>
-                                                            <td className="align-middle" style={{ width: '5%' }}>
+                                                        <div>
+                                                            <td className="align-middle" style={{ width: '20%', padding: '5px' }}>
                                                                 <input
                                                                     type="checkbox"
                                                                 // value="id_user"
@@ -241,8 +241,8 @@ const DetailClass = (props) => {
                                                                 // onChange={() => handleCheckboxChange('Option 1')}
                                                                 />
                                                             </td>
-                                                            <td className="align-middle" style={{ width: '75%' }}>{Teacher.FullName}</td>
-                                                        </>
+                                                            <td className="align-middle" style={{ width: '75%' }}><h5>{Teacher.FullName}</h5></td>
+                                                        </div>
                                                     ))}
                                                 </tr>
                                             </tbody>
@@ -279,10 +279,10 @@ const DetailClass = (props) => {
                                                         <a onClick="" className='button fs-2 mx-2'>
                                                             <CiCircleMore />
                                                         </a>
-                                                    </td> */} 
+                                                    </td> */}
                                                     {StudentInClass?.map((Student, index) => (
-                                                        <>
-                                                            <td className="align-middle" style={{ width: '5%' }}>
+                                                        <div>
+                                                            <td className="align-middle" style={{ width: '20%', padding: '5px' }}>
                                                                 <input
                                                                     type="checkbox"
                                                                 // value="id_user"
@@ -290,8 +290,8 @@ const DetailClass = (props) => {
                                                                 // onChange={() => handleCheckboxChange('Option 1')}
                                                                 />
                                                             </td>
-                                                            <td className="align-middle" style={{ width: '75%' }}>{Student.FullName}</td>
-                                                        </>
+                                                            <td className="align-middle" style={{ width: '75%' }}><h5>{Student.FullName}</h5></td>
+                                                        </div>
                                                     ))}
                                                 </tr>
                                             </tbody>

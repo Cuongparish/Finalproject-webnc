@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Row, Col, Image, Dropdown, Modal, Button, Form } from 'react-bootstrap';
 import { FaBars, FaPlus } from "react-icons/fa";
 import '../App.css';
@@ -18,6 +18,8 @@ const Home = (props) => {
     const [TenLop, setTenLop] = useState();
     const [ChuDe, setChuDe] = useState();
     const [Phong, setPhong] = useState();
+
+    const [MaLop, setMaLop] = useState();
 
     const [TeacherClasses, setTeacherClasses] = useState([]);
     const [StudentClasses, setStudentClasses] = useState([]);
@@ -44,20 +46,36 @@ const Home = (props) => {
         }
     }
 
+    const handleJoinClass = async (e) => {
+        e.preventDefault();
+        try {
+            await ClassService.JoinClassByCode(user.idUser, MaLop).then(
+                (res) => {
+                    console.log("res: ", res);
+                    navigate(`/detail-class/${MaLop}`);
+                    window.location.reload();
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const GetClassList = async () => {
         try {
             await ClassService.GetClasses(user.idUser).then(
                 (res) => {
                     //console.log("res[0].data: ", res[0].data);
                     //console.log("res[1].data: ", res[1].data);
-                    if(res[0].data)
-                    {
+                    if (res[0].data) {
                         setTeacherClasses(res[0].data);
                     }
-                    if(res[1].data)
-                    {
+                    if (res[1].data) {
                         setStudentClasses(res[1].data);
-                    }      
+                    }
 
                 },
                 (error) => {
@@ -76,19 +94,19 @@ const Home = (props) => {
             // Merge arrays when both TeacherClasses and StudentClasses are not null
             const merged = [...TeacherClasses, ...StudentClasses];
             setClasses(merged);
-          } else if (TeacherClasses) {
+        } else if (TeacherClasses) {
             // If TeacherClasses exists and StudentClasses is null, set mergedArray to TeacherClasses
             setClasses(TeacherClasses);
-          } else if (StudentClasses) {
+        } else if (StudentClasses) {
             // If StudentClasses exists and TeacherClasses is null, set mergedArray to StudentClasses
             setClasses(StudentClasses);
-          } else {
+        } else {
             // If both arrays are null, set mergedArray to an empty array
             setClasses([]);
-          }
+        }
 
-          console.log(Classes);
-      }, [TeacherClasses, StudentClasses]);
+        console.log(Classes);
+    }, [TeacherClasses, StudentClasses]);
 
     const [join_show, setJoinShow] = useState(false);
     const handleJoinClose = () => setJoinShow(false);
@@ -130,10 +148,10 @@ const Home = (props) => {
             </Row>
 
             <Row className='h-100 g-0'>
-                <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses}/>
+                <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses} />
 
                 <Col as={Row} md={10} className='d-flex g-0 p-3 right-content'>
-                    <ClassList ClassData = {Classes}/>
+                    <ClassList ClassData={Classes} />
                 </Col>
             </Row>
 
@@ -149,7 +167,7 @@ const Home = (props) => {
                             <Form.Text className='mb-2' style={{ display: 'block' }} muted>
                                 Đề nghị giáo viên của bạn cung cấp mã lớp rồi nhập mã đó vào đây.
                             </Form.Text>
-                            <Form.Control type="text" />
+                            <Form.Control type="text" onChange={(e) => setMaLop(e.target.value)} />
                         </Form.Group>
                         <Form.Text className='mb-2' style={{ display: 'block' }} muted>
                             <span className='fw-bold'>Cách đăng nhập bằng mã lớp học:</span>
@@ -161,7 +179,10 @@ const Home = (props) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleJoinClose}>
+                    <Button variant="secondary" onClick={handleJoinClose}>
+                        Hủy
+                    </Button>
+                    <Button variant="primary" onClick={handleJoinClass}>
                         Tham gia
                     </Button>
                 </Modal.Footer>
