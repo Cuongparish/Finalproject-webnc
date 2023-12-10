@@ -46,7 +46,15 @@ const GetClasses = (idUser) => {
  const JoinClassByLink = (idUser, MaLop, Role) => {
     return axios
         .post(`${API_URL}/api/v1/user/${MaLop}/joinClass?role=${Role}`, {idUser}).then((res) => {
-            console.log("res: ", res);
+            console.log("res-join: ", res);
+            return res;
+          });
+ }
+
+ const SendMailToJoinClass = (MaLop, Role, Email) => {
+    return axios
+        .post(`${API_URL}/api/v1/user/sendEmail`, {MaLop, Role, Email}).then((res) => {
+            console.log("res-sendmail: ", res);
             return res;
           });
  }
@@ -58,6 +66,7 @@ const ClassService = {
     GetListUserInClass,
     JoinClassByCode,
     JoinClassByLink,
+    SendMailToJoinClass,
 }
 
 export default ClassService;

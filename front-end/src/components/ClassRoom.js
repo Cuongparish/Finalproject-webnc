@@ -14,18 +14,22 @@ const ClassRoom = (props) => {
 
   return (
     <>
-      <Card className="class-item">
-          <Card.Img variant="top"
-              src={process.env.PUBLIC_URL + '/Images/class_bg.png'}
-              height={80}
-          />
-          <Card.Body>
-              <Card.Title>{TenLop}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{ChuDe}</Card.Subtitle>
-              <Button href={detail_class_link} variant="primary">Truy cập <RxEnter /></Button>
-              <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
-          </Card.Body>
+      <Card className="class-item" style={{ position: 'relative' }}>
+        <Card.Img
+          variant="top"
+          src={process.env.PUBLIC_URL + '/Images/class_bg.png'}
+          height={80}
+        />
+        <Card.Body>
+          <Card.Title>{TenLop}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">{ChuDe}</Card.Subtitle>
+        </Card.Body>
+        <div style={{ position: 'absolute', bottom: '0', left: '0', right: '0', padding: '10px', display: 'flex', justifyContent: 'flex-end' }}>
+          <Button href={detail_class_link} variant="primary">Truy cập <RxEnter /></Button>
+          <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
+        </div>
       </Card>
+
     </>
   );
 };

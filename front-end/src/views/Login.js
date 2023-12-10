@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { FaChevronLeft } from "react-icons/fa";
 import LeftBanner from "../components/LeftBanner.";
 import AuthService from "../service/auth.service";
@@ -13,6 +13,9 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+   
+
     try {
       await AuthService.localAuth(Email, Pw).then(
         (res) => {
@@ -20,8 +23,16 @@ const Login = () => {
           const user = res;
           console.log(JSON.stringify(user));
           localStorage.setItem("user", JSON.stringify(user));
-          navigate("/home");
-          window.location.reload();
+          if(sessionStorage.getItem("lastVisitedUrl")){
+            const JoinClassURL = sessionStorage.getItem("lastVisitedUrl");
+            sessionStorage.removeItem("lastVisitedUrl");
+            navigate(JoinClassURL);
+            window.location.reload();
+          }
+          else{
+            navigate("/home");
+            window.location.reload();
+          }
         },
         (error) => {
           console.log(error);

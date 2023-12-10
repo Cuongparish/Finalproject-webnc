@@ -14,7 +14,7 @@ import ClassService from "../service/class.service";
 
 import '../App.css';
 
-
+const Client_URL = "http://localhost:3000"
 
 const DetailClass = (props) => {
     const { malop } = useParams();
@@ -22,7 +22,7 @@ const DetailClass = (props) => {
     //const malop = match.params.malop;
     const user = props.User;
 
-    // const linktocopy = ""
+    const link = `${Client_URL}/join-class/${malop}/hs`
 
     const [add_teacher, setAddTeacher] = useState(false);
     const handleAddTeacherClose = () => setAddTeacher(false);
@@ -40,26 +40,44 @@ const DetailClass = (props) => {
     const [TeacherInClass, setTeacherInClass] = useState([]);
     const [StudentInClass, setStudentInClass] = useState([]);
 
+    const [Email, setEmail] = useState();
+
     useEffect(() => {
         console.log("123");
         Promise.all([GetClassList(), GetDetailClass(), GetListUserInClass()]);
     }, [user]);
 
-    function CopyText(text) {
-        const textToCopy = text;
-      
+    function CopyCode(code) {
+        const textToCopy = code;
+
         const copyText = () => {
-          copy(textToCopy)
-            .then(() => {
-              alert('Đã sao chép!');
-            })
-            .catch((err) => {
-              alert('Lỗi khi sao chép: ' + err);
-            });
+            copy(textToCopy)
+                .then(() => {
+                    alert('Đã sao chép!');
+                })
+                .catch((err) => {
+                    alert('Lỗi khi sao chép: ' + err);
+                });
         };
-      
+
         return copyText;
-      }
+    }
+
+    function CopyLink(link) {
+        const textToCopy = link;
+
+        const copyText = () => {
+            copy(textToCopy)
+                .then(() => {
+                    alert('Đã sao chép!');
+                })
+                .catch((err) => {
+                    alert('Lỗi khi sao chép: ' + err);
+                });
+        };
+
+        return copyText;
+    }
 
     const GetDetailClass = async () => {
         try {
@@ -129,6 +147,48 @@ const DetailClass = (props) => {
         }
     }
 
+    const handleSendToTeacher = async (e) => {
+        e.preventDefault();
+
+        const role = "gv";
+
+        try {
+            await ClassService.SendMailToJoinClass(malop, role, Email).then(
+                (res) => {
+                    console.log(res);
+                    //alert('Đã gửi lời mời');
+                    handleAddTeacherClose();
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleSendToStudent = async (e) => {
+        e.preventDefault();
+
+        const role = "hs";
+
+        try {
+            await ClassService.SendMailToJoinClass(malop, role, Email).then(
+                (res) => {
+                    console.log(res);
+                    //alert('Đã gửi lời mời');
+                    handleAddStudentClose();
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
         <>
             <Row className='justify-`content`-center py-3 menu-top align-items-center'>
@@ -160,7 +220,7 @@ const DetailClass = (props) => {
                                     <Row className='banner-news mb-4'>
                                         <h1>{DetailClass?.TenLop}</h1>
                                     </Row>
-                                    
+
                                     <Row>
                                         <Col md={3}>
                                             <Card className="mb-4">
@@ -171,10 +231,10 @@ const DetailClass = (props) => {
                                                     </Card.Text>
                                                     <Row className='d-flex g-3'>
                                                         <Col>
-                                                            <a onClick={CopyText(malop)} className='btn-outline-info btn d-flex align-items-center justify-content-center'><FaRegCopy /></a>
+                                                            <a onClick={CopyCode(malop)} className='btn-outline-info btn d-flex align-items-center justify-content-center'><FaRegCopy /></a>
                                                         </Col>
                                                         <Col>
-                                                            <a className='btn-outline-success btn d-flex align-items-center justify-content-center'><FaLink /></a>
+                                                            <a onClick={CopyLink(link)} className='btn-outline-success btn d-flex align-items-center justify-content-center'><FaLink /></a>
                                                         </Col>
                                                     </Row>
                                                 </Card.Body>
@@ -338,14 +398,14 @@ const DetailClass = (props) => {
                         label="Nhập email của giáo viên"
                         className="mb-3"
                     >
-                        <Form.Control id="add_teacher" type="email" placeholder="name@example.com" />
+                        <Form.Control id="add_teacher" type="email" placeholder="name@example.com" onChange={(e) => {setEmail(e.target.value)}}/>
                     </FloatingLabel>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleAddTeacherClose}>
                         Hủy
                     </Button>
-                    <Button variant="primary" onClick={handleAddTeacherClose}>
+                    <Button variant="primary" onClick={handleSendToTeacher}>
                         Mời
                     </Button>
                 </Modal.Footer>
@@ -362,14 +422,14 @@ const DetailClass = (props) => {
                         label="Nhập email của học sinh"
                         className="mb-3"
                     >
-                        <Form.Control id="add_student" type="email" placeholder="name@example.com" />
+                        <Form.Control id="add_student" type="email" placeholder="name@example.com"  onChange={(e) => {setEmail(e.target.value)}}/>
                     </FloatingLabel>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleAddStudentClose}>
                         Hủy
                     </Button>
-                    <Button variant="primary" onClick={handleAddStudentClose}>
+                    <Button variant="primary" onClick={handleSendToStudent}>
                         Mời
                     </Button>
                 </Modal.Footer>
