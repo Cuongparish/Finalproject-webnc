@@ -21,4 +21,7 @@ router.post("/:id/studentJoinClass", classController.addStudentinClass);
 // xac nhan tham gia lop hoc
 router.post("/:malop/joinClass?", classController.addUserinClass);
 
+// Gui email moi tham gia lop hoc
+router.post("/sendEmail", classController.postSendEmailintoClass);
+
 module.exports = router;

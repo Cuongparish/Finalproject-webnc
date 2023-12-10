@@ -1,6 +1,28 @@
 const classM = require("../models/class.models.js");
 
+const nodemailer = require("nodemailer");
 require("dotenv").config;
+
+async function hanldSendEmail(EmailAddress_User, MaLop, Role, content) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  console.log("handle : ", MaLop);
+  var info = await transporter.sendMail({
+    from: `ADMIN <${process.env.EMAIL_USERNAME}>`,
+    to: `${EmailAddress_User}`,
+    subject: "Invite class",
+    text: `${content} http://localhost:3000/join-class/${MaLop}/${Role}`, // plain text body
+    html: `${content} http://localhost:3000/join-class/${MaLop}/${Role}`,
+  });
+  return info;
+}
 
 const classC = {
   getClass: async (req, res) => {
@@ -143,6 +165,43 @@ const classC = {
       });
     } catch (error) {
       return res.status(500).json({ msg: "Lỗi thêm user vào lớp học" });
+    }
+  },
+
+  postSendEmailintoClass: async (req, res) => {
+    // const { Email, Malop, Role } = req.body;
+    if (!req.body.Email || !req.body.MaLop || !req.body.Role) {
+      return res.json({
+        errors: [
+          {
+            msg: "Thiếu trường dữ liệu",
+          },
+        ],
+      });
+    }
+    var content = "Bạn đã được mời";
+    if (req.body.Role === "hs") {
+      content = "Bạn đã được mời tham gia lớp học : ";
+    }
+    if (req.body.Role === "gv") {
+      content = "Bạn đã được mời tham gia cùng dạy : ";
+    }
+    try {
+      var sendEmail = await hanldSendEmail(
+        req.body.Email,
+        req.body.MaLop,
+        req.body.Role,
+        content
+      );
+
+      return res.json({
+        msg: "Gửi lời mời tham gia lớp học thành công",
+      });
+    } catch (error) {
+      console.error("Lỗi khi gửi lời mời tham gia lớp học :", error);
+      return res
+        .status(500)
+        .json({ msg: "Đã xảy ra lỗi khi gửi lời mời tham gia lớp học" });
     }
   },
 };
