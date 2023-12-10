@@ -89,7 +89,9 @@ const Home = (props) => {
 
     useEffect(() => {
         GetClassList();
-
+    }, []);
+    
+    useEffect(() => {
         if (TeacherClasses && StudentClasses) {
             // Merge arrays when both TeacherClasses and StudentClasses are not null
             const merged = [...TeacherClasses, ...StudentClasses];
@@ -104,9 +106,8 @@ const Home = (props) => {
             // If both arrays are null, set mergedArray to an empty array
             setClasses([]);
         }
-
         console.log(Classes);
-    }, []);
+    }, [TeacherClasses, StudentClasses]);
 
     const [join_show, setJoinShow] = useState(false);
     const handleJoinClose = () => setJoinShow(false);
