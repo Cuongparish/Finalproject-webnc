@@ -92,7 +92,7 @@ async function hanldSendEmail(EmailAddress_User, newPassword, content) {
     // to: "20120447@student.hcmus.edu.vn",
     // from: process.env.EMAIL_USERNAME,
     to: `${EmailAddress_User}`,
-    subject: "Reset Password",
+    subject: "Verify",
     text: `${content} ${newPassword}`, // plain text body
     html: `${content}<b>${newPassword}</b>`,
   });

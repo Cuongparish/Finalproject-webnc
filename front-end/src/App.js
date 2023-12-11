@@ -77,7 +77,6 @@
 //         <Route exact path="/ResetPw" element={<ResetPW />} />
 //         <Route exact path="/logout" element={<Navigate to="/login" />} />
 
-
 //         {loading ? (
 //           <Loader /> // Hiển thị Loader khi loading là true
 //         ) : (
@@ -118,8 +117,9 @@ import VerifyJoinNoUser from "./views/VerifyJoinNoUser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./service/auth.service";
 
-const API_URL = "http://localhost:5000";
-// const API_URL = "https://finalproject-webnc.vercel.app";
+// const API_URL = "http://localhost:5000";\
+
+const API_URL = "https://finalproject-webnc.vercel.app";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -175,7 +175,9 @@ function App() {
           <Route exact path="/logout" element={<Navigate to="/login" />} />
           <Route
             path="/detail-class/:malop"
-            element={user ? <DetailClass User={user} /> : <Navigate to="/login" />}
+            element={
+              user ? <DetailClass User={user} /> : <Navigate to="/login" />
+            }
           />
           <Route
             path="/join-class/:malop/:role"
@@ -188,4 +190,3 @@ function App() {
 }
 
 export default App;
-

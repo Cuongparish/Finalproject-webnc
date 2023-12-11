@@ -11,7 +11,7 @@
 }
 
 .left-content {
-  background-image: linear-gradient(#340f4f, #57217d, #2d1440);
+  background-image: linear-gradient(#24243E, #59599B, #0F0C29);
   color: white;
   overflow: hidden;
   position: relative;
@@ -52,7 +52,7 @@
 
 .btn-get-started {
   position: relative;
-  background-color: #3f145e;
+  background-color: #3F3F6D;
   color: #ffffff;
 }
 
@@ -89,7 +89,7 @@
 }
 
 .menu-top {
-  background-image: linear-gradient(#340f4f, #6a5b76, #2d1440);
+  background-image: linear-gradient(#24243E, #59599B, #0F0C29);
   color: #ffffff;
 }
 
