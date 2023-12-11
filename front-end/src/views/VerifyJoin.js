@@ -10,6 +10,16 @@ const VerifyJoin = (props) => {
   console.log(malop);
   console.log(role);
 
+  let Role = role;
+  if(role === "gv")
+  {
+    Role = "giáo viên";
+  }
+  if(Role === "hs")
+  {
+    Role = "học sinh";
+  }
+
   const navigate = useNavigate();
 
   const handleCancel = async () => {
@@ -47,8 +57,9 @@ const VerifyJoin = (props) => {
   
   return (
     <Container style={borderStyle} className="d-flex flex-column align-items-center justify-content-center">
-      <p>Bạn sẽ tham gia lớp học với vai trò là giáo viên hoặc học sinh?</p>
-      <Button variant="danger" onClick={handleCancel} className="rounded-2">Hủy</Button>{' '}
+      <p>Bạn sẽ tham gia lớp học với vai trò là {Role}?</p>
+      <Button variant="danger" onClick={handleCancel} className="rounded-2">Hủy</Button>
+      <br></br>
       <Button variant="success" onClick={handleConfirm} className="rounded-2">Xác nhận</Button>
     </Container>
   );
