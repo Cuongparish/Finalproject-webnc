@@ -131,3 +131,45 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."HocSinhLopHoc"
     OWNER to postgres;
+
+
+CREATE TABLE IF NOT EXISTS public."CotDiem"
+(
+    "idCotDiem" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
+    "idLop" integer NOT NULL,
+    "TenCotDiem" character varying COLLATE pg_catalog."default" NOT NULL,
+    "PhanTramDiem" integer NOT NULL,
+    CONSTRAINT "CotDiem_pkey" PRIMARY KEY ("idCotDiem", "idLop"),
+    CONSTRAINT "FK_CotDiem_LopHoc" FOREIGN KEY ("idLop")
+        REFERENCES public."LopHoc" ("idLop") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."CotDiem"
+    OWNER to postgres;
+
+
+CREATE TABLE IF NOT EXISTS public."BangDiemThanhPhan"
+(
+    "idHocSinh" integer NOT NULL,
+    "idCotDiem" integer NOT NULL,
+    "idLop" integer NOT NULL,
+    "Diem" numeric NOT NULL,
+    CONSTRAINT "BangDiemThanhPhan_pkey" PRIMARY KEY ("idHocSinh", "idCotDiem", "idLop"),
+    CONSTRAINT "FK_BangDiemThanhPha_HocSinh" FOREIGN KEY ("idHocSinh")
+        REFERENCES public."HocSinh" ("idHocSinh") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "FK_BangDiemThanhPhan_CotDiem" FOREIGN KEY ("idCotDiem", "idLop")
+        REFERENCES public."CotDiem" ("idCotDiem", "idLop") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."BangDiemThanhPhan"
+    OWNER to postgres;
