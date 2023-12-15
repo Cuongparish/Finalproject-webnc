@@ -248,6 +248,30 @@ const accountC = {
       });
     }
   },
+
+  getStudentID: async (req, res) => {
+    if (!req.body.idUser) {
+      return res.json({ msg: "Không có dữ liệu req.body" });
+    }
+
+    try {
+      const { rows } = await accountM.getStudentID(req, res);
+
+      if (rows && rows.length > 0) {
+        res.json({ msg: "OKkkkk", data: rows });
+      } else {
+        return res.json({ msg: "Không có StudentID" });
+      }
+    } catch (error) {
+      res.json({
+        errors: [
+          {
+            msg: "Invalid credentials",
+          },
+        ],
+      });
+    }
+  },
 };
 
 module.exports = accountC;

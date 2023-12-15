@@ -16,6 +16,8 @@ router.post("/resetPW", accountController.postResetPW);
 
 router.post("/verify", accountController.postVerify);
 
+router.post("/studentID", accountController.getStudentID);
+
 // // router.get("/:id", bookController.getById)
 // // router.put("/:id", bookController.updateById)
 // // router.delete("/:id", bookController.deleteById)

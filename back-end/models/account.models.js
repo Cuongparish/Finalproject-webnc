@@ -50,4 +50,11 @@ module.exports = {
     const { rows } = await postgre.query(sql, [Email, Pw]);
     return { rows };
   },
+
+  getStudentID: async (req, res) => {
+    const { rows } = await postgre.query(
+      `SELECT "StudentId" FROM "HocSinh" Where "idUser"='${req.body.idUser}';`
+    );
+    return { rows };
+  },
 };
