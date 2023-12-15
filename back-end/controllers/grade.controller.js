@@ -31,11 +31,18 @@ const accountC = {
   },
 
   getPercentScore_inClass: async (req, res) => {
+    let sum = 0;
     try {
       const { rows } = await gradeM.getPercentScore_inClass(req, res);
 
+      for (let i = 0; i < rows.length; i++) {
+        sum += rows[i].PhanTramDiem;
+        // console.log(rows[i].PhanTramDiem);
+      }
+      // console.log(sum);
+
       if (rows && rows.length > 0) {
-        res.json({ msg: "OKkkkk", data: rows });
+        res.json({ msg: "OKkkkk", data: rows, SUM_PERCENT: sum });
       } else {
         res.json({
           errors: [
@@ -57,6 +64,10 @@ const accountC = {
   },
 
   addPercentScore_inClass: async (req, res) => {
+    // score.TenCotDiem, score.PhanTramDiem
+    if (!req.body.TenCotDiem || !req.body.PhanTramDiem) {
+      return res.json({ msg: "Theo dữ liệu req.body" });
+    }
     try {
       gradeM.addPercentScore_inClass(req, res);
       res.json({ msg: "Thêm thành công" });
@@ -72,6 +83,10 @@ const accountC = {
   },
 
   delPercentScore_inClass: async (req, res) => {
+    if (!req.body.TenCotDiem) {
+      return res.json({ msg: "Theo dữ liệu req.body" });
+    }
+
     try {
       const { rows } = await gradeM.getCheckInputData(req, res);
       if (rows && rows.length <= 0) {
@@ -92,6 +107,10 @@ const accountC = {
   },
 
   updatePercentScore_inClass: async (req, res) => {
+    if (!req.body.TenCotDiem || !req.body.PhanTramDiem || !req.body.idCotDiem) {
+      return res.json({ msg: "Theo dữ liệu req.body" });
+    }
+
     try {
       const { rows } = await gradeM.updatePercentScore_inClass(req, res);
       res.json({ msg: "Cập nhật thành công thành phần điểm", data: rows });

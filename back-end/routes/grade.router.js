@@ -6,7 +6,7 @@ const gradeController = require("../controllers/grade.controller");
 //
 //router.get("/grade", gradeController.getAll);
 
-// danh sach bang diem thanh phan cua lop hoc
+// danh sach bang diem thanh phan cua lop hoc va tong phan tram diem
 router.get(
   "/grade/listPercentScore/:idLop",
   gradeController.getPercentScore_inClass
@@ -24,7 +24,7 @@ router.delete(
   gradeController.delPercentScore_inClass
 );
 
-// xoa 1 thanh phan diem
+// sua 1 thanh phan diem
 router.put(
   "/grade/updatePercentScore/:idLop",
   gradeController.updatePercentScore_inClass
