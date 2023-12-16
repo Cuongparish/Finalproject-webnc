@@ -30,6 +30,9 @@ router.put(
   gradeController.updatePercentScore_inClass
 );
 
-// sua 1 thanh phan diem
+router.get(
+  "/grade/exporttoExcel_StudentList/:idLop",
+  gradeController.exporttoExcel_StudentList
+);
 
 module.exports = router;

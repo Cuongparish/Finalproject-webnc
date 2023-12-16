@@ -124,6 +124,12 @@ const accountC = {
       });
     }
   },
+
+  exporttoExcel_StudentList: async (req, res) => {
+    const directory = "excel_outputs";
+    gradeM.exporttoExcel_StudentList(req, res, directory);
+    return res.json({ msg: "Xuất file danh sach học sinh thành công" });
+  },
 };
 
 module.exports = accountC;
