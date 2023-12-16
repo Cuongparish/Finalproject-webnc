@@ -85,7 +85,9 @@ module.exports = {
         { header: "MSSV", key: "StudentId", width: 20 },
         { header: "FullName", key: "FullName", width: 20 },
       ];
-
+      if (rows && rows.length <= 0) {
+        return res.json({ msg: "Lớp học chưa có học sinh vào tham dự" });
+      }
       // Add data to the worksheet
       rows.forEach((row) => {
         worksheet.addRow(row);
