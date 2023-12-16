@@ -127,9 +127,7 @@ const accountC = {
 
   exporttoExcel_StudentList: async (req, res) => {
     // const directory = "D:/";
-
-    gradeM.exporttoExcel_StudentList(req, res, req.body.Path);
-    return res.json({ msg: "Xuất file danh sách học sinh thành công" });
+    gradeM.exporttoExcel_StudentList(req, res);
   },
 };
 

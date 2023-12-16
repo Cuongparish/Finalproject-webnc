@@ -62,46 +62,53 @@ module.exports = {
     return { rows };
   },
 
-  exporttoExcel_StudentList: async (req, res, directory) => {
-    if (!fs.existsSync(directory)) {
-      fs.mkdirSync(directory);
+  exporttoExcel_StudentList: async (req, res) => {
+    try {
+      const query = `SELECT user1."FullName", hs."StudentId"
+                    FROM "HocSinh" hs
+                    JOIN "HocSinhLopHoc" hslh ON hs."idHocSinh" = hslh."idHocSinh"
+                    JOIN "User" user1 ON hs."idUser" = user1."idUser"
+                    WHERE hslh."idLop" = $1`;
+
+      const TenLop = await postgre.query(
+        `SELECT "TenLop" FROM "LopHoc" WHERE "idLop" = $1`,
+        [req.params.idLop]
+      );
+
+      const { rows } = await postgre.query(query, [req.params.idLop]);
+
+      const workbook = new excel.Workbook();
+      const worksheet = workbook.addWorksheet("Sheet 1");
+
+      // Add headers to the worksheet
+      worksheet.columns = [
+        { header: "MSSV", key: "StudentId", width: 20 },
+        { header: "FullName", key: "FullName", width: 20 },
+      ];
+
+      // Add data to the worksheet
+      rows.forEach((row) => {
+        worksheet.addRow(row);
+      });
+
+      // Set headers for the response
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+      res.setHeader(
+        "Content-Disposition",
+        `attachment;filename=DanhSachLopHocSinh_${TenLop.rows[0].TenLop}.xlsx`
+      );
+
+      // Pipe the workbook to the response
+      await workbook.xlsx.write(res);
+
+      // End the response
+      res.end();
+    } catch (error) {
+      console.error("Error exporting to Excel:", error);
+      res.status(500).send("Internal Server Error");
     }
-
-    const query = `SELECT user1."FullName", hs."StudentId"
-                  FROM "HocSinh" hs
-                  JOIN "HocSinhLopHoc" hslh ON hs."idHocSinh" = hslh."idHocSinh"
-                  JOIN "User" user1 ON hs."idUser" = user1."idUser"
-                  WHERE hslh."idLop" = $1`;
-    // console.log("File Excel đã được tạo thành công!");
-
-    const TenLop = await postgre.query(
-      `SELECT "TenLop" FROM "LopHoc" Where "idLop"=$1`,
-      [req.params.idLop]
-    );
-
-    // console.log(TenLop.rows[0].TenLop);
-
-    const { rows } = await postgre.query(query, [req.params.idLop]);
-
-    const workbook = new excel.Workbook();
-    const worksheet = workbook.addWorksheet("Sheet 1");
-
-    // Đưa dữ liệu từ kết quả truy vấn vào worksheet
-    worksheet.columns = [
-      { header: "MSSV", key: "StudentId", width: 20 },
-      { header: "FullName", key: "FullName", width: 20 },
-    ];
-
-    // Thêm dữ liệu từ kết quả truy vấn vào worksheet
-    rows.forEach((rows) => {
-      worksheet.addRow(rows);
-    });
-    const fileName = `DanhSachLopHocSinh${TenLop.rows[0].TenLop}.xlsx`;
-    const outputFilePath = path.join(directory, fileName);
-
-    // Lưu workbook xuống file Excel
-    workbook.xlsx.writeFile(outputFilePath).then(() => {
-      console.log("File Excel đã được tạo thành công!");
-    });
   },
 };

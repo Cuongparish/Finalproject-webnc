@@ -31,7 +31,7 @@ router.put(
 );
 
 // xuất danh sách các học sinh trong lớp (fullname, studentid)
-router.post(
+router.get(
   "/grade/exporttoExcel_StudentList/:idLop",
   gradeController.exporttoExcel_StudentList
 );
