@@ -67,7 +67,6 @@ module.exports = {
       fs.mkdirSync(directory);
     }
 
-    // const query = 'SELECT "idHocSinh", "idUser", "StudentId" FROM "HocSinh";';
     const query = `SELECT user1."FullName", hs."StudentId"
                   FROM "HocSinh" hs
                   JOIN "HocSinhLopHoc" hslh ON hs."idHocSinh" = hslh."idHocSinh"
@@ -97,17 +96,12 @@ module.exports = {
     rows.forEach((rows) => {
       worksheet.addRow(rows);
     });
-    const fileName = `Danh Sach Lop HocSinh ${TenLop.rows[0].TenLop}.xlsx`;
+    const fileName = `DanhSachLopHocSinh${TenLop.rows[0].TenLop}.xlsx`;
     const outputFilePath = path.join(directory, fileName);
 
     // Lưu workbook xuống file Excel
     workbook.xlsx.writeFile(outputFilePath).then(() => {
       console.log("File Excel đã được tạo thành công!");
     });
-
-    // const outputPath = path.resolve("output.xlsx");
-    // console.log(
-    //   `File Excel đã được tạo thành công! Được lưu tại: ${outputPath}`
-    // );
   },
 };

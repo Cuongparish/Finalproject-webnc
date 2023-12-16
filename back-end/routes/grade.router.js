@@ -30,7 +30,8 @@ router.put(
   gradeController.updatePercentScore_inClass
 );
 
-router.get(
+// xuất danh sách các học sinh trong lớp (fullname, studentid)
+router.post(
   "/grade/exporttoExcel_StudentList/:idLop",
   gradeController.exporttoExcel_StudentList
 );
