@@ -9,6 +9,20 @@ module.exports = {
     return { rows };
   },
 
+  getbyID: async (req, res) => {
+    const { rows } = await postgre.query(
+      `select us.*, hs."idHocSinh", hs."StudentId"
+      from "User" us left join "HocSinh" hs on us."idUser"=hs."idUser"
+      where us."idUser"=$1`,
+      [req.params.idUser]
+    );
+
+    rows.forEach((element) => {
+      element.DOB = moment(element.DOB).format("DD-MM-YYYY");
+    });
+    return { rows };
+  },
+
   getbyEmail: async (Email) => {
     const { rows } = await postgre.query(
       `select * from "User" where "Email" = '${Email}'`

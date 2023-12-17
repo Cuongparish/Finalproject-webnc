@@ -8,6 +8,8 @@ router.post("/login", accountController.postLogin);
 
 router.get("/", accountController.getAll);
 
+router.get("/profile/:idUser", accountController.getUser);
+
 router.put("/profile", accountController.postEditUser);
 
 router.post("/signup", accountController.postSignup);

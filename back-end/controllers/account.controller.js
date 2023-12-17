@@ -126,6 +126,32 @@ const accountC = {
     }
   },
 
+  getUser: async (req, res) => {
+    try {
+      const { rows } = await accountM.getbyID(req, res);
+
+      if (rows && rows.length > 0) {
+        res.json({ msg: "OKkkkk", data: rows });
+      } else {
+        res.json({
+          errors: [
+            {
+              msg: "Invalid credentials",
+            },
+          ],
+        });
+      }
+    } catch (error) {
+      res.json({
+        errors: [
+          {
+            msg: "Invalid credentials",
+          },
+        ],
+      });
+    }
+  },
+
   postLogin: async (req, res) => {
     const { rows } = await accountM.getbyEmail(req.body.Email);
 
