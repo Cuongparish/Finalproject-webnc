@@ -33,11 +33,18 @@ module.exports = {
     return { rows };
   },
 
-  editUser: async (IdUser, Email, Pw, Role) => {
-    const sql =
-      'UPDATE "User" SET "Email" = $2, "Pw" = $3, "Role"=$4 where "IdUser" = $1 RETURNING *';
-    const { rows } = await postgre.query(sql, [IdUser, Email, Pw, Role]);
-    return { rows };
+  editUser: async (IdUser, Email, Pw, DOB, Sex, Phone, StudentId) => {
+    const sql_user = `UPDATE "User" SET "Email" = $2, "Pw" = $3, "DOB"=$4, "Sex"=$5, "Phone"=$6 where "IdUser" = $1`;
+    const sql_hocsinh = `UPDATE "HocSinh" SET "StudentId" = $2 WHERE "idUser" = $1`;
+
+    if (!StudentId) {
+      postgre.query(sql_user, [IdUser, Email, Pw, DOB, Sex, Phone]);
+      res.json({ msg: "Profile (không StudentID) đã được chỉnh sửa" });
+    } else {
+      postgre.query(sql_user, [IdUser, Email, Pw, DOB, Sex, Phone]);
+      postgre.query(sql_hocsinh, [IdUser, StudentId]);
+      res.json({ msg: "Profile (có StudentID) đã được chỉnh sửa" });
+    }
   },
 
   addUser: async (Email, Pw, FullName, Sex, DOB, Phone) => {
