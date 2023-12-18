@@ -4,9 +4,9 @@ import { Row, Col, Image, Dropdown, Modal, Button, Form } from 'react-bootstrap'
 import { FaBars, FaPlus } from "react-icons/fa";
 import '../App.css';
 
-
 import ClassList from '../components/ClassList';
 import MenuLeft from '../components/MenuLeft';
+import AlertBox from "../components/AlertBox";
 
 import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
@@ -21,12 +21,27 @@ const Home = (props) => {
 
     const [MaLop, setMaLop] = useState();
 
+    const [showAlert, setShowAlert] = useState(false);
+    const [message, setMessage] = useState();
+
     const [TeacherClasses, setTeacherClasses] = useState([]);
     const [StudentClasses, setStudentClasses] = useState([]);
 
     const [Classes, setClasses] = useState([]);
 
     const navigate = useNavigate();
+
+    const handleConfirm = () => {
+        // Xử lý khi nút xác nhận được nhấn
+        console.log('Đã xác nhận');
+        setShowAlert(false); // Đóng box thông báo sau khi xác nhận
+    };
+
+    const handleCancel = () => {
+        // Xử lý khi nút hủy được nhấn
+        console.log('Đã hủy');
+        setShowAlert(false); // Đóng box thông báo sau khi hủy
+    };
 
     const handleCreateClass = async (e) => {
         e.preventDefault();
@@ -49,11 +64,27 @@ const Home = (props) => {
     const handleJoinClass = async (e) => {
         e.preventDefault();
         try {
-            await ClassService.JoinClassByCode(user.idUser, MaLop).then(
+            await ClassService.GetStudentId(user.idUser).then(
                 (res) => {
                     console.log("res: ", res);
-                    navigate(`/detail-class/${MaLop}`);
-                    window.location.reload();
+                    if (res.data[0].StudentId) {
+                        console.log("Có student id");
+                        ClassService.JoinClassByCode(user.idUser, MaLop).then(
+                            (res) => {
+                                console.log("res: ", res);
+                                navigate(`/detail-class/${MaLop}`);
+                                window.location.reload();
+                            },
+                            (error) => {
+                                console.log(error);
+                            }
+                        );
+                    }
+                    else {
+                        console.log("Không có student id");
+                        setMessage("Không có student id");
+                        setShowAlert(true);
+                    }
                 },
                 (error) => {
                     console.log(error);
@@ -90,7 +121,7 @@ const Home = (props) => {
     useEffect(() => {
         GetClassList();
     }, []);
-    
+
     useEffect(() => {
         if (TeacherClasses && StudentClasses) {
             // Merge arrays when both TeacherClasses and StudentClasses are not null
@@ -219,6 +250,13 @@ const Home = (props) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            <AlertBox
+                show={showAlert}
+                message={message}
+                onHide={handleCancel}
+                onConfirm={handleConfirm}
+            />
         </>
     );
 }

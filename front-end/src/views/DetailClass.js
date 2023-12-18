@@ -20,6 +20,7 @@ import copy from "clipboard-copy";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import MenuLeft from "../components/MenuLeft";
+import AlertBox from "../components/AlertBox";
 
 import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
@@ -54,6 +55,8 @@ const DetailClass = (props) => {
   const [StudentInClass, setStudentInClass] = useState([]);
 
   const [Email, setEmail] = useState();
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState();
 
   useEffect(() => {
     console.log("123");
@@ -66,7 +69,9 @@ const DetailClass = (props) => {
     const copyText = () => {
       copy(textToCopy)
         .then(() => {
-          alert("Đã sao chép!");
+          setMessage("Đã sao chép mã!")
+          //alert("Đã sao chép!");
+          setShowAlert(true)
         })
         .catch((err) => {
           alert("Lỗi khi sao chép: " + err);
@@ -82,7 +87,9 @@ const DetailClass = (props) => {
     const copyText = () => {
       copy(textToCopy)
         .then(() => {
-          alert("Đã sao chép!");
+          setMessage("Đã sao chép link!")
+          //alert("Đã sao chép!");
+          setShowAlert(true)
         })
         .catch((err) => {
           alert("Lỗi khi sao chép: " + err);
@@ -198,6 +205,18 @@ const DetailClass = (props) => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleConfirm = () => {
+    // Xử lý khi nút xác nhận được nhấn
+    console.log('Đã xác nhận');
+    setShowAlert(false); // Đóng box thông báo sau khi xác nhận
+  };
+
+  const handleCancel = () => {
+    // Xử lý khi nút hủy được nhấn
+    console.log('Đã hủy');
+    setShowAlert(false); // Đóng box thông báo sau khi hủy
   };
 
   return (
@@ -523,6 +542,13 @@ const DetailClass = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <AlertBox
+        show={showAlert}
+        message={message}
+        onHide={handleCancel}
+        onConfirm={handleConfirm}
+      />
     </>
   );
 };

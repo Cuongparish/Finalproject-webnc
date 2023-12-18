@@ -68,6 +68,15 @@ const SendMailToJoinClass = (MaLop, Role, Email) => {
     });
 };
 
+const GetStudentId = (idUser) => {
+  return axios
+    .post(`${API_URL}/api/v1/user/studentID`, { idUser })
+    .then((res) => {
+      console.log("res.data: ", res.data);
+      return res.data;
+    });
+};
+
 const ClassService = {
   CreateClass,
   GetClasses,
@@ -76,6 +85,7 @@ const ClassService = {
   JoinClassByCode,
   JoinClassByLink,
   SendMailToJoinClass,
+  GetStudentId,
 };
 
 export default ClassService;
