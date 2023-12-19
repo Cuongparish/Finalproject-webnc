@@ -302,3 +302,7 @@ a.element-left.nav-link:hover {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
+
+.tab-menu > .tab-content {
+  height: 100%;
+}

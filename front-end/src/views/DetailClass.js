@@ -262,13 +262,10 @@ const DetailClass = (props) => {
         <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses} />
 
         <Col md={10}>
-          <div className="w-100 tab-menu">
-            <Tabs
-              defaultActiveKey="news"
-              className="border-bottom border-2 px-3 mb-3"
-            >
+          <div className="w-100 h-100 tab-menu">
+            <Tabs defaultActiveKey="news" className="border-bottom border-2 px-3">
               <Tab eventKey="news" id="news" title="Bảng tin">
-                <div className="detail-news">
+                <div className="detail-news mt-3">
                   <Row className="banner-news mb-4">
                     <h1>{DetailClass?.TenLop}</h1>
                   </Row>
@@ -335,8 +332,7 @@ const DetailClass = (props) => {
                             lời câu hỏi của học viên
                           </Card.Subtitle>
                           <a className="btn-outline-dark float-end btn d-flex align-items-center justify-content-center">
-                            <IoSettingsOutline className="mx-1" /> Cài đặt bảng
-                            tin
+                            <IoSettingsOutline className="mx-1" /> Cài đặt bảng tin
                           </a>
                         </Card.Body>
                       </Card>
@@ -348,7 +344,7 @@ const DetailClass = (props) => {
                 <div>Bài tập trên lớp</div>
               </Tab>
               <Tab eventKey="members" title="Mọi người">
-                <div className="detail-members">
+                <div className="detail-members mt-3">
                   <Row className="banner-members mb-4">
                     <Col className="d-flex align-items-center border-bottom border-2 border-black">
                       <h3>Giáo viên</h3>
@@ -467,6 +463,203 @@ const DetailClass = (props) => {
                     {/* Table Student */}
                   </Row>
                 </div>
+              </Tab>
+              <Tab eventKey="score" title="Điểm" className="h-100">
+                <Row className="g-0 px-0">
+                    {/* Table Score */}
+                    <Table className="m-0" bordered hover>
+                      <thead>
+                        <tr style={{ height: '100px' }} className="text-center fw-bold table-secondary">
+                          <td className="align-middle border-2 border-start-0" style={{ width: '15%' }}>Họ và tên</td>
+                          <td className="align-middle" style={{ width: '5%' }}>MSSV</td>
+                          <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
+                          <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
+                          <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
+                          <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* data start */}
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        <tr className="text-center">
+                          <td className="align-middle">Phạm Trường Khoa</td>
+                          <td className="align-middle">18120419</td>
+                          <td className="align-middle">7</td>
+                          <td className="align-middle">8</td>
+                          <td className="align-middle">9</td>
+                          <td className="align-middle">10</td>
+                          <td></td> {/* input nothing */}
+                        </tr>
+                        {/* data end */}
+                      </tbody>
+                    </Table>
+                </Row>
+
+                <Row className="d-flex align-items-end justify-content-end my-5">
+                  <Col sm={2}>
+                    <a className="btn btn-primary">
+                      <IoSettingsOutline className="mx-1" /> Public bảng điểm
+                    </a>
+                  </Col>
+                  <Col sm={2}>
+                    <a className="btn btn-success">
+                      <IoSettingsOutline className="mx-1" /> Xuất bảng điểm
+                    </a>
+                  </Col>
+                </Row>
               </Tab>
             </Tabs>
           </div>
