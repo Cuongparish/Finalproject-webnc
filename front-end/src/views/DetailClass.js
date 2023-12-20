@@ -12,15 +12,17 @@ import {
   Button,
   Table,
 } from "react-bootstrap";
-import { FaBars, FaRegCopy, FaLink, FaUserPlus } from "react-icons/fa";
-import { IoSettingsOutline } from "react-icons/io5";
 import { useParams } from "react-router-dom";
-//import { CiCircleMore } from "react-icons/ci";
+import { FaBars, FaRegCopy, FaLink, FaUserPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
+import { IoSettingsOutline } from "react-icons/io5";
+import { TbDatabaseImport } from "react-icons/tb";
 import copy from "clipboard-copy";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import MenuLeft from "../components/MenuLeft";
 import AlertBox from "../components/AlertBox";
+import ScoreTable from "../components/ScoreTable";
 
 import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
@@ -32,6 +34,7 @@ const Client_URL = "https://finalproject-webnc.vercel.app";
 
 const DetailClass = (props) => {
   const { malop } = useParams();
+  var hasScore = false;
   //console.log("Ma lop: ",malop);
   //const malop = match.params.malop;
   const user = props.User;
@@ -45,6 +48,10 @@ const DetailClass = (props) => {
   const [add_student, setAddStudent] = useState(false);
   const handleAddStudentClose = () => setAddStudent(false);
   const handleAddStudentShow = () => setAddStudent(true);
+  
+  const [add_score, setAddScore] = useState(false);
+  const handleAddScoreClose = () => setAddScore(false);
+  const handleAddScoreShow = () => setAddScore(true);
 
   const [TeacherClasses, setTeacherClasses] = useState([]);
   const [StudentClasses, setStudentClasses] = useState([]);
@@ -465,201 +472,28 @@ const DetailClass = (props) => {
                 </div>
               </Tab>
               <Tab eventKey="score" title="Điểm" className="h-100">
-                <Row className="g-0 px-0">
-                    {/* Table Score */}
-                    <Table className="m-0" bordered hover>
-                      <thead>
-                        <tr style={{ height: '100px' }} className="text-center fw-bold table-secondary">
-                          <td className="align-middle border-2 border-start-0" style={{ width: '15%' }}>Họ và tên</td>
-                          <td className="align-middle" style={{ width: '5%' }}>MSSV</td>
-                          <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
-                          <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
-                          <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
-                          <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* data start */}
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        <tr className="text-center">
-                          <td className="align-middle">Phạm Trường Khoa</td>
-                          <td className="align-middle">18120419</td>
-                          <td className="align-middle">7</td>
-                          <td className="align-middle">8</td>
-                          <td className="align-middle">9</td>
-                          <td className="align-middle">10</td>
-                          <td></td> {/* input nothing */}
-                        </tr>
-                        {/* data end */}
-                      </tbody>
-                    </Table>
-                </Row>
-
-                <Row className="d-flex align-items-end justify-content-end my-5">
-                  <Col sm={2}>
-                    <a className="btn btn-primary">
-                      <IoSettingsOutline className="mx-1" /> Public bảng điểm
-                    </a>
-                  </Col>
-                  <Col sm={2}>
-                    <a className="btn btn-success">
-                      <IoSettingsOutline className="mx-1" /> Xuất bảng điểm
-                    </a>
-                  </Col>
-                </Row>
+                
+                {hasScore ? <ScoreTable /> : 
+                  <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
+                    <Col sm={2}>
+                      <Card className="border-0 text-center">
+                        <Card.Img
+                          variant="top"
+                          src={process.env.PUBLIC_URL + '/Images/score_bg.png'}
+                        />
+                        <Card.Body className="mb-3">
+                          <a onClick={handleAddScoreShow} className="btn btn-primary mb-2">
+                            <FaPlus className="mx-1" /> Tạo bảng điểm
+                          </a>
+                          <a className="btn btn-success">
+                            <TbDatabaseImport  className="mx-1" /> Import bảng điểm
+                          </a>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </Row>
+                }
+                
               </Tab>
             </Tabs>
           </div>
@@ -742,6 +576,72 @@ const DetailClass = (props) => {
         onHide={handleCancel}
         onConfirm={handleConfirm}
       />
+
+      {/* Modal Add Score */}
+      <Modal
+        show={add_score}
+        size="fullscreen"
+        onHide={handleAddScoreClose}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="fw-bold">Tạo bảng điểm</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bg-body-secondary">
+          <Row className="mb-3 justify-content-center">
+            <Card className="p-0 w-50">
+              <Card.Header style={{ height: '2px' }} className="bg-primary"></Card.Header>
+              <Card.Body>
+                <Form.Control
+                  type="text"
+                  id="score_name"
+                  placeholder="Mẫu không có tiêu đề"
+                  className="fs-3 fw-bold border-0 p-0 text-black"
+                  value="Mẫu không có tiêu đề"
+                />
+                <Form.Text muted>
+                  Mô tả biểu mẫu
+                </Form.Text>
+              </Card.Body>
+            </Card>
+          </Row>
+
+          <Row className="mb-3 justify-content-center">
+            <Card className="p-3 w-50">
+              <FloatingLabel
+                controlId="add_score"
+                label="Tên cột điểm"
+                className="mb-3"
+              >
+                <Form.Control
+                  id="add_score"
+                  type="text"
+                  placeholder="Kiểm tra miệng"
+                />
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="add_score"
+                label="% cột điểm"
+              >
+                <Form.Control
+                  id="add_score"
+                  type="number"
+                  placeholder="5%"
+                />
+              </FloatingLabel>
+            </Card>
+          </Row>
+          
+          
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleAddScoreClose}>
+            Hủy
+          </Button>
+          <Button variant="success">
+            Xác nhận
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
