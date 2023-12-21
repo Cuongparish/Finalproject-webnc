@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS public."User"
     "DOB" date,
     "Sex" character varying COLLATE pg_catalog."default",
     "Phone" character varying COLLATE pg_catalog."default",
+    "Role" integer,
     CONSTRAINT "User_pkey" PRIMARY KEY ("idUser")
 )
 
