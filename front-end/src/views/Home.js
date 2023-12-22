@@ -174,7 +174,7 @@ const Home = (props) => {
                         </Dropdown.Menu>
                     </Dropdown>
 
-                    <a href='/home' className='mx-2 btn-member'>{user.FullName}</a>
+                    <a href='/profile' className='mx-2 btn-member'>{user.FullName}</a>
                     <a href='/logout' className='button btn-logout' onClick={AuthService.logout}>Log Out</a>
                 </Col>
             </Row>

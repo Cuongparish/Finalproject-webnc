@@ -62,8 +62,8 @@ const DetailClass = (props) => {
   const [message, setMessage] = useState();
 
   const [GradeStructure, setGradeStructure] = useState([
-    <Row key={0} className="mb-3 justify-content-center">
-      <Card className="p-3 w-50">
+    <Row key={0} className="mb-0 justify-content-center">
+      <Card className="p-3 w-50" style={{ borderRadius: '10px 10px 0 0' }}>
         <FloatingLabel
           controlId={`add_score_0`}
           label="Tên cột điểm"
@@ -92,8 +92,8 @@ const DetailClass = (props) => {
   const [add_score, setAddScore] = useState(false);
   const handleAddScoreClose = () => {
     setGradeStructure([
-      <Row key={0} className="mb-3 justify-content-center">
-        <Card className="p-3 w-50">
+      <Row key={0} className="mb-0 justify-content-center">
+        <Card className="p-3 w-50" style={{ borderRadius: '10px 10px 0 0' }}>
           <FloatingLabel
             controlId={`add_score_0`}
             label="Tên cột điểm"
@@ -287,8 +287,8 @@ const DetailClass = (props) => {
   // Function to add a new set of controls
   const addGradeStructure = () => {
     const newGradeStructure = (
-      <Row key={GradeStructure.length} className="mb-3 justify-content-center">
-        <Card className="p-3 w-50">
+      <Row key={0} className="mb-0 justify-content-center">
+        <Card className="p-3 w-50" style={{ borderRadius: '10px 10px 0 0' }}>
           <FloatingLabel
             controlId={`add_score_${GradeStructure.length}`}
             label="Tên cột điểm"
@@ -705,15 +705,14 @@ const DetailClass = (props) => {
           {GradeStructure.map((gradestructure, index) => (
             <div key={index} >
               {gradestructure}
-              <Row className="mb-3 justify-content-end">
-                <Col xs={12} className="text-end">
+              <Row className="mb-3 justify-content-center">
                   <Button
                     variant="danger"
                     size="sm"
                     onClick={() => RemoveGradeStructure(index)}
                     style={{
-                      borderRadius: '50%',
-                      width: '40px',
+                      borderRadius: '0 0 10px 10px',
+                      width: '50%',
                       height: '40px',
                       fontSize: '24px',
                       lineHeight: '24px',
@@ -722,13 +721,11 @@ const DetailClass = (props) => {
                       display: 'inline-flex',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      cursor: 'pointer',
-                      marginRight: '10px', // Khoảng cách giữa các nút xóa
+                      cursor: 'pointer'
                     }}
                   >
                     -
                   </Button>
-                </Col>
               </Row>
             </div> // Wrap in a container like div
           ))}

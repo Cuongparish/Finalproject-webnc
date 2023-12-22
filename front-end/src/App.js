@@ -11,6 +11,7 @@ import Login from "./views/Login";
 import Signup from "./views/Signup";
 import ResetPW from "./views/ResetPW";
 import DetailClass from "./views/DetailClass";
+import Profile from "./views/Profile";
 import VerifyJoin from "./views/VerifyJoin";
 import VerifyJoinNoUser from "./views/VerifyJoinNoUser";
 
@@ -79,6 +80,10 @@ function App() {
               user ? <DetailClass User={user} /> : <Navigate to="/login" />
             }
           />
+          <Route
+            path="/profile"
+            element={<Profile />}
+            />
           <Route
             path="/join-class/:malop/:role"
             element={user ? <VerifyJoin user={user} /> : <VerifyJoinNoUser />}
