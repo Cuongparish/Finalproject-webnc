@@ -29,7 +29,7 @@ import ClassService from "../service/class.service";
 
 import "../App.css";
 
-// const Client_URL = "http://localhost:3000"
+//const Client_URL = "http://localhost:3000"
 const Client_URL = "https://finalproject-webnc.vercel.app";
 
 const DetailClass = (props) => {
@@ -48,10 +48,6 @@ const DetailClass = (props) => {
   const [add_student, setAddStudent] = useState(false);
   const handleAddStudentClose = () => setAddStudent(false);
   const handleAddStudentShow = () => setAddStudent(true);
-  
-  const [add_score, setAddScore] = useState(false);
-  const handleAddScoreClose = () => setAddScore(false);
-  const handleAddScoreShow = () => setAddScore(true);
 
   const [TeacherClasses, setTeacherClasses] = useState([]);
   const [StudentClasses, setStudentClasses] = useState([]);
@@ -64,6 +60,68 @@ const DetailClass = (props) => {
   const [Email, setEmail] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState();
+
+  const [GradeStructure, setGradeStructure] = useState([
+    <Row key={0} className="mb-3 justify-content-center">
+      <Card className="p-3 w-50">
+        <FloatingLabel
+          controlId={`add_score_0`}
+          label="Tên cột điểm"
+          className="mb-3"
+        >
+          <Form.Control
+            id={`add_score_0`}
+            type="text"
+            placeholder="Exercise"
+          />
+        </FloatingLabel>
+        <FloatingLabel
+          controlId={`add_score_percentage_0`}
+          label="% cột điểm"
+        >
+          <Form.Control
+            id={`add_score_percentage_0`}
+            type="number"
+            placeholder="5%"
+          />
+        </FloatingLabel>
+      </Card>
+    </Row>
+  ]);
+
+  const [add_score, setAddScore] = useState(false);
+  const handleAddScoreClose = () => {
+    setGradeStructure([
+      <Row key={0} className="mb-3 justify-content-center">
+        <Card className="p-3 w-50">
+          <FloatingLabel
+            controlId={`add_score_0`}
+            label="Tên cột điểm"
+            className="mb-3"
+          >
+            <Form.Control
+              id={`add_score_0`}
+              type="text"
+              placeholder="Exercise"
+            />
+          </FloatingLabel>
+          <FloatingLabel
+            controlId={`add_score_percentage_0`}
+            label="% cột điểm"
+          >
+            <Form.Control
+              id={`add_score_percentage_0`}
+              type="number"
+              placeholder="5%"
+            />
+          </FloatingLabel>
+        </Card>
+      </Row>
+    ])
+
+    setAddScore(false);
+  }
+  const handleAddScoreShow = () => setAddScore(true);
 
   useEffect(() => {
     console.log("123");
@@ -224,6 +282,44 @@ const DetailClass = (props) => {
     // Xử lý khi nút hủy được nhấn
     console.log('Đã hủy');
     setShowAlert(false); // Đóng box thông báo sau khi hủy
+  };
+
+  // Function to add a new set of controls
+  const addGradeStructure = () => {
+    const newGradeStructure = (
+      <Row key={GradeStructure.length} className="mb-3 justify-content-center">
+        <Card className="p-3 w-50">
+          <FloatingLabel
+            controlId={`add_score_${GradeStructure.length}`}
+            label="Tên cột điểm"
+            className="mb-3"
+          >
+            <Form.Control
+              id={`add_score_${GradeStructure.length}`}
+              type="text"
+              placeholder="Exercise"
+            />
+          </FloatingLabel>
+          <FloatingLabel
+            controlId={`add_score_percentage_${GradeStructure.length}`}
+            label="% cột điểm"
+          >
+            <Form.Control
+              id={`add_score_percentage_${GradeStructure.length}`}
+              type="number"
+              placeholder="5%"
+            />
+          </FloatingLabel>
+        </Card>
+      </Row>
+    );
+
+    setGradeStructure([...GradeStructure, newGradeStructure]);
+  };
+
+  const RemoveGradeStructure = (indexToRemove) => {
+    const updatedGradeStructure = GradeStructure.filter((_, index) => index !== indexToRemove);
+    setGradeStructure(updatedGradeStructure);
   };
 
   return (
@@ -392,9 +488,9 @@ const DetailClass = (props) => {
                               >
                                 <input
                                   type="checkbox"
-                                  // value="id_user"
-                                  // checked={selectedValues.includes('Option 1')}
-                                  // onChange={() => handleCheckboxChange('Option 1')}
+                                // value="id_user"
+                                // checked={selectedValues.includes('Option 1')}
+                                // onChange={() => handleCheckboxChange('Option 1')}
                                 />
                               </td>
                               <td
@@ -451,9 +547,9 @@ const DetailClass = (props) => {
                               >
                                 <input
                                   type="checkbox"
-                                  // value="id_user"
-                                  // checked={selectedValues.includes('Option 1')}
-                                  // onChange={() => handleCheckboxChange('Option 1')}
+                                // value="id_user"
+                                // checked={selectedValues.includes('Option 1')}
+                                // onChange={() => handleCheckboxChange('Option 1')}
                                 />
                               </td>
                               <td
@@ -472,8 +568,8 @@ const DetailClass = (props) => {
                 </div>
               </Tab>
               <Tab eventKey="score" title="Điểm" className="h-100">
-                
-                {hasScore ? <ScoreTable /> : 
+
+                {hasScore ? <ScoreTable /> :
                   <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
                     <Col sm={2}>
                       <Card className="border-0 text-center">
@@ -486,14 +582,14 @@ const DetailClass = (props) => {
                             <FaPlus className="mx-1" /> Tạo bảng điểm
                           </a>
                           <a className="btn btn-success">
-                            <TbDatabaseImport  className="mx-1" /> Import bảng điểm
+                            <TbDatabaseImport className="mx-1" /> Import bảng điểm
                           </a>
                         </Card.Body>
                       </Card>
                     </Col>
                   </Row>
                 }
-                
+
               </Tab>
             </Tabs>
           </div>
@@ -586,6 +682,7 @@ const DetailClass = (props) => {
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">Tạo bảng điểm</Modal.Title>
         </Modal.Header>
+
         <Modal.Body className="bg-body-secondary">
           <Row className="mb-3 justify-content-center">
             <Card className="p-0 w-50">
@@ -594,19 +691,50 @@ const DetailClass = (props) => {
                 <Form.Control
                   type="text"
                   id="score_name"
-                  placeholder="Mẫu không có tiêu đề"
+                  placeholder="Cấu trúc bảng điểm"
                   className="fs-3 fw-bold border-0 p-0 text-black"
-                  value="Mẫu không có tiêu đề"
+                  value="Cấu trúc bảng điểm"
                 />
-                <Form.Text muted>
+                {/* <Form.Text muted>
                   Mô tả biểu mẫu
-                </Form.Text>
+                </Form.Text> */}
               </Card.Body>
             </Card>
           </Row>
 
-          <Row className="mb-3 justify-content-center">
-            <Card className="p-3 w-50">
+          {GradeStructure.map((gradestructure, index) => (
+            <div key={index} >
+              {gradestructure}
+              <Row className="mb-3 justify-content-end">
+                <Col xs={12} className="text-end">
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => RemoveGradeStructure(index)}
+                    style={{
+                      borderRadius: '50%',
+                      width: '40px',
+                      height: '40px',
+                      fontSize: '24px',
+                      lineHeight: '24px',
+                      fontWeight: 'bold',
+                      boxShadow: '0 0 4px rgba(0, 0, 0, 0.2)',
+                      display: 'inline-flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      marginRight: '10px', // Khoảng cách giữa các nút xóa
+                    }}
+                  >
+                    -
+                  </Button>
+                </Col>
+              </Row>
+            </div> // Wrap in a container like div
+          ))}
+
+          {/* <Row className="mb-3 justify-content-center">
+            {/* <Card className="p-3 w-50">
               <FloatingLabel
                 controlId="add_score"
                 label="Tên cột điểm"
@@ -628,11 +756,37 @@ const DetailClass = (props) => {
                   placeholder="5%"
                 />
               </FloatingLabel>
-            </Card>
+            </Card> 
+            <Button variant="outline-primary" onClick={addGradeStructure}>
+              Thêm cột điểm
+            </Button>
+          </Row> */}
+          <Row className="mb-3 justify-content-center">
+            <Col xs={12} className="text-center">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={addGradeStructure}
+                style={{
+                  borderRadius: '50%',
+                  width: '40px',
+                  height: '40px',
+                  fontSize: '24px',
+                  lineHeight: '24px',
+                  fontWeight: 'bold',
+                  boxShadow: '0 0 4px rgba(0, 0, 0, 0.2)',
+                  display: 'inline-flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                +
+              </Button>
+            </Col>
           </Row>
-          
-          
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={handleAddScoreClose}>
             Hủy
