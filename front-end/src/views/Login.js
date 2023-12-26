@@ -14,8 +14,6 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-   
-
     try {
       await AuthService.localAuth(Email, Pw).then(
         (res) => {

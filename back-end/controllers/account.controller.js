@@ -179,6 +179,10 @@ const accountC = {
     const IdUser = req.params.idUser;
     try {
       accountM.editUser(IdUser, Email, Pw, DOB, Sex, Phone, StudentId);
+      //console.log(IdUser)
+      return res.jon({
+        msg: "Ok"
+      })
     } catch (error) {
       return res.json({
         errors: [

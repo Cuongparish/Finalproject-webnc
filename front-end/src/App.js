@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, Router } from "react-router-dom";
+import { Routes, Route, Navigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 //import { Navbar, Container, Image, Nav} from 'react-bootstrap';
@@ -82,8 +82,10 @@ function App() {
           />
           <Route
             path="/profile"
-            element={<Profile />}
-            />
+            element={
+              user ? <Profile User={user} /> : <Navigate to="/login" />
+            }
+          />
           <Route
             path="/join-class/:malop/:role"
             element={user ? <VerifyJoin user={user} /> : <VerifyJoinNoUser />}

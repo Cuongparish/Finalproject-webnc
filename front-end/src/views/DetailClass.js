@@ -73,6 +73,7 @@ const DetailClass = (props) => {
             id={`add_score_0`}
             type="text"
             placeholder="Exercise"
+          //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
           />
         </FloatingLabel>
         <FloatingLabel
@@ -83,6 +84,7 @@ const DetailClass = (props) => {
             id={`add_score_percentage_0`}
             type="number"
             placeholder="5%"
+          //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
           />
         </FloatingLabel>
       </Card>
@@ -103,6 +105,7 @@ const DetailClass = (props) => {
               id={`add_score_0`}
               type="text"
               placeholder="Exercise"
+            //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
             />
           </FloatingLabel>
           <FloatingLabel
@@ -113,6 +116,7 @@ const DetailClass = (props) => {
               id={`add_score_percentage_0`}
               type="number"
               placeholder="5%"
+            //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
             />
           </FloatingLabel>
         </Card>
@@ -123,11 +127,10 @@ const DetailClass = (props) => {
   }
   const handleAddScoreShow = () => setAddScore(true);
 
-  useEffect(() => {
-    console.log("123");
-    Promise.all([GetClassList(), GetDetailClass(), GetListUserInClass()]);
-  }, [user]);
+  const [DataGradeStructure, setDataGradeStructure] = useState([]);
+  //const [formData, setFormData] = useState([]);
 
+  //----------------------------------------Hàm copy
   function CopyCode(code) {
     const textToCopy = code;
 
@@ -164,25 +167,7 @@ const DetailClass = (props) => {
     return copyText;
   }
 
-  const GetDetailClass = async () => {
-    try {
-      console.log("1111");
-      await ClassService.GetDetailClass(malop).then(
-        (res) => {
-          console.log("res-detail-class: ", res[0]);
-          if (res) {
-            setDetailClass(res[0]);
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
+  //----------------------------------------Hàm cho menu left
   const GetClassList = async () => {
     try {
       //console.log(1111);
@@ -206,6 +191,27 @@ const DetailClass = (props) => {
     }
   };
 
+  //----------------------------------------Màn hình bảng tinh
+  const GetDetailClass = async () => {
+    try {
+      console.log("1111");
+      await ClassService.GetDetailClass(malop).then(
+        (res) => {
+          console.log("res-detail-class: ", res[0]);
+          if (res) {
+            setDetailClass(res[0]);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //----------------------------------------Màn hình mọi người
   const GetListUserInClass = async () => {
     try {
       //console.log(1111);
@@ -230,6 +236,7 @@ const DetailClass = (props) => {
     }
   };
 
+  //----------------------------------------Hàm mời giáo viên và học sinh
   const handleSendToTeacher = async (e) => {
     e.preventDefault();
 
@@ -272,6 +279,7 @@ const DetailClass = (props) => {
     }
   };
 
+  //----------------------------------------Box thông báo
   const handleConfirm = () => {
     // Xử lý khi nút xác nhận được nhấn
     console.log('Đã xác nhận');
@@ -284,7 +292,7 @@ const DetailClass = (props) => {
     setShowAlert(false); // Đóng box thông báo sau khi hủy
   };
 
-  // Function to add a new set of controls
+  //-----------------------------------------Tạo grade structure
   const addGradeStructure = () => {
     const newGradeStructure = (
       <Row key={0} className="mb-0 justify-content-center">
@@ -298,6 +306,7 @@ const DetailClass = (props) => {
               id={`add_score_${GradeStructure.length}`}
               type="text"
               placeholder="Exercise"
+            // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
             />
           </FloatingLabel>
           <FloatingLabel
@@ -308,6 +317,7 @@ const DetailClass = (props) => {
               id={`add_score_percentage_${GradeStructure.length}`}
               type="number"
               placeholder="5%"
+            // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
             />
           </FloatingLabel>
         </Card>
@@ -321,6 +331,45 @@ const DetailClass = (props) => {
     const updatedGradeStructure = GradeStructure.filter((_, index) => index !== indexToRemove);
     setGradeStructure(updatedGradeStructure);
   };
+
+  // const handleInputChange = (index, fieldName, value) => {
+  //   const updatedFormData = [...formData];
+  //   updatedFormData[index] = {
+  //     ...updatedFormData[index],
+  //     [fieldName]: value
+  //   };
+  //   setFormData(updatedFormData);
+  // };
+
+  const saveDataGradeStructure = () => {
+    setDataGradeStructure(
+      GradeStructure.map((item, index) => ({
+        tencotdiem: document.getElementById(`add_score_${index}`).value,
+        phantramdiem: document.getElementById(`add_score_percentage_${index}`).value
+      })));
+
+    //console.log(DataGradeStructure);
+    handleAddScoreClose();
+  };
+
+  const handleclick = () => {
+    console.log(DataGradeStructure);
+  }
+
+  //----------------------------------------Use effect
+  useEffect(() => {
+    console.log("123");
+    GetClassList(); 
+    GetDetailClass();
+    GetListUserInClass();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  useEffect(() => {
+    console.log(DataGradeStructure);
+    //Làm hàm đưa grade structure qua cho back-end ở đây
+  }, [DataGradeStructure]);
+
 
   return (
     <>
@@ -348,7 +397,7 @@ const DetailClass = (props) => {
           md={{ span: 2, offset: 1 }}
           className="d-flex justify-content-end align-items-center"
         >
-          <a href="/" className="mx-2 btn-member">
+          <a href="/profile" className="mx-2 btn-member">
             {user?.FullName}
           </a>
           <a
@@ -581,7 +630,7 @@ const DetailClass = (props) => {
                           <a onClick={handleAddScoreShow} className="btn btn-primary mb-2">
                             <FaPlus className="mx-1" /> Tạo bảng điểm
                           </a>
-                          <a className="btn btn-success">
+                          <a onClick={handleclick} className="btn btn-success">
                             <TbDatabaseImport className="mx-1" /> Import bảng điểm
                           </a>
                         </Card.Body>
@@ -706,26 +755,26 @@ const DetailClass = (props) => {
             <div key={index} >
               {gradestructure}
               <Row className="mb-3 justify-content-center">
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => RemoveGradeStructure(index)}
-                    style={{
-                      borderRadius: '0 0 10px 10px',
-                      width: '50%',
-                      height: '40px',
-                      fontSize: '24px',
-                      lineHeight: '24px',
-                      fontWeight: 'bold',
-                      boxShadow: '0 0 4px rgba(0, 0, 0, 0.2)',
-                      display: 'inline-flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    -
-                  </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => RemoveGradeStructure(index)}
+                  style={{
+                    borderRadius: '0 0 10px 10px',
+                    width: '50%',
+                    height: '40px',
+                    fontSize: '24px',
+                    lineHeight: '24px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 0 4px rgba(0, 0, 0, 0.2)',
+                    display: 'inline-flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    cursor: 'pointer'
+                  }}
+                >
+                  -
+                </Button>
               </Row>
             </div> // Wrap in a container like div
           ))}
@@ -788,7 +837,7 @@ const DetailClass = (props) => {
           <Button variant="secondary" onClick={handleAddScoreClose}>
             Hủy
           </Button>
-          <Button variant="success">
+          <Button variant="success" onClick={saveDataGradeStructure}>
             Xác nhận
           </Button>
         </Modal.Footer>
