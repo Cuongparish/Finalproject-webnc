@@ -29,10 +29,9 @@ import ClassService from "../service/class.service";
 
 import "../App.css";
 import GradeService from "../service/grade.service";
-import { RiP2PFill } from "react-icons/ri";
 
-const Client_URL = "http://localhost:3000"
-//const Client_URL = "https://finalproject-webnc.vercel.app";
+//const Client_URL = "http://localhost:3000"
+const Client_URL = "https://finalproject-webnc.vercel.app";
 
 const DetailClass = (props) => {
   const { malop } = useParams();
