@@ -130,6 +130,10 @@ const accountC = {
     gradeM.exporttoExcel_StudentList(req, res);
     // return res.json({ msg: "Xuất file danh sách học sinh thành công" });
   },
+
+  importtoExcel_StudentList: async (req, res) => {
+    gradeM.importtoExcel_StudentList(req, res);
+  },
 };
 
 module.exports = accountC;

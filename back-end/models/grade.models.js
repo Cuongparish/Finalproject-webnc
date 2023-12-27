@@ -4,6 +4,7 @@ const excel = require("exceljs");
 const path = require("path");
 const fs = require("fs");
 const fastcsv = require("fast-csv");
+const multer = require("multer");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -185,6 +186,60 @@ module.exports = {
       res.end();
     } catch (error) {
       console.error("Error exporting to Excel/CSV:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+
+  importtoExcel_StudentList: async (req, res) => {
+    try {
+      const fileBuffer = req.file.buffer;
+      let data = [];
+
+      // Kiểm tra định dạng file bằng cách kiểm tra đuôi mở rộng
+      const fileExtension = req.file.originalname
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+      if (fileExtension === "xlsx") {
+        // Sử dụng exceljs để đọc dữ liệu từ file xlsx
+        const workbook = new excel.Workbook();
+        await workbook.xlsx.load(fileBuffer);
+
+        const sheet = workbook.worksheets[0];
+
+        sheet.eachRow({ includeEmpty: false }, (row) => {
+          data.push(row.values);
+        });
+      } else if (fileExtension === "csv") {
+        // Sử dụng fast-csv để đọc dữ liệu từ file CSV
+        data = await new Promise((resolve, reject) => {
+          const parsedData = [];
+          fastcsv
+            .parseString(fileBuffer.toString(), {
+              headers: true,
+              ignoreEmpty: true,
+            })
+            .on("data", (row) => {
+              parsedData.push(row);
+            })
+            .on("end", () => {
+              resolve(parsedData);
+            })
+            .on("error", (error) => {
+              reject(error);
+            });
+        });
+      } else {
+        throw new Error("Unsupported file format");
+      }
+
+      // In dữ liệu ra console
+      console.log(data);
+
+      res.send("File uploaded successfully!");
+    } catch (error) {
+      console.error(error);
       res.status(500).send("Internal Server Error");
     }
   },

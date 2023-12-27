@@ -37,4 +37,16 @@ router.get(
   gradeController.exporttoExcel_StudentList
 );
 
+router.get(
+  // "/grade/exporttoExcel_StudentList/:idLop",
+  "/grade/exporttoExcel_StudentList/:idLop/type?",
+  gradeController.exporttoExcel_StudentList
+);
+
+router.post(
+  // "/grade/exporttoExcel_StudentList/:idLop",
+  "/grade/importtoExcel_StudentList/:idLop/type?",
+  gradeController.importtoExcel_StudentList
+);
+
 module.exports = router;
