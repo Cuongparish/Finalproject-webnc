@@ -37,7 +37,7 @@ module.exports = {
 
   getStudent_inClass: async (req, res) => {
     const { rows } = await postgre.query(
-      `SELECT "User".*
+      `SELECT "User".*, "HocSinh"."StudentId"
       FROM "HocSinh"
       JOIN "HocSinhLopHoc" ON "HocSinh"."idHocSinh" = "HocSinhLopHoc"."idHocSinh"
       JOIN "LopHoc" ON "HocSinhLopHoc"."idLop" = "LopHoc"."idLop"

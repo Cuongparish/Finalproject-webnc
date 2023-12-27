@@ -31,9 +31,16 @@ module.exports = {
   },
 
   addPercentScore_inClass: async (req, res) => {
-    const percentScores = req.body;
+    const percentScores = req.body.Data;
     const results = [];
+
+    if (!Array.isArray(percentScores)) {
+      console.log(percentScores);
+      //return res.status(400).json({ error: "Invalid data format" });
+    }
+
     for (const score of percentScores) {
+      console.log(score);
       const { rows } = await postgre.query(
         'INSERT INTO public."CotDiem"("idLop", "TenCotDiem", "PhanTramDiem") VALUES ($1, $2, $3) RETURNING *;',
         [req.params.idLop, score.TenCotDiem, score.PhanTramDiem]

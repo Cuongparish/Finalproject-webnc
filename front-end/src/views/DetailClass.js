@@ -28,13 +28,14 @@ import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
 
 import "../App.css";
+import GradeService from "../service/grade.service";
+import { RiP2PFill } from "react-icons/ri";
 
-//const Client_URL = "http://localhost:3000"
-const Client_URL = "https://finalproject-webnc.vercel.app";
+const Client_URL = "http://localhost:3000"
+//const Client_URL = "https://finalproject-webnc.vercel.app";
 
 const DetailClass = (props) => {
   const { malop } = useParams();
-  var hasScore = false;
   //console.log("Ma lop: ",malop);
   //const malop = match.params.malop;
   const user = props.User;
@@ -60,6 +61,8 @@ const DetailClass = (props) => {
   const [Email, setEmail] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState();
+
+  const [hasScore, sethasScore] = useState(false);
 
   const [GradeStructure, setGradeStructure] = useState([
     <Row key={0} className="mb-0 justify-content-center">
@@ -128,7 +131,7 @@ const DetailClass = (props) => {
   const handleAddScoreShow = () => setAddScore(true);
 
   const [DataGradeStructure, setDataGradeStructure] = useState([]);
-  //const [formData, setFormData] = useState([]);
+  const [HadCreateGradeStructer, setHadCreateGradeStructer] = useState(false);
 
   //----------------------------------------Hàm copy
   function CopyCode(code) {
@@ -332,42 +335,84 @@ const DetailClass = (props) => {
     setGradeStructure(updatedGradeStructure);
   };
 
-  // const handleInputChange = (index, fieldName, value) => {
-  //   const updatedFormData = [...formData];
-  //   updatedFormData[index] = {
-  //     ...updatedFormData[index],
-  //     [fieldName]: value
-  //   };
-  //   setFormData(updatedFormData);
-  // };
-
   const saveDataGradeStructure = () => {
     setDataGradeStructure(
       GradeStructure.map((item, index) => ({
-        tencotdiem: document.getElementById(`add_score_${index}`).value,
-        phantramdiem: document.getElementById(`add_score_percentage_${index}`).value
+        TenCotDiem: document.getElementById(`add_score_${index}`).value,
+        PhanTramDiem: document.getElementById(`add_score_percentage_${index}`).value
       })));
 
     //console.log(DataGradeStructure);
+    sethasScore(true);
+    setHadCreateGradeStructer(true);
     handleAddScoreClose();
   };
 
   const handleclick = () => {
     console.log(DataGradeStructure);
-  }
+  };
+
+  const addGradeStructureToDB = async () => {
+    try {
+      await GradeService.CreateGradeStructure(DetailClass.idLop, DataGradeStructure).then(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const GetGradeStructures = async () => {
+    console.log(1111);
+    try {
+      await GradeService.GetGradeStructure(DetailClass.idLop).then(
+        (res) => {
+          console.log("gradestructure: ", res);
+          if(res.data)
+          {
+            const newData = res.data.map((element, index) => {
+              return {
+                TenCotDiem: element.TenCotDiem,
+                PhanTramDiem: element.PhanTramDiem
+              };
+            });
+            
+            if (newData.length > 0) {
+              setDataGradeStructure(newData);
+            }
+            sethasScore(true);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   //----------------------------------------Use effect
   useEffect(() => {
     console.log("123");
-    GetClassList(); 
-    GetDetailClass();
-    GetListUserInClass();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    Promise.all([GetClassList(), GetDetailClass(), GetListUserInClass()]);
   }, [user]);
 
   useEffect(() => {
+    Promise.all([GetGradeStructures()]);
+  }, [DetailClass]);
+
+  useEffect(() => {
     console.log(DataGradeStructure);
-    //Làm hàm đưa grade structure qua cho back-end ở đây
+    if(HadCreateGradeStructer)
+    {
+      addGradeStructureToDB();
+    }
   }, [DataGradeStructure]);
 
 
@@ -416,6 +461,8 @@ const DetailClass = (props) => {
         <Col md={10}>
           <div className="w-100 h-100 tab-menu">
             <Tabs defaultActiveKey="news" className="border-bottom border-2 px-3">
+
+              {/* Màn hình bảng tin */}
               <Tab eventKey="news" id="news" title="Bảng tin">
                 <div className="detail-news mt-3">
                   <Row className="banner-news mb-4">
@@ -492,9 +539,13 @@ const DetailClass = (props) => {
                   </Row>
                 </div>
               </Tab>
+
+              {/* Màn hình bài tập */}
               <Tab eventKey="homework" title="Bài tập trên lớp">
                 <div>Bài tập trên lớp</div>
               </Tab>
+
+              {/* Màn hình mọi người */}
               <Tab eventKey="members" title="Mọi người">
                 <div className="detail-members mt-3">
                   <Row className="banner-members mb-4">
@@ -616,9 +667,10 @@ const DetailClass = (props) => {
                   </Row>
                 </div>
               </Tab>
-              <Tab eventKey="score" title="Điểm" className="h-100">
 
-                {hasScore ? <ScoreTable /> :
+              {/* Màn hình điểm */}
+              <Tab eventKey="score" title="Điểm" className="h-100">
+                {hasScore ? <ScoreTable gradestructure={DataGradeStructure} liststudent={StudentInClass}/> :
                   <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
                     <Col sm={2}>
                       <Card className="border-0 text-center">

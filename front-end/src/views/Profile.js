@@ -117,15 +117,12 @@ const Profile = (props) => {
   const handleCancel = () => {
     // Xử lý khi nút hủy được nhấn
     console.log('Đã hủy');
-    window.location.reload();
+    //window.location.reload();
     setShowAlert(false); // Đóng box thông báo sau khi hủy
   };
 
   useEffect(() => {
-    //console.log(formattedDate);
-    GetClassList();
-    GetDataUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    Promise.all([GetClassList(), GetDataUser()])
   }, [user]);
 
   useEffect(() => {

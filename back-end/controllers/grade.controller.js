@@ -65,7 +65,7 @@ const accountC = {
 
   addPercentScore_inClass: async (req, res) => {
     // score.TenCotDiem, score.PhanTramDiem
-    if (!req.body.TenCotDiem || !req.body.PhanTramDiem) {
+    if (!req.body.Data) {
       return res.json({ msg: "Theo dữ liệu req.body" });
     }
     try {

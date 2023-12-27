@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://finalproject-webnc.vercel.app";
-//const API_URL = "http://localhost:5000";
+//const API_URL = "https://finalproject-webnc.vercel.app";
+const API_URL = "http://localhost:5000";
 
 const GetGradeStructure = (idLop) => {
     return axios
@@ -12,12 +12,9 @@ const GetGradeStructure = (idLop) => {
         });
 }
 
-const CreateGradeStructure = (idLop, TenCotDiem, PhanTramDiem) => {
+const CreateGradeStructure = (idLop, Data) => {
     return axios
-        .post(`${API_URL}/api/v1/user/grade/addPercentScore/${idLop}`, {
-            TenCotDiem,
-            PhanTramDiem
-        })
+        .post(`${API_URL}/api/v1/user/grade/addPercentScore/${idLop}`, {Data})
         .then((res) => {
             //console.log("res: ", res);
             return res.data;
