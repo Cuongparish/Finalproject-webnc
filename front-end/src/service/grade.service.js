@@ -14,7 +14,7 @@ const GetGradeStructure = (idLop) => {
 
 const CreateGradeStructure = (idLop, Data) => {
     return axios
-        .post(`${API_URL}/api/v1/user/grade/addPercentScore/${idLop}`, {Data})
+        .post(`${API_URL}/api/v1/user/grade/addPercentScore/${idLop}`, { Data })
         .then((res) => {
             //console.log("res: ", res);
             return res.data;
@@ -46,32 +46,34 @@ const UpdateGradeStructure = (idLop, TenCotDiem, PhanTramDiem, idCotDiem) => {
 };
 
 const ExportToExcel_StudentList = async (idLop, type) => {
-    // return axios
-    // .get(`${API_URL}/api/v1/user/grade/exporttoExcel_StudentList/${idLop}/type?format=${type}`)
-    // .then((res) => {
-    //     //console.log("res: ", res);
-    //     return res.data;
-    // });
     try {
         const response = await axios.get(`${API_URL}/api/v1/user/grade/exporttoExcel_StudentList/${idLop}/type?format=${type}`, {
-          responseType: 'blob', // Sử dụng 'blob' để nhận dữ liệu dưới dạng file
+            responseType: 'blob', // Sử dụng 'blob' để nhận dữ liệu dưới dạng file
         });
-        console.log(response);
-    
+        //console.log(response);
         return response.data; // Trả về dữ liệu blob từ response
-      } catch (error) {
+    } catch (error) {
         console.error('Error exporting to Excel:', error);
         //throw error; // Re-throw lỗi để xử lý ở phía gọi hàm nếu cần
-      }
+    }
 };
 
-const ImportToExcel_StudentList = (idLop, type) => {
-    return axios
-    .get(`${API_URL}/api/v1/user/grade/importtoExcel_StudentList/${idLop}/type?format=${type}`)
-    .then((res) => {
-        //console.log("res: ", res);
-        return res.data;
-    });
+const ImportToExcel_StudentList = async (idLop, formData) => {
+    console.log(formData);
+
+    try {
+        const response = await axios.post(`${API_URL}/api/v1/user/grade/importtoExcel_StudentList/${idLop}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        // Xử lý phản hồi từ server nếu cần
+        console.log('Server response:', response.data);
+        return response.data;
+    } catch (error) {
+        // Xử lý lỗi
+        console.error('Error uploading file:', error);
+    }
 };
 
 const GradeService = {

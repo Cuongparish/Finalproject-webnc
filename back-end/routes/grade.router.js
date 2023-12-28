@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const upload = require('../config/multer.config'); 
+
 const gradeController = require("../controllers/grade.controller");
 
 //
@@ -45,7 +47,7 @@ router.get(
 
 router.post(
   // "/grade/exporttoExcel_StudentList/:idLop",
-  "/grade/importtoExcel_StudentList/:idLop/type?",
+  "/grade/importtoExcel_StudentList/:idLop", upload.single('file'),
   gradeController.importtoExcel_StudentList
 );
 

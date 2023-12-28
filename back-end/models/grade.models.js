@@ -4,7 +4,6 @@ const excel = require("exceljs");
 const path = require("path");
 const fs = require("fs");
 const fastcsv = require("fast-csv");
-const multer = require("multer");
 
 module.exports = {
   getAll: async (req, res) => {

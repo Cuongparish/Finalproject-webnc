@@ -134,6 +134,12 @@ const DetailClass = (props) => {
   const [DataGradeStructure, setDataGradeStructure] = useState([]);
   const [HadCreateGradeStructer, setHadCreateGradeStructer] = useState(false);
 
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
   //----------------------------------------Hàm copy
   function CopyCode(code) {
     const textToCopy = code;
@@ -248,7 +254,7 @@ const DetailClass = (props) => {
 
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'DanhSachHocSinh.xlsx'); // Đặt tên file
+      link.setAttribute('download', `DanhSachHocSinh.${Type}`); // Đặt tên file
       document.body.appendChild(link);
 
       link.click();
@@ -259,6 +265,21 @@ const DetailClass = (props) => {
       // Xử lý lỗi nếu cần
     }
   };
+
+  const handleUploadStudentList = async () => {
+    if (selectedFile) {
+      console.log("selectedFiled: ",selectedFile);
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      console.log("formdata: ",formData);
+
+      const res = await GradeService.ImportToExcel_StudentList(DetailClass.idLop, Type, formData);
+      console.log("File", res);
+
+    } else {
+      console.log('Please select a file to upload');
+    }
+  }
 
   //----------------------------------------Hàm mời giáo viên và học sinh
   const handleSendToTeacher = async (e) => {
@@ -686,11 +707,20 @@ const DetailClass = (props) => {
                   </Row>
 
                   <Row className="banner-members mb-4">
-                    {/* <Col className="d-flex align-items-center border-bottom border-2 border-black">
-                      <h3>Giáo viên</h3>
-                    </Col> */}
-                    <Col className="text-end border-2 float-end">
-                      <Col xs={3} className="float-end"> {/* Sử dụng cột lớn hơn cho phần chọn file */}
+                    <Col className="text-end border-2">
+                      <Col xs={3}>
+                        <Form>
+                          <Form.Group controlId="formFile" className="mb-3">
+                            <Form.Label>Select file to upload:</Form.Label>
+                            <Form.Control type="file" onChange={handleFileChange} />
+                          </Form.Group>
+                          <Button variant="primary" onClick={handleUploadStudentList}>
+                            Upload StudentList
+                          </Button>
+                        </Form>
+                      </Col>
+
+                      <Col xs={3} className="float-end">
                         <FloatingLabel
                           controlId="type"
                           label="FileType"
