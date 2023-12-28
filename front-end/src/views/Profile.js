@@ -149,7 +149,7 @@ const Profile = (props) => {
         <Loader /> // Hiển thị Loader khi loading là true
       ) : (
         <>
-          <Row className="justify-`content`-center py-3 menu-top align-items-center">
+          <Row className="justify-content-center py-3 menu-top align-items-center">
             <Col xs md={1}>
               <a href="/home" className="fs-3 btn-menu">
                 <FaBars />
