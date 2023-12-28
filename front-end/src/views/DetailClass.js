@@ -30,7 +30,7 @@ import ClassService from "../service/class.service";
 import "../App.css";
 import GradeService from "../service/grade.service";
 
-//const Client_URL = "http://localhost:3000"
+// const Client_URL = "http://localhost:3000";
 const Client_URL = "https://finalproject-webnc.vercel.app";
 
 const DetailClass = (props) => {
@@ -61,13 +61,13 @@ const DetailClass = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState();
 
-  const [Type, setType] = useState("xlsx")
+  const [Type, setType] = useState("xlsx");
 
   const [hasScore, sethasScore] = useState(false);
 
   const [GradeStructure, setGradeStructure] = useState([
     <Row key={0} className="mb-0 justify-content-center">
-      <Card className="p-3 w-50" style={{ borderRadius: '10px 10px 0 0' }}>
+      <Card className="p-3 w-50" style={{ borderRadius: "10px 10px 0 0" }}>
         <FloatingLabel
           controlId={`add_score_0`}
           label="Tên cột điểm"
@@ -77,29 +77,26 @@ const DetailClass = (props) => {
             id={`add_score_0`}
             type="text"
             placeholder="Exercise"
-          //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
+            //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
           />
         </FloatingLabel>
-        <FloatingLabel
-          controlId={`add_score_percentage_0`}
-          label="% cột điểm"
-        >
+        <FloatingLabel controlId={`add_score_percentage_0`} label="% cột điểm">
           <Form.Control
             id={`add_score_percentage_0`}
             type="number"
             placeholder="5%"
-          //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
+            //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
           />
         </FloatingLabel>
       </Card>
-    </Row>
+    </Row>,
   ]);
 
   const [add_score, setAddScore] = useState(false);
   const handleAddScoreClose = () => {
     setGradeStructure([
       <Row key={0} className="mb-0 justify-content-center">
-        <Card className="p-3 w-50" style={{ borderRadius: '10px 10px 0 0' }}>
+        <Card className="p-3 w-50" style={{ borderRadius: "10px 10px 0 0" }}>
           <FloatingLabel
             controlId={`add_score_0`}
             label="Tên cột điểm"
@@ -109,7 +106,7 @@ const DetailClass = (props) => {
               id={`add_score_0`}
               type="text"
               placeholder="Exercise"
-            //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
+              //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
             />
           </FloatingLabel>
           <FloatingLabel
@@ -120,15 +117,15 @@ const DetailClass = (props) => {
               id={`add_score_percentage_0`}
               type="number"
               placeholder="5%"
-            //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
+              //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
             />
           </FloatingLabel>
         </Card>
-      </Row>
-    ])
+      </Row>,
+    ]);
 
     setAddScore(false);
-  }
+  };
   const handleAddScoreShow = () => setAddScore(true);
 
   const [DataGradeStructure, setDataGradeStructure] = useState([]);
@@ -147,9 +144,9 @@ const DetailClass = (props) => {
     const copyText = () => {
       copy(textToCopy)
         .then(() => {
-          setMessage("Đã sao chép mã!")
+          setMessage("Đã sao chép mã!");
           //alert("Đã sao chép!");
-          setShowAlert(true)
+          setShowAlert(true);
         })
         .catch((err) => {
           alert("Lỗi khi sao chép: " + err);
@@ -165,9 +162,9 @@ const DetailClass = (props) => {
     const copyText = () => {
       copy(textToCopy)
         .then(() => {
-          setMessage("Đã sao chép link!")
+          setMessage("Đã sao chép link!");
           //alert("Đã sao chép!");
-          setShowAlert(true)
+          setShowAlert(true);
         })
         .catch((err) => {
           alert("Lỗi khi sao chép: " + err);
@@ -248,38 +245,43 @@ const DetailClass = (props) => {
 
   const handleDownloadStudentList = async () => {
     try {
-      const blobData = await GradeService.ExportToExcel_StudentList(DetailClass.idLop, Type); // Thay thế idLop và type bằng giá trị thực tế của bạn
+      const blobData = await GradeService.ExportToExcel_StudentList(
+        DetailClass.idLop,
+        Type
+      ); // Thay thế idLop và type bằng giá trị thực tế của bạn
       console.log(blobData);
       const url = window.URL.createObjectURL(new Blob([blobData]));
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', `DanhSachHocSinh.${Type}`); // Đặt tên file
+      link.setAttribute("download", `DanhSachHocSinh.${Type}`); // Đặt tên file
       document.body.appendChild(link);
 
       link.click();
 
       document.body.removeChild(link);
     } catch (error) {
-      console.error('Error handling download:', error);
+      console.error("Error handling download:", error);
       // Xử lý lỗi nếu cần
     }
   };
 
   const handleUploadStudentList = async () => {
     if (selectedFile) {
-      console.log("selectedFiled: ",selectedFile);
+      console.log("selectedFiled: ", selectedFile);
       const formData = new FormData();
-      formData.append('file', selectedFile);
-      console.log("formdata: ",formData);
+      formData.append("file", selectedFile);
+      console.log("formdata: ", formData);
 
-      const res = await GradeService.ImportToExcel_StudentList(DetailClass.idLop, Type, formData);
+      const res = await GradeService.ImportToExcel_StudentList(
+        DetailClass.idLop,
+        formData
+      );
       console.log("File", res);
-
     } else {
-      console.log('Please select a file to upload');
+      console.log("Please select a file to upload");
     }
-  }
+  };
 
   //----------------------------------------Hàm mời giáo viên và học sinh
   const handleSendToTeacher = async (e) => {
@@ -327,13 +329,13 @@ const DetailClass = (props) => {
   //----------------------------------------Box thông báo
   const handleConfirm = () => {
     // Xử lý khi nút xác nhận được nhấn
-    console.log('Đã xác nhận');
+    console.log("Đã xác nhận");
     setShowAlert(false); // Đóng box thông báo sau khi xác nhận
   };
 
   const handleCancel = () => {
     // Xử lý khi nút hủy được nhấn
-    console.log('Đã hủy');
+    console.log("Đã hủy");
     setShowAlert(false); // Đóng box thông báo sau khi hủy
   };
 
@@ -341,7 +343,7 @@ const DetailClass = (props) => {
   const addGradeStructure = () => {
     const newGradeStructure = (
       <Row key={0} className="mb-0 justify-content-center">
-        <Card className="p-3 w-50" style={{ borderRadius: '10px 10px 0 0' }}>
+        <Card className="p-3 w-50" style={{ borderRadius: "10px 10px 0 0" }}>
           <FloatingLabel
             controlId={`add_score_${GradeStructure.length}`}
             label="Tên cột điểm"
@@ -351,7 +353,7 @@ const DetailClass = (props) => {
               id={`add_score_${GradeStructure.length}`}
               type="text"
               placeholder="Exercise"
-            // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
+              // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
             />
           </FloatingLabel>
           <FloatingLabel
@@ -362,7 +364,7 @@ const DetailClass = (props) => {
               id={`add_score_percentage_${GradeStructure.length}`}
               type="number"
               placeholder="5%"
-            // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
+              // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
             />
           </FloatingLabel>
         </Card>
@@ -373,7 +375,9 @@ const DetailClass = (props) => {
   };
 
   const RemoveGradeStructure = (indexToRemove) => {
-    const updatedGradeStructure = GradeStructure.filter((_, index) => index !== indexToRemove);
+    const updatedGradeStructure = GradeStructure.filter(
+      (_, index) => index !== indexToRemove
+    );
     setGradeStructure(updatedGradeStructure);
   };
 
@@ -381,8 +385,10 @@ const DetailClass = (props) => {
     setDataGradeStructure(
       GradeStructure.map((item, index) => ({
         TenCotDiem: document.getElementById(`add_score_${index}`).value,
-        PhanTramDiem: document.getElementById(`add_score_percentage_${index}`).value
-      })));
+        PhanTramDiem: document.getElementById(`add_score_percentage_${index}`)
+          .value,
+      }))
+    );
 
     //console.log(DataGradeStructure);
     sethasScore(true);
@@ -396,7 +402,10 @@ const DetailClass = (props) => {
 
   const addGradeStructureToDB = async () => {
     try {
-      await GradeService.CreateGradeStructure(DetailClass.idLop, DataGradeStructure).then(
+      await GradeService.CreateGradeStructure(
+        DetailClass.idLop,
+        DataGradeStructure
+      ).then(
         (res) => {
           console.log(res);
         },
@@ -419,7 +428,7 @@ const DetailClass = (props) => {
             const newData = res.data.map((element, index) => {
               return {
                 TenCotDiem: element.TenCotDiem,
-                PhanTramDiem: element.PhanTramDiem
+                PhanTramDiem: element.PhanTramDiem,
               };
             });
 
@@ -454,7 +463,6 @@ const DetailClass = (props) => {
       addGradeStructureToDB();
     }
   }, [DataGradeStructure]);
-
 
   return (
     <>
@@ -500,8 +508,10 @@ const DetailClass = (props) => {
 
         <Col md={10}>
           <div className="w-100 h-100 tab-menu">
-            <Tabs defaultActiveKey="news" className="border-bottom border-2 px-3">
-
+            <Tabs
+              defaultActiveKey="news"
+              className="border-bottom border-2 px-3"
+            >
               {/* Màn hình bảng tin */}
               <Tab eventKey="news" id="news" title="Bảng tin">
                 <div className="detail-news mt-3">
@@ -571,7 +581,8 @@ const DetailClass = (props) => {
                             lời câu hỏi của học viên
                           </Card.Subtitle>
                           <a className="btn-outline-dark float-end btn d-flex align-items-center justify-content-center">
-                            <IoSettingsOutline className="mx-1" /> Cài đặt bảng tin
+                            <IoSettingsOutline className="mx-1" /> Cài đặt bảng
+                            tin
                           </a>
                         </Card.Body>
                       </Card>
@@ -628,9 +639,9 @@ const DetailClass = (props) => {
                               >
                                 <input
                                   type="checkbox"
-                                // value="id_user"
-                                // checked={selectedValues.includes('Option 1')}
-                                // onChange={() => handleCheckboxChange('Option 1')}
+                                  // value="id_user"
+                                  // checked={selectedValues.includes('Option 1')}
+                                  // onChange={() => handleCheckboxChange('Option 1')}
                                 />
                               </td>
                               <td
@@ -687,9 +698,9 @@ const DetailClass = (props) => {
                               >
                                 <input
                                   type="checkbox"
-                                // value="id_user"
-                                // checked={selectedValues.includes('Option 1')}
-                                // onChange={() => handleCheckboxChange('Option 1')}
+                                  // value="id_user"
+                                  // checked={selectedValues.includes('Option 1')}
+                                  // onChange={() => handleCheckboxChange('Option 1')}
                                 />
                               </td>
                               <td
@@ -712,9 +723,15 @@ const DetailClass = (props) => {
                         <Form>
                           <Form.Group controlId="formFile" className="mb-3">
                             <Form.Label>Select file to upload:</Form.Label>
-                            <Form.Control type="file" onChange={handleFileChange} />
+                            <Form.Control
+                              type="file"
+                              onChange={handleFileChange}
+                            />
                           </Form.Group>
-                          <Button variant="primary" onClick={handleUploadStudentList}>
+                          <Button
+                            variant="primary"
+                            onClick={handleUploadStudentList}
+                          >
                             Upload StudentList
                           </Button>
                         </Form>
@@ -735,7 +752,12 @@ const DetailClass = (props) => {
                           </Form.Select>
                         </FloatingLabel>
 
-                        <Button variant="primary" onClick={handleDownloadStudentList}>Download StudentList</Button>
+                        <Button
+                          variant="primary"
+                          onClick={handleDownloadStudentList}
+                        >
+                          Download StudentList
+                        </Button>
                       </Col>
                     </Col>
                   </Row>
@@ -744,27 +766,35 @@ const DetailClass = (props) => {
 
               {/* Màn hình điểm */}
               <Tab eventKey="score" title="Điểm" className="h-100">
-                {hasScore ? <ScoreTable gradestructure={DataGradeStructure} liststudent={StudentInClass} /> :
+                {hasScore ? (
+                  <ScoreTable
+                    gradestructure={DataGradeStructure}
+                    liststudent={StudentInClass}
+                  />
+                ) : (
                   <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
                     <Col sm={2}>
                       <Card className="border-0 text-center">
                         <Card.Img
                           variant="top"
-                          src={process.env.PUBLIC_URL + '/Images/score_bg.png'}
+                          src={process.env.PUBLIC_URL + "/Images/score_bg.png"}
                         />
                         <Card.Body className="mb-3">
-                          <a onClick={handleAddScoreShow} className="btn btn-primary mb-2">
+                          <a
+                            onClick={handleAddScoreShow}
+                            className="btn btn-primary mb-2"
+                          >
                             <FaPlus className="mx-1" /> Tạo bảng điểm
                           </a>
                           <a onClick={handleclick} className="btn btn-success">
-                            <TbDatabaseImport className="mx-1" /> Import bảng điểm
+                            <TbDatabaseImport className="mx-1" /> Import bảng
+                            điểm
                           </a>
                         </Card.Body>
                       </Card>
                     </Col>
                   </Row>
-                }
-
+                )}
               </Tab>
             </Tabs>
           </div>
@@ -849,11 +879,7 @@ const DetailClass = (props) => {
       />
 
       {/* Modal Add Score */}
-      <Modal
-        show={add_score}
-        size="fullscreen"
-        onHide={handleAddScoreClose}
-      >
+      <Modal show={add_score} size="fullscreen" onHide={handleAddScoreClose}>
         <Modal.Header closeButton>
           <Modal.Title className="fw-bold">Tạo bảng điểm</Modal.Title>
         </Modal.Header>
@@ -861,7 +887,10 @@ const DetailClass = (props) => {
         <Modal.Body className="bg-body-secondary">
           <Row className="mb-3 justify-content-center">
             <Card className="p-0 w-50">
-              <Card.Header style={{ height: '2px' }} className="bg-primary"></Card.Header>
+              <Card.Header
+                style={{ height: "2px" }}
+                className="bg-primary"
+              ></Card.Header>
               <Card.Body>
                 <Form.Control
                   type="text"
@@ -878,7 +907,7 @@ const DetailClass = (props) => {
           </Row>
 
           {GradeStructure.map((gradestructure, index) => (
-            <div key={index} >
+            <div key={index}>
               {gradestructure}
               <Row className="mb-3 justify-content-center">
                 <Button
@@ -886,17 +915,17 @@ const DetailClass = (props) => {
                   size="sm"
                   onClick={() => RemoveGradeStructure(index)}
                   style={{
-                    borderRadius: '0 0 10px 10px',
-                    width: '50%',
-                    height: '40px',
-                    fontSize: '24px',
-                    lineHeight: '24px',
-                    fontWeight: 'bold',
-                    boxShadow: '0 0 4px rgba(0, 0, 0, 0.2)',
-                    display: 'inline-flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    cursor: 'pointer'
+                    borderRadius: "0 0 10px 10px",
+                    width: "50%",
+                    height: "40px",
+                    fontSize: "24px",
+                    lineHeight: "24px",
+                    fontWeight: "bold",
+                    boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
+                    display: "inline-flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    cursor: "pointer",
                   }}
                 >
                   -
@@ -940,17 +969,17 @@ const DetailClass = (props) => {
                 size="sm"
                 onClick={addGradeStructure}
                 style={{
-                  borderRadius: '50%',
-                  width: '40px',
-                  height: '40px',
-                  fontSize: '24px',
-                  lineHeight: '24px',
-                  fontWeight: 'bold',
-                  boxShadow: '0 0 4px rgba(0, 0, 0, 0.2)',
-                  display: 'inline-flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  cursor: 'pointer'
+                  borderRadius: "50%",
+                  width: "40px",
+                  height: "40px",
+                  fontSize: "24px",
+                  lineHeight: "24px",
+                  fontWeight: "bold",
+                  boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
+                  display: "inline-flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
                 }}
               >
                 +

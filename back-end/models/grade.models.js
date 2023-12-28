@@ -147,9 +147,15 @@ module.exports = {
   },
 
   importtoExcel_StudentList: async (req, res) => {
+    const sql = ` UPDATE "User" 
+                  SET "FullName" = $2 
+                  FROM "HocSinh"
+                  WHERE "User"."idUser" = "HocSinh"."idUser" AND "HocSinh"."StudentId" = $1`;
     try {
       const fileBuffer = req.file.buffer;
       let data = [];
+      let data1 = [];
+      let isFirstRow = true;
 
       // Kiểm tra định dạng file bằng cách kiểm tra đuôi mở rộng
       const fileExtension = req.file.originalname
@@ -165,8 +171,24 @@ module.exports = {
         const sheet = workbook.worksheets[0];
 
         sheet.eachRow({ includeEmpty: false }, (row) => {
-          data.push(row.values);
+          data1.push(row.values);
         });
+
+        for (const row of data1) {
+          if (isFirstRow) {
+            isFirstRow = false;
+            continue;
+          }
+          const student = {};
+          student["FullName"] = row[1];
+          for (const column of row) {
+            if (column) {
+              student["StudentId"] = column;
+            }
+          }
+
+          data.push(student);
+        }
       } else if (fileExtension === "csv") {
         // Sử dụng fast-csv để đọc dữ liệu từ file CSV
         data = await new Promise((resolve, reject) => {
@@ -191,7 +213,11 @@ module.exports = {
       }
 
       // In dữ liệu ra console
-      console.log(data);
+      // console.log(data);
+      for (const row of data) {
+        //console.log(row.StudentId);
+        postgre.query(sql, [row.StudentId, row.FullName]);
+      }
 
       res.send("File uploaded successfully!");
     } catch (error) {

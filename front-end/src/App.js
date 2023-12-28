@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 //import { Navbar, Container, Image, Nav} from 'react-bootstrap';
@@ -18,7 +18,7 @@ import VerifyJoinNoUser from "./views/VerifyJoinNoUser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./service/auth.service";
 
-//const API_URL = "http://localhost:5000";
+// const API_URL = "http://localhost:5000";
 const API_URL = "https://finalproject-webnc.vercel.app";
 
 function App() {
@@ -81,9 +81,7 @@ function App() {
           />
           <Route
             path="/profile"
-            element={
-              user ? <Profile User={user} /> : <Navigate to="/login" />
-            }
+            element={user ? <Profile User={user} /> : <Navigate to="/login" />}
           />
           <Route
             path="/join-class/:malop/:role"
