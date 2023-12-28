@@ -466,7 +466,7 @@ const DetailClass = (props) => {
 
   return (
     <>
-      <Row className="justify-`content`-center py-3 menu-top align-items-center">
+      <Row className="justify-content-center py-3 menu-top align-items-center">
         <Col xs md={1}>
           <a href="/home" className="fs-3 btn-menu">
             <FaBars />

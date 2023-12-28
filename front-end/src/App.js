@@ -15,6 +15,8 @@ import Profile from "./views/Profile";
 import VerifyJoin from "./views/VerifyJoin";
 import VerifyJoinNoUser from "./views/VerifyJoinNoUser";
 
+import AdminManagement from "./views/AdminManagement";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./service/auth.service";
 
@@ -87,6 +89,15 @@ function App() {
             path="/join-class/:malop/:role"
             element={user ? <VerifyJoin user={user} /> : <VerifyJoinNoUser />}
           />
+          
+          {/* Admin */}
+          <Route
+            path="/admin"
+            element={
+              <AdminManagement User={user} />
+            }
+          />
+          
         </Routes>
       )}
     </>
