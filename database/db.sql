@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS public."HocSinh"
 (
     "idHocSinh" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
     "idUser" integer NOT NULL,
+    "StudentId" character varying COLLATE pg_catalog."default",
     CONSTRAINT "HocSinh_pkey" PRIMARY KEY ("idHocSinh"),
     CONSTRAINT "FK_HocSinh_User" FOREIGN KEY ("idUser")
         REFERENCES public."User" ("idUser") MATCH SIMPLE
