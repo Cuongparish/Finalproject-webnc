@@ -21,7 +21,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./service/auth.service";
 
 //const API_URL = "http://localhost:5000";
-
 const API_URL = "https://finalproject-webnc.vercel.app";
 
 function App() {

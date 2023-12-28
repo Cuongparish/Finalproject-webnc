@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const upload = require("../config/multer.config");
+
 const gradeController = require("../controllers/grade.controller");
 
 //
@@ -30,13 +32,6 @@ router.put(
   gradeController.updatePercentScore_inClass
 );
 
-// xuất danh sách các học sinh trong lớp (fullname, studentid)
-router.get(
-  // "/grade/exporttoExcel_StudentList/:idLop",
-  "/grade/exporttoExcel_StudentList/:idLop/type?",
-  gradeController.exporttoExcel_StudentList
-);
-
 router.get(
   // "/grade/exporttoExcel_StudentList/:idLop",
   "/grade/exporttoExcel_StudentList/:idLop/type?",
@@ -45,7 +40,8 @@ router.get(
 
 router.post(
   // "/grade/exporttoExcel_StudentList/:idLop",
-  "/grade/importtoExcel_StudentList/:idLop/type?",
+  "/grade/importtoExcel_StudentList/:idLop",
+  upload.single("file"),
   gradeController.importtoExcel_StudentList
 );
 

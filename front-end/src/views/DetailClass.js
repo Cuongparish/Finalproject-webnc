@@ -28,13 +28,13 @@ import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
 
 import "../App.css";
+import GradeService from "../service/grade.service";
 
 //const Client_URL = "http://localhost:3000"
 const Client_URL = "https://finalproject-webnc.vercel.app";
 
 const DetailClass = (props) => {
   const { malop } = useParams();
-  var hasScore = false;
   //console.log("Ma lop: ",malop);
   //const malop = match.params.malop;
   const user = props.User;
@@ -60,6 +60,10 @@ const DetailClass = (props) => {
   const [Email, setEmail] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState();
+
+  const [Type, setType] = useState("xlsx")
+
+  const [hasScore, sethasScore] = useState(false);
 
   const [GradeStructure, setGradeStructure] = useState([
     <Row key={0} className="mb-0 justify-content-center">
@@ -128,7 +132,13 @@ const DetailClass = (props) => {
   const handleAddScoreShow = () => setAddScore(true);
 
   const [DataGradeStructure, setDataGradeStructure] = useState([]);
-  //const [formData, setFormData] = useState([]);
+  const [HadCreateGradeStructer, setHadCreateGradeStructer] = useState(false);
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
 
   //----------------------------------------Hàm copy
   function CopyCode(code) {
@@ -236,6 +246,41 @@ const DetailClass = (props) => {
     }
   };
 
+  const handleDownloadStudentList = async () => {
+    try {
+      const blobData = await GradeService.ExportToExcel_StudentList(DetailClass.idLop, Type); // Thay thế idLop và type bằng giá trị thực tế của bạn
+      console.log(blobData);
+      const url = window.URL.createObjectURL(new Blob([blobData]));
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `DanhSachHocSinh.${Type}`); // Đặt tên file
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error handling download:', error);
+      // Xử lý lỗi nếu cần
+    }
+  };
+
+  const handleUploadStudentList = async () => {
+    if (selectedFile) {
+      console.log("selectedFiled: ",selectedFile);
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      console.log("formdata: ",formData);
+
+      const res = await GradeService.ImportToExcel_StudentList(DetailClass.idLop, Type, formData);
+      console.log("File", res);
+
+    } else {
+      console.log('Please select a file to upload');
+    }
+  }
+
   //----------------------------------------Hàm mời giáo viên và học sinh
   const handleSendToTeacher = async (e) => {
     e.preventDefault();
@@ -332,42 +377,82 @@ const DetailClass = (props) => {
     setGradeStructure(updatedGradeStructure);
   };
 
-  // const handleInputChange = (index, fieldName, value) => {
-  //   const updatedFormData = [...formData];
-  //   updatedFormData[index] = {
-  //     ...updatedFormData[index],
-  //     [fieldName]: value
-  //   };
-  //   setFormData(updatedFormData);
-  // };
-
   const saveDataGradeStructure = () => {
     setDataGradeStructure(
       GradeStructure.map((item, index) => ({
-        tencotdiem: document.getElementById(`add_score_${index}`).value,
-        phantramdiem: document.getElementById(`add_score_percentage_${index}`).value
+        TenCotDiem: document.getElementById(`add_score_${index}`).value,
+        PhanTramDiem: document.getElementById(`add_score_percentage_${index}`).value
       })));
 
     //console.log(DataGradeStructure);
+    sethasScore(true);
+    setHadCreateGradeStructer(true);
     handleAddScoreClose();
   };
 
   const handleclick = () => {
     console.log(DataGradeStructure);
-  }
+  };
+
+  const addGradeStructureToDB = async () => {
+    try {
+      await GradeService.CreateGradeStructure(DetailClass.idLop, DataGradeStructure).then(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const GetGradeStructures = async () => {
+    console.log(1111);
+    try {
+      await GradeService.GetGradeStructure(DetailClass.idLop).then(
+        (res) => {
+          console.log("gradestructure: ", res);
+          if (res.data) {
+            const newData = res.data.map((element, index) => {
+              return {
+                TenCotDiem: element.TenCotDiem,
+                PhanTramDiem: element.PhanTramDiem
+              };
+            });
+
+            if (newData.length > 0) {
+              setDataGradeStructure(newData);
+            }
+            sethasScore(true);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   //----------------------------------------Use effect
   useEffect(() => {
     console.log("123");
-    GetClassList(); 
-    GetDetailClass();
-    GetListUserInClass();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    Promise.all([GetClassList(), GetDetailClass(), GetListUserInClass()]);
   }, [user]);
 
   useEffect(() => {
+    Promise.all([GetGradeStructures()]);
+  }, [DetailClass]);
+
+  useEffect(() => {
     console.log(DataGradeStructure);
-    //Làm hàm đưa grade structure qua cho back-end ở đây
+    if (HadCreateGradeStructer) {
+      addGradeStructureToDB();
+    }
   }, [DataGradeStructure]);
 
 
@@ -416,6 +501,8 @@ const DetailClass = (props) => {
         <Col md={10}>
           <div className="w-100 h-100 tab-menu">
             <Tabs defaultActiveKey="news" className="border-bottom border-2 px-3">
+
+              {/* Màn hình bảng tin */}
               <Tab eventKey="news" id="news" title="Bảng tin">
                 <div className="detail-news mt-3">
                   <Row className="banner-news mb-4">
@@ -492,9 +579,13 @@ const DetailClass = (props) => {
                   </Row>
                 </div>
               </Tab>
+
+              {/* Màn hình bài tập */}
               <Tab eventKey="homework" title="Bài tập trên lớp">
                 <div>Bài tập trên lớp</div>
               </Tab>
+
+              {/* Màn hình mọi người */}
               <Tab eventKey="members" title="Mọi người">
                 <div className="detail-members mt-3">
                   <Row className="banner-members mb-4">
@@ -614,11 +705,46 @@ const DetailClass = (props) => {
                     </Table>
                     {/* Table Student */}
                   </Row>
+
+                  <Row className="banner-members mb-4">
+                    <Col className="text-end border-2">
+                      <Col xs={3}>
+                        <Form>
+                          <Form.Group controlId="formFile" className="mb-3">
+                            <Form.Label>Select file to upload:</Form.Label>
+                            <Form.Control type="file" onChange={handleFileChange} />
+                          </Form.Group>
+                          <Button variant="primary" onClick={handleUploadStudentList}>
+                            Upload StudentList
+                          </Button>
+                        </Form>
+                      </Col>
+
+                      <Col xs={3} className="float-end">
+                        <FloatingLabel
+                          controlId="type"
+                          label="FileType"
+                          className="mb-3"
+                        >
+                          <Form.Select
+                            defaultValue={Type}
+                            onChange={(e) => setType(e.target.value)}
+                          >
+                            <option>xlsx</option>
+                            <option>csv</option>
+                          </Form.Select>
+                        </FloatingLabel>
+
+                        <Button variant="primary" onClick={handleDownloadStudentList}>Download StudentList</Button>
+                      </Col>
+                    </Col>
+                  </Row>
                 </div>
               </Tab>
-              <Tab eventKey="score" title="Điểm" className="h-100">
 
-                {hasScore ? <ScoreTable /> :
+              {/* Màn hình điểm */}
+              <Tab eventKey="score" title="Điểm" className="h-100">
+                {hasScore ? <ScoreTable gradestructure={DataGradeStructure} liststudent={StudentInClass} /> :
                   <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
                     <Col sm={2}>
                       <Card className="border-0 text-center">

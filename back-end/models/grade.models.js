@@ -4,7 +4,6 @@ const excel = require("exceljs");
 const path = require("path");
 const fs = require("fs");
 const fastcsv = require("fast-csv");
-const multer = require("multer");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -31,9 +30,16 @@ module.exports = {
   },
 
   addPercentScore_inClass: async (req, res) => {
-    const percentScores = req.body;
+    const percentScores = req.body.Data;
     const results = [];
+
+    if (!Array.isArray(percentScores)) {
+      console.log(percentScores);
+      //return res.status(400).json({ error: "Invalid data format" });
+    }
+
     for (const score of percentScores) {
+      console.log(score);
       const { rows } = await postgre.query(
         'INSERT INTO public."CotDiem"("idLop", "TenCotDiem", "PhanTramDiem") VALUES ($1, $2, $3) RETURNING *;',
         [req.params.idLop, score.TenCotDiem, score.PhanTramDiem]
@@ -63,58 +69,6 @@ module.exports = {
     );
     return { rows };
   },
-
-  // exporttoExcel_StudentList: async (req, res) => {
-  //   try {
-  //     const query = `SELECT user1."FullName", hs."StudentId"
-  //                   FROM "HocSinh" hs
-  //                   JOIN "HocSinhLopHoc" hslh ON hs."idHocSinh" = hslh."idHocSinh"
-  //                   JOIN "User" user1 ON hs."idUser" = user1."idUser"
-  //                   WHERE hslh."idLop" = $1`;
-
-  //     // const TenLop = await postgre.query(
-  //     //   `SELECT "TenLop" FROM "LopHoc" WHERE "idLop" = $1`,
-  //     //   [req.params.idLop]
-  //     // );
-
-  //     const { rows } = await postgre.query(query, [req.params.idLop]);
-
-  //     const workbook = new excel.Workbook();
-  //     const worksheet = workbook.addWorksheet("Sheet 1");
-
-  //     // Add headers to the worksheet
-  //     worksheet.columns = [
-  //       { header: "MSSV", key: "StudentId", width: 20 },
-  //       { header: "FullName", key: "FullName", width: 20 },
-  //     ];
-  //     if (rows && rows.length <= 0) {
-  //       return res.json({ msg: "Lớp học chưa có học sinh vào tham dự" });
-  //     }
-  //     // Add data to the worksheet
-  //     rows.forEach((row) => {
-  //       worksheet.addRow(row);
-  //     });
-  //     req.query.format;
-  //     // Set headers for the response
-  //     res.setHeader(
-  //       "Content-Type",
-  //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  //     );
-  //     res.setHeader(
-  //       "Content-Disposition",
-  //       `attachment;filename=DanhSachHocSinh.xlsx`
-  //     );
-
-  //     // Pipe the workbook to the response
-  //     await workbook.xlsx.write(res);
-
-  //     // End the response
-  //     res.end();
-  //   } catch (error) {
-  //     console.error("Error exporting to Excel:", error);
-  //     res.status(500).send("Internal Server Error");
-  //   }
-  // },
 
   exporttoExcel_StudentList: async (req, res) => {
     try {
@@ -170,7 +124,9 @@ module.exports = {
         );
 
         // Pipe the worksheet to the response as CSV
-        const csvStream = fastcsv.format({ headers: true });
+        const csvStream = fastcsv.format({
+          headers: ["StudentId", "FullName"],
+        });
         csvStream.pipe(res);
 
         rows.forEach((row) => {

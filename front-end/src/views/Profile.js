@@ -13,9 +13,6 @@ import AccountService from "../service/account.service";
 
 import "../App.css";
 
-//const Client_URL = "http://localhost:3000"
-// const Client_URL = "https://finalproject-webnc.vercel.app";
-
 const Profile = (props) => {
 
   const user = props.User;
@@ -110,22 +107,19 @@ const Profile = (props) => {
   const handleConfirm = () => {
     // Xử lý khi nút xác nhận được nhấn
     console.log('Đã xác nhận');
-    window.location.reload();
+    //window.location.reload();
     setShowAlert(false); // Đóng box thông báo sau khi xác nhận
   };
 
   const handleCancel = () => {
     // Xử lý khi nút hủy được nhấn
     console.log('Đã hủy');
-    window.location.reload();
+    //window.location.reload();
     setShowAlert(false); // Đóng box thông báo sau khi hủy
   };
 
   useEffect(() => {
-    //console.log(formattedDate);
-    GetClassList();
-    GetDataUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    Promise.all([GetClassList(), GetDataUser()])
   }, [user]);
 
   useEffect(() => {
