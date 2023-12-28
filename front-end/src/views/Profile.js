@@ -107,7 +107,7 @@ const Profile = (props) => {
   const handleConfirm = () => {
     // Xử lý khi nút xác nhận được nhấn
     console.log('Đã xác nhận');
-    window.location.reload();
+    //window.location.reload();
     setShowAlert(false); // Đóng box thông báo sau khi xác nhận
   };
 
