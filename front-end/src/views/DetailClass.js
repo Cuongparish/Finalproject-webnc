@@ -61,6 +61,8 @@ const DetailClass = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState();
 
+  const [Type, setType] = useState("xlsx")
+
   const [hasScore, sethasScore] = useState(false);
 
   const [GradeStructure, setGradeStructure] = useState([
@@ -238,6 +240,26 @@ const DetailClass = (props) => {
     }
   };
 
+  const handleDownloadStudentList = async () => {
+    try {
+      const blobData = await GradeService.ExportToExcel_StudentList(DetailClass.idLop, Type); // Thay thế idLop và type bằng giá trị thực tế của bạn
+      console.log(blobData);
+      const url = window.URL.createObjectURL(new Blob([blobData]));
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'DanhSachHocSinh.xlsx'); // Đặt tên file
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error handling download:', error);
+      // Xử lý lỗi nếu cần
+    }
+  };
+
   //----------------------------------------Hàm mời giáo viên và học sinh
   const handleSendToTeacher = async (e) => {
     e.preventDefault();
@@ -372,15 +394,14 @@ const DetailClass = (props) => {
       await GradeService.GetGradeStructure(DetailClass.idLop).then(
         (res) => {
           console.log("gradestructure: ", res);
-          if(res.data)
-          {
+          if (res.data) {
             const newData = res.data.map((element, index) => {
               return {
                 TenCotDiem: element.TenCotDiem,
                 PhanTramDiem: element.PhanTramDiem
               };
             });
-            
+
             if (newData.length > 0) {
               setDataGradeStructure(newData);
             }
@@ -408,8 +429,7 @@ const DetailClass = (props) => {
 
   useEffect(() => {
     console.log(DataGradeStructure);
-    if(HadCreateGradeStructer)
-    {
+    if (HadCreateGradeStructer) {
       addGradeStructureToDB();
     }
   }, [DataGradeStructure]);
@@ -664,12 +684,37 @@ const DetailClass = (props) => {
                     </Table>
                     {/* Table Student */}
                   </Row>
+
+                  <Row className="banner-members mb-4">
+                    {/* <Col className="d-flex align-items-center border-bottom border-2 border-black">
+                      <h3>Giáo viên</h3>
+                    </Col> */}
+                    <Col className="text-end border-2 float-end">
+                      <Col xs={3} className="float-end"> {/* Sử dụng cột lớn hơn cho phần chọn file */}
+                        <FloatingLabel
+                          controlId="type"
+                          label="FileType"
+                          className="mb-3"
+                        >
+                          <Form.Select
+                            defaultValue={Type}
+                            onChange={(e) => setType(e.target.value)}
+                          >
+                            <option>xlsx</option>
+                            <option>csv</option>
+                          </Form.Select>
+                        </FloatingLabel>
+
+                        <Button variant="primary" onClick={handleDownloadStudentList}>Download StudentList</Button>
+                      </Col>
+                    </Col>
+                  </Row>
                 </div>
               </Tab>
 
               {/* Màn hình điểm */}
               <Tab eventKey="score" title="Điểm" className="h-100">
-                {hasScore ? <ScoreTable gradestructure={DataGradeStructure} liststudent={StudentInClass}/> :
+                {hasScore ? <ScoreTable gradestructure={DataGradeStructure} liststudent={StudentInClass} /> :
                   <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
                     <Col sm={2}>
                       <Card className="border-0 text-center">

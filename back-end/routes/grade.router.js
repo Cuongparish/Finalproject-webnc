@@ -31,11 +31,11 @@ router.put(
 );
 
 // xuất danh sách các học sinh trong lớp (fullname, studentid)
-router.get(
-  // "/grade/exporttoExcel_StudentList/:idLop",
-  "/grade/exporttoExcel_StudentList/:idLop/type?",
-  gradeController.exporttoExcel_StudentList
-);
+// router.get(
+//   // "/grade/exporttoExcel_StudentList/:idLop",
+//   "/grade/exporttoExcel_StudentList/:idLop/type?",
+//   gradeController.exporttoExcel_StudentList
+// );
 
 router.get(
   // "/grade/exporttoExcel_StudentList/:idLop",

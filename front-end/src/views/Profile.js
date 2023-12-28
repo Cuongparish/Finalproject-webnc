@@ -13,9 +13,6 @@ import AccountService from "../service/account.service";
 
 import "../App.css";
 
-//const Client_URL = "http://localhost:3000"
-// const Client_URL = "https://finalproject-webnc.vercel.app";
-
 const Profile = (props) => {
 
   const user = props.User;

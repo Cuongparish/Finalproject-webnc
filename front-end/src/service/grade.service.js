@@ -45,11 +45,42 @@ const UpdateGradeStructure = (idLop, TenCotDiem, PhanTramDiem, idCotDiem) => {
         });
 };
 
+const ExportToExcel_StudentList = async (idLop, type) => {
+    // return axios
+    // .get(`${API_URL}/api/v1/user/grade/exporttoExcel_StudentList/${idLop}/type?format=${type}`)
+    // .then((res) => {
+    //     //console.log("res: ", res);
+    //     return res.data;
+    // });
+    try {
+        const response = await axios.get(`${API_URL}/api/v1/user/grade/exporttoExcel_StudentList/${idLop}/type?format=${type}`, {
+          responseType: 'blob', // Sử dụng 'blob' để nhận dữ liệu dưới dạng file
+        });
+        console.log(response);
+    
+        return response.data; // Trả về dữ liệu blob từ response
+      } catch (error) {
+        console.error('Error exporting to Excel:', error);
+        //throw error; // Re-throw lỗi để xử lý ở phía gọi hàm nếu cần
+      }
+};
+
+const ImportToExcel_StudentList = (idLop, type) => {
+    return axios
+    .get(`${API_URL}/api/v1/user/grade/importtoExcel_StudentList/${idLop}/type?format=${type}`)
+    .then((res) => {
+        //console.log("res: ", res);
+        return res.data;
+    });
+};
+
 const GradeService = {
     CreateGradeStructure,
     GetGradeStructure,
     DelGradeStructure,
     UpdateGradeStructure,
+    ExportToExcel_StudentList,
+    ImportToExcel_StudentList,
 };
 
 export default GradeService;
