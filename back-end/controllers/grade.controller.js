@@ -127,8 +127,14 @@ const accountC = {
 
   exporttoExcel_StudentList: async (req, res) => {
     // const directory = "D:/";
-    gradeM.exporttoExcel_StudentList(req, res);
+
     // return res.json({ msg: "Xuất file danh sách học sinh thành công" });
+    try {
+      await gradeM.exporttoExcel_StudentList(req, res);
+    } catch (error) {
+      console.error("Error exporting to Excel/CSV:", error);
+      res.status(500).send("Internal Server Error");
+    }
   },
 
   importtoExcel_StudentList: async (req, res) => {
