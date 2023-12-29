@@ -36,15 +36,20 @@ module.exports = {
   editUser: async (IdUser, Email, Pw, DOB, Sex, Phone, StudentId) => {
     const sql_user = `UPDATE "User" SET "Email" = $2, "Pw" = $3, "DOB"=$4, "Sex"=$5, "Phone"=$6 where "idUser" = $1`;
     const sql_hocsinh = `UPDATE "HocSinh" SET "StudentId" = $2 WHERE "idUser" = $1`;
-    
+    const sql_create_hocsinh = `INSERT INTO public."HocSinh" ("idUser", "StudentId") VALUES ( $1, $2)`;
+    const sql_select_hocsinh = `SELECT * FROM "HocSinh" WHERE "idUser"=$1`;
+
+    const { rows } = await postgre.query(sql_select_hocsinh, [IdUser]);
+
     if (!StudentId) {
       postgre.query(sql_user, [IdUser, Email, Pw, DOB, Sex, Phone]);
-      //res.json({ msg: "Profile (không StudentID) đã được chỉnh sửa" });
     } else {
       postgre.query(sql_user, [IdUser, Email, Pw, DOB, Sex, Phone]);
-      postgre.query(sql_hocsinh, [IdUser, StudentId]);
-      //console.log(1112);
-      //res.json({ msg: "Profile (có StudentID) đã được chỉnh sửa" });
+      if (rows && rows.length > 0) {
+        postgre.query(sql_hocsinh, [IdUser, StudentId]);
+      } else {
+        postgre.query(sql_create_hocsinh, [IdUser, StudentId]);
+      }
     }
   },
 

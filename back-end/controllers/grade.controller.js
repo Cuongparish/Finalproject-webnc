@@ -132,7 +132,13 @@ const accountC = {
   },
 
   importtoExcel_StudentList: async (req, res) => {
-    gradeM.importtoExcel_StudentList(req, res);
+    try {
+      await gradeM.importtoExcel_StudentList(req.file);
+      res.send("File uploaded successfully!");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
   },
 };
 

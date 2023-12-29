@@ -89,15 +89,9 @@ function App() {
             path="/join-class/:malop/:role"
             element={user ? <VerifyJoin user={user} /> : <VerifyJoinNoUser />}
           />
-          
+
           {/* Admin */}
-          <Route
-            path="/admin"
-            element={
-              <AdminManagement User={user} />
-            }
-          />
-          
+          <Route path="/admin" element={<AdminManagement User={user} />} />
         </Routes>
       )}
     </>
