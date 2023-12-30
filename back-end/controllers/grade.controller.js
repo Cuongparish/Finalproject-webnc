@@ -66,7 +66,7 @@ const gradeC = {
   addPercentScore_inClass: async (req, res) => {
     // score.TenCotDiem, score.PhanTramDiem
     if (!req.body.Data) {
-      return res.json({ msg: "Theo dữ liệu req.body" });
+      return res.json({ msg: "Không có dữ liệu req.body" });
     }
     try {
       gradeM.addPercentScore_inClass(req, res);
@@ -200,6 +200,26 @@ const gradeC = {
       await gradeM.exporttoExcel_Score(req, res);
     } catch (error) {
       console.error("Error exporting to Excel/CSV:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+
+  importtoExcel_Score: async (req, res) => {
+    if (!req.body) {
+      return res.json({ msg: "Không có dữ liệu req.body" });
+    }
+
+    try {
+      const { rows } = await gradeM.importtoExcel_Score(
+        req.file,
+        req.body.idLop,
+        req.body.TenCotDiem,
+        req.body.Diem,
+        req.body.StudentId
+      );
+      res.json({ msg: "File uploaded successfully!", data: rows });
+    } catch (error) {
+      console.error(error);
       res.status(500).send("Internal Server Error");
     }
   },

@@ -32,14 +32,14 @@ router.put(
   gradeController.updatePercentScore_inClass
 );
 
+//download file danh sach lop hoc
 router.get(
-  // "/grade/exporttoExcel_StudentList/:idLop",
   "/grade/exporttoExcel_StudentList/:idLop/type?",
   gradeController.exporttoExcel_StudentList
 );
 
+//tai len file danh sach lop hoc
 router.post(
-  // "/grade/exporttoExcel_StudentList/:idLop",
   "/grade/importtoExcel_StudentList/:idLop",
   upload.single("file"),
   gradeController.importtoExcel_StudentList
@@ -51,10 +51,23 @@ router.get("/grade/listClass/:idLop", gradeController.getGradesBoard);
 // nhap diem cho  hoc sinh
 router.post("/grade/inputScore/", gradeController.addScore_Student_inClass);
 
+//download file danh sach diem 1 thanh phan cua tat ca hoc sinh
 router.get(
-  // "/grade/exporttoExcel_StudentList/:idLop",
   "/grade/exporttoExcel_Score/:idLop/:TenCotDiem/type?",
   gradeController.exporttoExcel_Score
 );
+
+//tai len file danh sach diem 1 thanh phan cua tat ca hoc sinh
+router.post(
+  "/grade/importtoExcel_Score/",
+  upload.single("file"),
+  gradeController.importtoExcel_Score
+);
+
+//download file danh sach toan bo diem
+// router.get(
+//   "/grade/exporttoExcel_Score/:idLop/:TenCotDiem/type?",
+//   gradeController.exporttoExcel_Score
+// );
 
 module.exports = router;
