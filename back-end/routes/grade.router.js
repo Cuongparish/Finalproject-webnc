@@ -51,4 +51,10 @@ router.get("/grade/listClass/:idLop", gradeController.getGradesBoard);
 // nhap diem cho  hoc sinh
 router.post("/grade/inputScore/", gradeController.addScore_Student_inClass);
 
+router.get(
+  // "/grade/exporttoExcel_StudentList/:idLop",
+  "/grade/exporttoExcel_Score/:idLop/:TenCotDiem/type?",
+  gradeController.exporttoExcel_Score
+);
+
 module.exports = router;

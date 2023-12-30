@@ -266,4 +266,88 @@ module.exports = {
     ]);
     return { rows };
   },
+
+  exporttoExcel_Score: async (req, res) => {
+    const sql = `
+    SELECT
+        "HocSinh"."StudentId",
+        "BangDiemThanhPhan"."Diem"
+    FROM
+        "HocSinhLopHoc"
+    JOIN
+        "HocSinh" ON "HocSinhLopHoc"."idHocSinh" = "HocSinh"."idHocSinh"
+    JOIN
+        "BangDiemThanhPhan" ON "HocSinhLopHoc"."idHocSinh" = "BangDiemThanhPhan"."idHocSinh"
+    JOIN
+        "CotDiem" ON "BangDiemThanhPhan"."idCotDiem" = "CotDiem"."idCotDiem" AND "BangDiemThanhPhan"."idLop" = "CotDiem"."idLop"
+    WHERE
+        "HocSinhLopHoc"."idLop" = $1
+        AND "CotDiem"."TenCotDiem" = $2;`;
+
+    const { rows } = await postgre.query(sql, [
+      req.params.idLop,
+      req.params.TenCotDiem,
+    ]);
+
+    // Check if there are no rows
+    if (rows && rows.length <= 0) {
+      return res.json({ msg: "Lớp học chưa có học sinh vào tham dự" });
+    }
+
+    // Determine the desired format (xlsx or csv)
+    const format = req.query.format || "xlsx";
+
+    // Create a new workbook and worksheet
+    const workbook = new excel.Workbook();
+    const worksheet = workbook.addWorksheet("Sheet 1");
+
+    // Add headers to the worksheet
+    worksheet.columns = [
+      { header: "StudentId", key: "StudentId", width: 20 },
+      { header: "Grade", key: "Diem", width: 20 },
+    ];
+
+    // Add data to the worksheet
+    rows.forEach((row) => {
+      worksheet.addRow(row);
+    });
+
+    // Set headers for the response based on the format
+    if (format === "xlsx") {
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+      res.setHeader(
+        "Content-Disposition",
+        `attachment;filename=DanhSachHocSinh.xlsx`
+      );
+
+      // Pipe the workbook to the response
+      await workbook.xlsx.write(res);
+    } else if (format === "csv") {
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment;filename=DanhSachHocSinh.csv`
+      );
+
+      // Pipe the worksheet to the response as CSV
+      const csvStream = fastcsv.format({
+        headers: ["StudentId", "Grade"],
+      });
+      csvStream.pipe(res);
+
+      rows.forEach((row) => {
+        csvStream.write(row);
+      });
+
+      csvStream.end();
+    } else {
+      return res.status(400).json({ msg: "Invalid format specified" });
+    }
+
+    // End the response
+    res.end();
+  },
 };

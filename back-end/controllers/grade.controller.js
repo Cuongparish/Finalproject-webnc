@@ -194,6 +194,15 @@ const gradeC = {
       });
     }
   },
+
+  exporttoExcel_Score: async (req, res) => {
+    try {
+      await gradeM.exporttoExcel_Score(req, res);
+    } catch (error) {
+      console.error("Error exporting to Excel/CSV:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
 };
 
 module.exports = gradeC;
