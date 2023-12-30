@@ -3,7 +3,7 @@ const gradeM = require("../models/grade.models.js");
 const nodemailer = require("nodemailer");
 require("dotenv").config;
 
-const accountC = {
+const gradeC = {
   getAll: async (req, res) => {
     try {
       const { rows } = await gradeM.getAll();
@@ -146,6 +146,35 @@ const accountC = {
       res.status(500).send("Internal Server Error");
     }
   },
+
+  getGradesBoard: async (req, res) => {
+    try {
+      const { rows: header } = await gradeM.getPercentScore_inClass(req, res);
+      const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(
+        req,
+        res
+      );
+      var data = [];
+
+      const new_header = header.map((comp) => ({
+        TenCotDiem: comp.TenCotDiem,
+        PhanTramDiem: comp.PhanTramDiem,
+      }));
+
+      data.push({ msg: "header", data: new_header });
+      data.push({ msg: "Grade_Board", data: gradeBoard });
+      // console.log(data);
+      res.json({ data });
+    } catch (error) {
+      res.json({
+        errors: [
+          {
+            msg: "Lỗi",
+          },
+        ],
+      });
+    }
+  },
 };
 
-module.exports = accountC;
+module.exports = gradeC;

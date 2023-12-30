@@ -45,4 +45,6 @@ router.post(
   gradeController.importtoExcel_StudentList
 );
 
+router.get("/grade/listclass/:idLop", gradeController.getGradesBoard);
+
 module.exports = router;
