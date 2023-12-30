@@ -155,15 +155,31 @@ const gradeC = {
         res
       );
       var data = [];
-
+      let sum = 0;
       const new_header = header.map((comp) => ({
         TenCotDiem: comp.TenCotDiem,
         PhanTramDiem: comp.PhanTramDiem,
       }));
 
+      for (let i = 0; i < gradeBoard.length; i++) {
+        const student = gradeBoard[i];
+
+        for (let k = 0; k < new_header.length; k++) {
+          const percent = new_header[k];
+          if (student.Diem[k] != null) {
+            sum += (student.Diem[k] * percent.PhanTramDiem) / 100;
+          } else {
+            sum += 0;
+          }
+        }
+        sum = Number(sum.toFixed(3));
+        student.total = sum;
+        sum = 0;
+      }
+
       data.push({ msg: "header", data: new_header });
       data.push({ msg: "Grade_Board", data: gradeBoard });
-      // console.log(data);
+
       res.json({ data });
     } catch (error) {
       res.json({
