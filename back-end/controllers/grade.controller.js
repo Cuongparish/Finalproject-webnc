@@ -175,6 +175,25 @@ const gradeC = {
       });
     }
   },
+
+  addScore_Student_inClass: async (req, res) => {
+    // score.TenCotDiem, score.PhanTramDiem
+    if (!req.body) {
+      return res.json({ msg: "Theo dữ liệu req.body" });
+    }
+    try {
+      gradeM.inputGrade_Student_inClass(req, res);
+      res.json({ msg: "Thêm thành công" });
+    } catch (error) {
+      res.json({
+        errors: [
+          {
+            msg: "Lỗi",
+          },
+        ],
+      });
+    }
+  },
 };
 
 module.exports = gradeC;

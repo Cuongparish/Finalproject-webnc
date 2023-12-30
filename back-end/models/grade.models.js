@@ -255,4 +255,15 @@ module.exports = {
 
     return { rows };
   },
+
+  inputGrade_Student_inClass: async (req, res) => {
+    const sql = `INSERT INTO "BangDiemThanhPhan"("idHocSinh", "idCotDiem", "idLop", "Diem") VALUES ($1, $2, $3, $4);`;
+    const { rows } = await postgre.query(sql, [
+      req.body.idHocSinh,
+      req.body.idCotDiem,
+      req.params.idLop,
+      req.body.Diem,
+    ]);
+    return { rows };
+  },
 };
