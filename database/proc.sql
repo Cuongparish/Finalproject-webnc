@@ -97,3 +97,55 @@ BEGIN
     COMMIT;
 END 
 $BODY$; 
+
+
+-----------------------------------------------------------proc thêm 1 thành phần điểm cho học sinh
+CREATE OR REPLACE PROCEDURE addScoreforaStudent(
+    IN p_idLop INTEGER,
+    IN p_TenCotDiem CHARACTER VARYING,
+    IN p_Diem NUMERIC,
+    IN p_StudentId CHARACTER VARYING,
+    OUT p_Result TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Kiểm tra xem StudentId có tồn tại trong lớp không
+    IF EXISTS (
+        SELECT 1
+        FROM public."HocSinhLopHoc" hslh
+        JOIN public."HocSinh" hs ON hslh."idHocSinh" = hs."idHocSinh"
+        WHERE hslh."idLop" = p_idLop AND hs."StudentId" = p_StudentId
+    ) THEN
+        -- Tìm idCotDiem cho cột điểm cụ thể trong lớp
+        WITH CotDiemInfo AS (
+            SELECT
+                cd."idCotDiem",
+                cd."idLop"
+            FROM
+                public."CotDiem" cd
+                JOIN public."LopHoc" lh ON cd."idLop" = lh."idLop"
+            WHERE
+                lh."idLop" = p_idLop
+                AND cd."TenCotDiem" = p_TenCotDiem
+        )
+
+        -- Chèn hoặc cập nhật điểm cho tất cả học sinh trong lớp và cột điểm cụ thể
+        INSERT INTO public."BangDiemThanhPhan" ("idHocSinh", "idCotDiem", "idLop", "Diem")
+        VALUES (
+            (SELECT hs."idHocSinh" FROM public."HocSinh" hs WHERE hs."StudentId" = p_StudentId),
+            (SELECT ci."idCotDiem" FROM CotDiemInfo ci),
+            p_idLop,
+            p_Diem
+        )
+        ON CONFLICT ("idHocSinh", "idCotDiem", "idLop") DO UPDATE
+        SET "Diem" = p_Diem;
+
+        -- Trả về thông báo thành công
+        p_Result := 'Success';
+    ELSE
+        -- Trả về thông báo lỗi
+        p_Result := 'StudentId không tồn tại trong lớp';
+    END IF;
+END;
+$$;
