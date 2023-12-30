@@ -1,4 +1,9 @@
 const gradeM = require("../models/grade.models.js");
+const moment = require("moment");
+const excel = require("exceljs");
+const path = require("path");
+const fs = require("fs");
+const fastcsv = require("fast-csv");
 
 const nodemailer = require("nodemailer");
 require("dotenv").config;
@@ -229,14 +234,150 @@ const gradeC = {
       const { rows } = await gradeM.importtoExcel_Score(
         req.file,
         req.body.idLop,
-        req.body.TenCotDiem,
-        req.body.Diem,
-        req.body.StudentId
+        req.body.TenCotDiem
       );
       res.json({ msg: "File uploaded successfully!", data: rows });
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal Server Error");
+    }
+  },
+
+  exporttoExcel_FullScore: async (req, res) => {
+    try {
+      const { rows: header } = await gradeM.getPercentScore_inClass(req, res);
+      const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(
+        req,
+        res
+      );
+      var data = [];
+      let sum = 0;
+      const new_header = header.map((comp) => ({
+        TenCotDiem: comp.TenCotDiem,
+        PhanTramDiem: comp.PhanTramDiem,
+      }));
+
+      for (let i = 0; i < gradeBoard.length; i++) {
+        const student = gradeBoard[i];
+
+        for (let k = 0; k < new_header.length; k++) {
+          const percent = new_header[k];
+          if (student.Diem[k] != null) {
+            sum += (student.Diem[k] * percent.PhanTramDiem) / 100;
+          } else {
+            sum += 0;
+          }
+        }
+        sum = Number(sum.toFixed(3));
+        student.total = sum;
+        sum = 0;
+      }
+
+      data.push({ msg: "header", data: new_header });
+      data.push({ msg: "Grade_Board", data: gradeBoard });
+
+      if (gradeBoard && gradeBoard.length <= 0) {
+        return res.json({ msg: "Lớp học chưa có học sinh vào tham dự" });
+      }
+
+      // Determine the desired format (xlsx or csv)
+      const format = req.query.format || "xlsx";
+
+      // Create a new workbook and worksheet
+      const workbook = new excel.Workbook();
+      const worksheet = workbook.addWorksheet("Sheet 1");
+
+      // Add headers to the worksheet
+      const headerColumns = [
+        { header: "FullName", key: "FullName", width: 20 },
+        { header: "StudentId", key: "StudentId", width: 20 },
+        ...new_header.map((comp) => ({
+          header: comp.TenCotDiem,
+          key: comp.TenCotDiem,
+          width: 20,
+        })),
+        { header: "Total", key: "total", width: 20 },
+      ];
+
+      worksheet.columns = headerColumns;
+
+      gradeBoard.forEach((student) => {
+        const row = {
+          FullName: student.FullName,
+          StudentId: student.StudentId,
+          ...student.Diem.reduce((acc, diem, index) => {
+            const tenCotDiem = new_header[index].TenCotDiem;
+            acc[tenCotDiem] = diem;
+            return acc;
+          }, {}),
+          total: student.total,
+        };
+
+        worksheet.addRow(row);
+      });
+
+      // Set headers for the response based on the format
+      if (format === "xlsx") {
+        res.setHeader(
+          "Content-Type",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        res.setHeader(
+          "Content-Disposition",
+          `attachment;filename=DanhSachHocSinh.xlsx`
+        );
+
+        // Pipe the workbook to the response
+        await workbook.xlsx.write(res);
+      } else if (format === "csv") {
+        const csvHeaders = [
+          "FullName",
+          "StudentId",
+          ...new_header.map((comp) => comp.TenCotDiem),
+          "total",
+        ];
+
+        // Đặt header cho file CSV
+        res.setHeader("Content-Type", "text/csv");
+        res.setHeader(
+          "Content-Disposition",
+          `attachment;filename=DanhSachHocSinh.csv`
+        );
+
+        const csvStream = fastcsv.format({ headers: csvHeaders });
+        csvStream.pipe(res);
+
+        gradeBoard.forEach((student) => {
+          const csvRow = {
+            FullName: student.FullName,
+            StudentId: student.StudentId,
+            ...student.Diem.reduce((acc, diem, index) => {
+              const tenCotDiem = new_header[index].TenCotDiem;
+              acc[tenCotDiem] = diem;
+              return acc;
+            }, {}),
+            total: student.total,
+          };
+          csvStream.write(csvRow);
+        });
+
+        csvStream.end();
+      } else {
+        return res.status(400).json({ msg: "Invalid format specified" });
+      }
+
+      // End the response
+      res.end();
+
+      // res.json({ data });
+    } catch (error) {
+      res.json({
+        errors: [
+          {
+            msg: "Lỗi",
+          },
+        ],
+      });
     }
   },
 };

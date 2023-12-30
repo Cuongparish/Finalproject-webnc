@@ -70,4 +70,10 @@ router.post(
 //   gradeController.exporttoExcel_Score
 // );
 
+// bang diem cua cac hoc sinh trong  lop hoc
+router.get(
+  "/grade/exportListClass/:idLop/type?",
+  gradeController.exporttoExcel_FullScore
+);
+
 module.exports = router;
