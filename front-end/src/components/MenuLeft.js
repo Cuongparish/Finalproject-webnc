@@ -1,12 +1,43 @@
-import React from 'react';
+import { React, useState, useEffect } from "react";
 import { Col, Nav, Accordion } from 'react-bootstrap';
 import { FaHome, FaChalkboardTeacher } from "react-icons/fa";
 import { MdClass } from "react-icons/md";
+
+import ClassService from "../service/class.service";
+
 import '../App.css';
 
 const MenuLeft = (props) => {
-    const TeacherClass = props.TeacherClass;
-    const StudentClass = props.StudentClass;
+    const user = props.user;
+
+    const [TeacherClasses, setTeacherClasses] = useState([]);
+    const [StudentClasses, setStudentClasses] = useState([]);
+
+    const GetClassList = async () => {
+        try {
+          //console.log(1111);
+          await ClassService.GetClasses(user?.idUser).then(
+            (res) => {
+              if (res[0].data) {
+                setTeacherClasses(res[0].data);
+              }
+              if (res[1].data) {
+                setStudentClasses(res[1].data);
+              }
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+    useEffect(() => {
+        console.log("123");
+        GetClassList();
+      }, [user]);
 
     return (
         <>
@@ -22,7 +53,7 @@ const MenuLeft = (props) => {
                                 <FaChalkboardTeacher className='mx-2' /> Giảng dạy
                             </Accordion.Header>
                             <Accordion.Body className='list-body'>
-                                {TeacherClass.map((classItem) => (
+                                {TeacherClasses.map((classItem) => (
                                     <Nav.Link href={`/detail-class/${classItem.MaLop}`} className='body-item d-flex align-items-center'>
                                         <MdClass className='mx-2' /> {classItem.TenLop}
                                     </Nav.Link>
@@ -36,7 +67,7 @@ const MenuLeft = (props) => {
                                 <FaChalkboardTeacher className='mx-2' /> Đã tham gia
                             </Accordion.Header>
                             <Accordion.Body className='list-body'>
-                                {StudentClass.map((classItem) => (
+                                {StudentClasses.map((classItem) => (
                                     <Nav.Link href={`/detail-class/${classItem.MaLop}`} className='body-item d-flex align-items-center'>
                                         <MdClass className='mx-2' /> {classItem.TenLop}
                                     </Nav.Link>

@@ -20,26 +20,26 @@ import AdminManagement from "./views/AdminManagement";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./service/auth.service";
 
-// const API_URL = "http://localhost:5000";
-const API_URL = "https://finalproject-webnc.vercel.app";
+//const API_URL = "http://localhost:5000";
+//const API_URL = "https://finalproject-webnc.vercel.app";
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const getSocialUser = async () => {
-    try {
-      const url = `${API_URL}/auth/login/success`;
-      const { data } = await axios.get(url, { withCredentials: true });
-      setUser(data.user._json);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const getSocialUser = async () => {
+  //   try {
+  //     const url = `${API_URL}/auth/login/success`;
+  //     const { data } = await axios.get(url, { withCredentials: true });
+  //     setUser(data.user._json);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    getSocialUser();
-  }, []);
+  // useEffect(() => {
+  //   getSocialUser();
+  // }, []);
 
   useEffect(() => {
     const localUser = AuthService.getLocalUser;
@@ -78,12 +78,12 @@ function App() {
           <Route
             path="/detail-class/:malop"
             element={
-              user ? <DetailClass User={user} /> : <Navigate to="/login" />
+              user ? <DetailClass user={user} /> : <Navigate to="/login" />
             }
           />
           <Route
             path="/profile"
-            element={user ? <Profile User={user} /> : <Navigate to="/login" />}
+            element={user ? <Profile user={user} /> : <Navigate to="/login" />}
           />
           <Route
             path="/join-class/:malop/:role"

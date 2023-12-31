@@ -1,28 +1,17 @@
 import { React, useState, useEffect } from "react";
-import {
-  Row,
-  Col,
-  Image,
-  Tabs,
-  Tab,
-  Card,
-  FloatingLabel,
-  Form,
-  Modal,
-  Button,
-  Table,
-} from "react-bootstrap";
+import {Row, Col, Image, Tabs, Tab, Card, FloatingLabel, Form, Modal, Button} from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { FaBars, FaRegCopy, FaLink, FaUserPlus } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
-import { IoSettingsOutline } from "react-icons/io5";
 import { TbDatabaseImport } from "react-icons/tb";
-import copy from "clipboard-copy";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import MenuLeft from "../components/MenuLeft";
-import AlertBox from "../components/AlertBox";
+//import AlertBox from "../components/AlertBox";
+import News from "../components/News";
+import People from "../components/People";
 import ScoreTable from "../components/ScoreTable";
+
 
 import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
@@ -30,38 +19,19 @@ import ClassService from "../service/class.service";
 import "../App.css";
 import GradeService from "../service/grade.service";
 
-// const Client_URL = "http://localhost:3000";
-const Client_URL = "https://finalproject-webnc.vercel.app";
-
 const DetailClass = (props) => {
   const { malop } = useParams();
-  //console.log("Ma lop: ",malop);
-  //const malop = match.params.malop;
-  const user = props.User;
-
-  const link = `${Client_URL}/join-class/${malop}/hs`;
-
-  const [add_teacher, setAddTeacher] = useState(false);
-  const handleAddTeacherClose = () => setAddTeacher(false);
-  const handleAddTeacherShow = () => setAddTeacher(true);
-
-  const [add_student, setAddStudent] = useState(false);
-  const handleAddStudentClose = () => setAddStudent(false);
-  const handleAddStudentShow = () => setAddStudent(true);
-
-  const [TeacherClasses, setTeacherClasses] = useState([]);
-  const [StudentClasses, setStudentClasses] = useState([]);
+  const user = props.user;
 
   const [DetailClass, setDetailClass] = useState();
 
   const [TeacherInClass, setTeacherInClass] = useState([]);
   const [StudentInClass, setStudentInClass] = useState([]);
 
-  const [Email, setEmail] = useState();
-  const [showAlert, setShowAlert] = useState(false);
-  const [message, setMessage] = useState();
+  //Thông báo
+  // const [showAlert, setShowAlert] = useState(false);
+  // const [message, setMessage] = useState();
 
-  const [Type, setType] = useState("xlsx");
 
   const [hasScore, sethasScore] = useState(false);
 
@@ -131,73 +101,6 @@ const DetailClass = (props) => {
   const [DataGradeStructure, setDataGradeStructure] = useState([]);
   const [HadCreateGradeStructer, setHadCreateGradeStructer] = useState(false);
 
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
-  //----------------------------------------Hàm copy
-  function CopyCode(code) {
-    const textToCopy = code;
-
-    const copyText = () => {
-      copy(textToCopy)
-        .then(() => {
-          setMessage("Đã sao chép mã!");
-          //alert("Đã sao chép!");
-          setShowAlert(true);
-        })
-        .catch((err) => {
-          alert("Lỗi khi sao chép: " + err);
-        });
-    };
-
-    return copyText;
-  }
-
-  function CopyLink(link) {
-    const textToCopy = link;
-
-    const copyText = () => {
-      copy(textToCopy)
-        .then(() => {
-          setMessage("Đã sao chép link!");
-          //alert("Đã sao chép!");
-          setShowAlert(true);
-        })
-        .catch((err) => {
-          alert("Lỗi khi sao chép: " + err);
-        });
-    };
-
-    return copyText;
-  }
-
-  //----------------------------------------Hàm cho menu left
-  const GetClassList = async () => {
-    try {
-      //console.log(1111);
-      await ClassService.GetClasses(user.idUser).then(
-        (res) => {
-          //console.log("res[0].data: ", res[0].data);
-          //console.log("res[1].data: ", res[1].data);
-          if (res[0].data) {
-            setTeacherClasses(res[0].data);
-          }
-          if (res[1].data) {
-            setStudentClasses(res[1].data);
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   //----------------------------------------Màn hình bảng tinh
   const GetDetailClass = async () => {
     try {
@@ -221,12 +124,8 @@ const DetailClass = (props) => {
   //----------------------------------------Màn hình mọi người
   const GetListUserInClass = async () => {
     try {
-      //console.log(1111);
       await ClassService.GetListUserInClass(malop).then(
         (res) => {
-          // console.log("res[0].data: ", res.data[0]);
-          // console.log("res[1].data: ", res.data[1]);
-          //console.log("res: ",res[0].data);
           if (res[0].data) {
             setTeacherInClass(res[0].data);
           }
@@ -243,101 +142,18 @@ const DetailClass = (props) => {
     }
   };
 
-  const handleDownloadStudentList = async () => {
-    try {
-      const blobData = await GradeService.ExportToExcel_StudentList(
-        DetailClass.idLop,
-        Type
-      ); // Thay thế idLop và type bằng giá trị thực tế của bạn
-      console.log(blobData);
-      const url = window.URL.createObjectURL(new Blob([blobData]));
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `DanhSachHocSinh.${Type}`); // Đặt tên file
-      document.body.appendChild(link);
-
-      link.click();
-
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("Error handling download:", error);
-      // Xử lý lỗi nếu cần
-    }
-  };
-
-  const handleUploadStudentList = async () => {
-    if (selectedFile) {
-      console.log("selectedFiled: ", selectedFile);
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-      console.log("formdata: ", formData);
-
-      const res = await GradeService.ImportToExcel_StudentList(
-        DetailClass.idLop,
-        formData
-      );
-      console.log("File", res);
-    } else {
-      console.log("Please select a file to upload");
-    }
-  };
-
-  //----------------------------------------Hàm mời giáo viên và học sinh
-  const handleSendToTeacher = async (e) => {
-    e.preventDefault();
-
-    const role = "gv";
-
-    try {
-      await ClassService.SendMailToJoinClass(malop, role, Email).then(
-        (res) => {
-          console.log(res);
-          //alert('Đã gửi lời mời');
-          handleAddTeacherClose();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleSendToStudent = async (e) => {
-    e.preventDefault();
-
-    const role = "hs";
-
-    try {
-      await ClassService.SendMailToJoinClass(malop, role, Email).then(
-        (res) => {
-          console.log(res);
-          //alert('Đã gửi lời mời');
-          handleAddStudentClose();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   //----------------------------------------Box thông báo
-  const handleConfirm = () => {
-    // Xử lý khi nút xác nhận được nhấn
-    console.log("Đã xác nhận");
-    setShowAlert(false); // Đóng box thông báo sau khi xác nhận
-  };
+  // const handleConfirm = () => {
+  //   // Xử lý khi nút xác nhận được nhấn
+  //   console.log("Đã xác nhận");
+  //   setShowAlert(false); // Đóng box thông báo sau khi xác nhận
+  // };
 
-  const handleCancel = () => {
-    // Xử lý khi nút hủy được nhấn
-    console.log("Đã hủy");
-    setShowAlert(false); // Đóng box thông báo sau khi hủy
-  };
+  // const handleCancel = () => {
+  //   // Xử lý khi nút hủy được nhấn
+  //   console.log("Đã hủy");
+  //   setShowAlert(false); // Đóng box thông báo sau khi hủy
+  // };
 
   //-----------------------------------------Tạo grade structure
   const addGradeStructure = () => {
@@ -449,8 +265,8 @@ const DetailClass = (props) => {
 
   //----------------------------------------Use effect
   useEffect(() => {
-    console.log("123");
-    Promise.all([GetClassList(), GetDetailClass(), GetListUserInClass()]);
+    //console.log("123");
+    Promise.all([GetDetailClass(), GetListUserInClass()]);
   }, [user]);
 
   useEffect(() => {
@@ -504,7 +320,7 @@ const DetailClass = (props) => {
       </Row>
 
       <Row className="g-0">
-        <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses} />
+        <MenuLeft user={user} />
 
         <Col md={10}>
           <div className="w-100 h-100 tab-menu">
@@ -514,81 +330,7 @@ const DetailClass = (props) => {
             >
               {/* Màn hình bảng tin */}
               <Tab eventKey="news" id="news" title="Bảng tin">
-                <div className="detail-news mt-3">
-                  <Row className="banner-news mb-4">
-                    <h1>{DetailClass?.TenLop}</h1>
-                  </Row>
-
-                  <Row>
-                    <Col md={3}>
-                      <Card className="mb-4">
-                        <Card.Header className="fs-6">Mã lớp</Card.Header>
-                        <Card.Body>
-                          <Card.Text className="fs-3 fw-bold">
-                            {malop}
-                          </Card.Text>
-                          <Row className="d-flex g-3">
-                            <Col>
-                              <a
-                                onClick={CopyCode(malop)}
-                                className="btn-outline-info btn d-flex align-items-center justify-content-center"
-                              >
-                                <FaRegCopy />
-                              </a>
-                            </Col>
-                            <Col>
-                              <a
-                                onClick={CopyLink(link)}
-                                className="btn-outline-success btn d-flex align-items-center justify-content-center"
-                              >
-                                <FaLink />
-                              </a>
-                            </Col>
-                          </Row>
-                        </Card.Body>
-                      </Card>
-
-                      <Card>
-                        <Card.Header className="fs-6">Sắp đến hạn</Card.Header>
-                        <Card.Body>
-                          <Card.Text className="text-muted">
-                            Không có bài tập nào sắp đến hạn
-                          </Card.Text>
-                          <Row className="text-end">
-                            <a href="/" className="button">
-                              Xem tất cả
-                            </a>
-                          </Row>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                    <Col md={9}>
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label="Thông báo nội dung nào đó cho lớp học của ban"
-                        className="mb-4"
-                      >
-                        <Form.Control type="text" placeholder="" />
-                      </FloatingLabel>
-
-                      <Card style={{ width: "100%" }}>
-                        <Card.Body>
-                          <Card.Title>
-                            Đây là nơi bạn giao tiếp với cả lớp học của mình
-                          </Card.Title>
-                          <Card.Subtitle className="mb-4 fs-6 fw-bold text-muted">
-                            Sử dụng bảng tin để thông báo, đăng bài tập và trả
-                            lời câu hỏi của học viên
-                          </Card.Subtitle>
-                          <a className="btn-outline-dark float-end btn d-flex align-items-center justify-content-center">
-                            <IoSettingsOutline className="mx-1" /> Cài đặt bảng
-                            tin
-                          </a>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </div>
+                <News DetailClass={DetailClass}/>
               </Tab>
 
               {/* Màn hình bài tập */}
@@ -598,170 +340,7 @@ const DetailClass = (props) => {
 
               {/* Màn hình mọi người */}
               <Tab eventKey="members" title="Mọi người">
-                <div className="detail-members mt-3">
-                  <Row className="banner-members mb-4">
-                    <Col className="d-flex align-items-center border-bottom border-2 border-black">
-                      <h3>Giáo viên</h3>
-                    </Col>
-                    <Col className="text-end border-bottom border-2 border-black">
-                      <h3>
-                        <a onClick={handleAddTeacherShow} className="button">
-                          <FaUserPlus />
-                        </a>
-                      </h3>
-                    </Col>
-                  </Row>
-
-                  <Row className="banner-members mb-4">
-                    {/* Table Teachers */}
-                    <Table>
-                      <tbody>
-                        <tr>
-                          {/* <td className="align-middle" style={{ width: '5%' }}>
-                                                        <input
-                                                            type="checkbox"
-                                                        // value="id_user"
-                                                        // checked={selectedValues.includes('Option 1')}
-                                                        // onChange={() => handleCheckboxChange('Option 1')}
-                                                        />
-                                                    </td>
-                                                    <td className="align-middle" style={{ width: '75%' }}>Trường Khoa Phạm</td>
-                                                    <td className="align-middle text-end" style={{ width: '20%' }}>
-                                                        <a onClick="" className='button fs-2 mx-2'>
-                                                            <CiCircleMore />
-                                                        </a>
-                                                    </td> */}
-                          {TeacherInClass?.map((Teacher, index) => (
-                            <div>
-                              <td
-                                className="align-middle"
-                                style={{ width: "20%", padding: "5px" }}
-                              >
-                                <input
-                                  type="checkbox"
-                                  // value="id_user"
-                                  // checked={selectedValues.includes('Option 1')}
-                                  // onChange={() => handleCheckboxChange('Option 1')}
-                                />
-                              </td>
-                              <td
-                                className="align-middle"
-                                style={{ width: "75%" }}
-                              >
-                                <h5>{Teacher.FullName}</h5>
-                              </td>
-                            </div>
-                          ))}
-                        </tr>
-                      </tbody>
-                    </Table>
-                    {/* Table Teachers */}
-                  </Row>
-
-                  <Row className="banner-members mb-4">
-                    <Col className="d-flex align-items-center border-bottom border-2 border-black">
-                      <h3>Sinh viên</h3>
-                    </Col>
-                    <Col className="text-end border-bottom border-2 border-black">
-                      <h3>
-                        <a onClick={handleAddStudentShow} className="button">
-                          <FaUserPlus />
-                        </a>
-                      </h3>
-                    </Col>
-                  </Row>
-
-                  <Row className="banner-members mb-4">
-                    {/* Table Student */}
-                    <Table>
-                      <tbody>
-                        <tr>
-                          {/* <td className="align-middle" style={{ width: '5%' }}>
-                                                        <input
-                                                            type="checkbox"
-                                                        // value="id_user"
-                                                        // checked={selectedValues.includes('Option 1')}
-                                                        // onChange={() => handleCheckboxChange('Option 1')}
-                                                        />
-                                                    </td>
-                                                    <td className="align-middle" style={{ width: '75%' }}>Trường Khoa Phạm</td>
-                                                    <td className="align-middle text-end" style={{ width: '20%' }}>
-                                                        <a onClick="" className='button fs-2 mx-2'>
-                                                            <CiCircleMore />
-                                                        </a>
-                                                    </td> */}
-                          {StudentInClass?.map((Student, index) => (
-                            <div>
-                              <td
-                                className="align-middle"
-                                style={{ width: "20%", padding: "5px" }}
-                              >
-                                <input
-                                  type="checkbox"
-                                  // value="id_user"
-                                  // checked={selectedValues.includes('Option 1')}
-                                  // onChange={() => handleCheckboxChange('Option 1')}
-                                />
-                              </td>
-                              <td
-                                className="align-middle"
-                                style={{ width: "75%" }}
-                              >
-                                <h5>{Student.FullName}</h5>
-                              </td>
-                            </div>
-                          ))}
-                        </tr>
-                      </tbody>
-                    </Table>
-                    {/* Table Student */}
-                  </Row>
-
-                  <Row className="banner-members mb-4">
-                    <Col className="text-end border-2">
-                      <Col xs={3}>
-                        <Form>
-                          <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Select file to upload:</Form.Label>
-                            <Form.Control
-                              type="file"
-                              onChange={handleFileChange}
-                            />
-                          </Form.Group>
-                          <Button
-                            variant="primary"
-                            onClick={handleUploadStudentList}
-                          >
-                            Upload StudentList
-                          </Button>
-                        </Form>
-                      </Col>
-
-                      <Col xs={3} className="float-end">
-                        <FloatingLabel
-                          controlId="type"
-                          label="FileType"
-                          className="mb-3"
-                        >
-                          <Form.Select
-                            defaultValue={Type}
-                            onChange={(e) => setType(e.target.value)}
-                          >
-                            <option>xlsx</option>
-                            <option>csv</option>
-                          </Form.Select>
-                        </FloatingLabel>
-
-                        <Button
-                          variant="primary"
-                          onClick={handleDownloadStudentList}
-                        >
-                          Download StudentList
-                        </Button>
-                      </Col>
-                    </Col>
-                  </Row>
-                </div>
+                <People DetailClass={DetailClass} TeacherInClass={TeacherInClass} StudentInClass={StudentInClass}></People>
               </Tab>
 
               {/* Màn hình điểm */}
@@ -801,82 +380,12 @@ const DetailClass = (props) => {
         </Col>
       </Row>
 
-      {/* Modal Add Teacher */}
-      <Modal
-        show={add_teacher}
-        style={{ top: "10%" }}
-        onHide={handleAddTeacherClose}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">Mời giáo viên</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FloatingLabel
-            controlId="add_teacher"
-            label="Nhập email của giáo viên"
-            className="mb-3"
-          >
-            <Form.Control
-              id="add_teacher"
-              type="email"
-              placeholder="name@example.com"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-          </FloatingLabel>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleAddTeacherClose}>
-            Hủy
-          </Button>
-          <Button variant="primary" onClick={handleSendToTeacher}>
-            Mời
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Modal Add Student */}
-      <Modal
-        show={add_student}
-        style={{ top: "10%" }}
-        onHide={handleAddStudentClose}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">Mời sinh viên</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FloatingLabel
-            controlId="add_student"
-            label="Nhập email của học sinh"
-            className="mb-3"
-          >
-            <Form.Control
-              id="add_student"
-              type="email"
-              placeholder="name@example.com"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-          </FloatingLabel>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleAddStudentClose}>
-            Hủy
-          </Button>
-          <Button variant="primary" onClick={handleSendToStudent}>
-            Mời
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <AlertBox
+      {/* <AlertBox
         show={showAlert}
         message={message}
         onHide={handleCancel}
         onConfirm={handleConfirm}
-      />
+      /> */}
 
       {/* Modal Add Score */}
       <Modal show={add_score} size="fullscreen" onHide={handleAddScoreClose}>

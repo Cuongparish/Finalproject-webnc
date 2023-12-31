@@ -7,7 +7,6 @@ import ScoreTable from "../components/ScoreTable";
 import Loader from "../components/Loader";
 import AlertBox from "../components/AlertBox";
 
-import ClassService from "../service/class.service";
 import AuthService from "../service/auth.service";
 import AccountService from "../service/account.service";
 
@@ -15,12 +14,9 @@ import "../App.css";
 
 const Profile = (props) => {
 
-  const user = props.User;
+  const user = props.user;
   const parts = user.DOB.split('-');
   let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-
-  const [TeacherClasses, setTeacherClasses] = useState([]);
-  const [StudentClasses, setStudentClasses] = useState([]);
 
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState();
@@ -81,29 +77,6 @@ const Profile = (props) => {
     }
   }
 
-  const GetClassList = async () => {
-    try {
-      //console.log(1111);
-      await ClassService.GetClasses(user.idUser).then(
-        (res) => {
-          //console.log("res[0].data: ", res[0].data);
-          //console.log("res[1].data: ", res[1].data);
-          if (res[0].data) {
-            setTeacherClasses(res[0].data);
-          }
-          if (res[1].data) {
-            setStudentClasses(res[1].data);
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleConfirm = () => {
     // Xử lý khi nút xác nhận được nhấn
     console.log('Đã xác nhận');
@@ -119,7 +92,7 @@ const Profile = (props) => {
   };
 
   useEffect(() => {
-    Promise.all([GetClassList(), GetDataUser()])
+    GetDataUser();
   }, [user]);
 
   useEffect(() => {
@@ -181,7 +154,7 @@ const Profile = (props) => {
           </Row>
 
           <Row className="g-0">
-            <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses} />
+            <MenuLeft user={user} />
 
             <Col md={10}>
               <div className="w-100 h-100 tab-menu">
@@ -295,7 +268,7 @@ const Profile = (props) => {
                   </Tab>
 
                   <Tab eventKey="score" title="Điểm" className="h-100">
-                    <ScoreTable />
+                    {/* <ScoreTable /> */}
                   </Tab>
                 </Tabs>
               </div>
