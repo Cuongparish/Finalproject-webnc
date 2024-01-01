@@ -120,9 +120,9 @@ const classC = {
       const { rows: Role } = await classM.Role_inClass(req, res);
 
       if (Role && Role.length > 0) {
-        data.push({ msg: "Student" });
+        data.push({ role: "Student" });
       } else {
-        data.push({ msg: "Teacher" });
+        data.push({ role: "Teacher" });
       }
 
       if (data.length > 0) {
