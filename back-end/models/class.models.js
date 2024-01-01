@@ -86,4 +86,47 @@ module.exports = {
     ]);
     return { rows };
   },
+
+  getDetail_inClass: async (req, res) => {
+    const { rows } = await postgre.query(
+      `SELECT "LopHoc".*
+      FROM "LopHoc"
+      WHERE "LopHoc"."MaLop" = $1;`,
+      [req.params.malop]
+    );
+    return { rows };
+  },
+
+  Role_inClass: async (req, res) => {
+    const sql = `select *
+              from "HocSinhLopHoc" hslh 
+              join "HocSinh" hs on hslh."idHocSinh"=hs."idHocSinh"
+              join "LopHoc" lh on lh."idLop"=hslh."idLop"
+              where hs."idUser"=$1 and lh."MaLop"=$2`;
+    const { rows } = await postgre.query(sql, [
+      req.params.idUser,
+      req.params.malop,
+    ]);
+    return { rows };
+  },
+
+  getNameClass: async (idLop) => {
+    const rows = await postgre.query(
+      `SELECT "LopHoc"."TenLop"
+      FROM "LopHoc"
+      WHERE "LopHoc"."idLop" = $1;`,
+      [idLop]
+    );
+    return rows;
+  },
+
+  getIDTeacher: async (idLop) => {
+    const { rows } = await postgre.query(
+      `SELECT "GiaoVien"."idUser"
+      FROM "GiaoVienLopHoc" gvlh, "GiaoVien"
+      WHERE gvlh."idLop" = $1 and gvlh."idGiaoVien"="GiaoVien"."idGiaoVien"`,
+      [idLop]
+    );
+    return { rows };
+  },
 };

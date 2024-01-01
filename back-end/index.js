@@ -13,6 +13,8 @@ const accountRouter = require("./routes/account.router");
 const classRouter = require("./routes/class.router");
 const authRouter = require("./routes/auth.router");
 const gradeRouter = require("./routes/grade.router");
+// const notifyRouter = require("./routes/notify.router");
+const reviewRouter = require("./routes/review.router");
 
 app.use(
   cookieSession({
@@ -27,8 +29,8 @@ app.use(passport.session());
 // origin: "https://frontend-finalproject-webnc.vercel.app",
 app.use(
   cors({
-    origin: "https://frontend-finalproject-webnc.vercel.app",
-    // origin: "http://localhost:3000",
+    // origin: "https://frontend-finalproject-webnc.vercel.app",
+    origin: "http://localhost:3000",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -37,6 +39,8 @@ app.use(
 app.use("/api/v1/user", accountRouter);
 app.use("/api/v1/user", classRouter);
 app.use("/api/v1/user", gradeRouter);
+// app.use("/api/v1/user", notifyRouter);
+app.use("/api/v1/user", reviewRouter);
 app.use("/auth", authRouter);
 
 app.listen(process.env.PORT, () =>

@@ -177,7 +177,10 @@ const gradeC = {
             sum += 0;
           }
         }
-        sum = Number(sum.toFixed(3));
+        sum = Number(sum.toFixed(2));
+        if (sum > 10) {
+          sum = 10;
+        }
         student.total = sum;
         sum = 0;
       }

@@ -176,23 +176,17 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public."BangDiemThanhPhan"
     OWNER to postgres;
 
-
 CREATE TABLE IF NOT EXISTS public."PhucKhao"
 (
     "idPhucKhao" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
-    "IdUser" integer NOT NULL,
-    "ThoiGian" date NOT NULL,
+    "ThoiGian" timestamp without time zone,
+    "DiemMongMuon" character varying COLLATE pg_catalog."default" NOT NULL,
+    "NoiDung" character varying COLLATE pg_catalog."default" NOT NULL,
     "idCotDiem" integer NOT NULL,
     "idLop" integer NOT NULL,
-    "NoiDung" character varying COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "PhucKhao_pkey" PRIMARY KEY ("idPhucKhao", "IdUser"),
+    CONSTRAINT "PhucKhao_pkey" PRIMARY KEY ("idPhucKhao"),
     CONSTRAINT "FK_PhucKhao_CotDiem" FOREIGN KEY ("idCotDiem", "idLop")
         REFERENCES public."CotDiem" ("idCotDiem", "idLop") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
-    CONSTRAINT "FK_PhucKhao_User" FOREIGN KEY ("IdUser")
-        REFERENCES public."User" ("idUser") MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
@@ -204,68 +198,19 @@ ALTER TABLE IF EXISTS public."PhucKhao"
     OWNER to postgres;
 
 
-CREATE TABLE IF NOT EXISTS public."ThongBaoGiaoVien"
-(
-    "idThongBao" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
-    "idUser" integer NOT NULL,
-    "idPhucKhao" integer NOT NULL,
-    "ThoiGian" date NOT NULL,
-    CONSTRAINT "ThongBaoGiaoVien_pkey" PRIMARY KEY ("idThongBao", "idUser", "idPhucKhao"),
-    CONSTRAINT "FK_ThongBaoGIaoVien_PhucKhao" FOREIGN KEY ("idUser", "idPhucKhao")
-        REFERENCES public."PhucKhao" ("IdUser", "idPhucKhao") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."ThongBaoGiaoVien"
-    OWNER to postgres;
-
-
-CREATE TABLE IF NOT EXISTS public."ThongBaoHocSinh"
-(
-    "idThongBao" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
-    "idUser" integer NOT NULL,
-    "idPhucKhao" integer NOT NULL,
-    "ThoiGian" date NOT NULL,
-    CONSTRAINT "ThongBaoHocSinh_pkey" PRIMARY KEY ("idThongBao", "idUser", "idPhucKhao"),
-    CONSTRAINT "FK_ThongBaoHocSinh_PhucKhao" FOREIGN KEY ("idUser", "idPhucKhao")
-        REFERENCES public."PhucKhao" ("IdUser", "idPhucKhao") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."ThongBaoHocSinh"
-    OWNER to postgres;
-
-
-CREATE TABLE IF NOT EXISTS public."BanAccount"
-(
-    "idUser" integer NOT NULL,
-    "ThoiGianKhoa" date NOT NULL,
-    "ThoiHanKhoa" date NOT NULL,
-    CONSTRAINT "BanAccount_pkey" PRIMARY KEY ("idUser")
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."BanAccount"
-    OWNER to postgres;
-
-
 CREATE TABLE IF NOT EXISTS public."NoiDungTraoDoi"
 (
-    "idTraoDoi" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
     "idPhucKhao" integer NOT NULL,
     "idUser" integer NOT NULL,
     "TraoDoi" character varying COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "NoiDungTraoDoi_pkey" PRIMARY KEY ("idTraoDoi", "idPhucKhao", "idUser"),
-    CONSTRAINT "FK_NoiDungTraoDoi_PhucKhao" FOREIGN KEY ("idPhucKhao", "idUser")
-        REFERENCES public."PhucKhao" ("idPhucKhao", "IdUser") MATCH SIMPLE
+    "ThoiGian" timestamp without time zone,
+    CONSTRAINT "NoiDungTraoDoi_pkey" PRIMARY KEY ("idPhucKhao", "idUser"),
+    CONSTRAINT "FK_TraoDoi_PhucKhao" FOREIGN KEY ("idPhucKhao")
+        REFERENCES public."PhucKhao" ("idPhucKhao") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "FK_TraoDoi_User" FOREIGN KEY ("idUser")
+        REFERENCES public."User" ("idUser") MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -273,4 +218,30 @@ CREATE TABLE IF NOT EXISTS public."NoiDungTraoDoi"
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."NoiDungTraoDoi"
+    OWNER to postgres;
+
+
+
+CREATE TABLE IF NOT EXISTS public."ThongBao"
+(
+    "idThongBao" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
+    "Malop" integer NOT NULL,
+    "NoiDung" character varying COLLATE pg_catalog."default" NOT NULL,
+    "ThoiGian" timestamp without time zone,
+    "idUser" integer NOT NULL,
+    "idPhucKhao" integer,
+    CONSTRAINT "ThongBao_pkey" PRIMARY KEY ("idThongBao"),
+    CONSTRAINT "FK_ThongBao_PhucKhao" FOREIGN KEY ("idPhucKhao")
+        REFERENCES public."PhucKhao" ("idPhucKhao") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "FK_ThongBao_User" FOREIGN KEY ("idUser")
+        REFERENCES public."User" ("idUser") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."ThongBao"
     OWNER to postgres;

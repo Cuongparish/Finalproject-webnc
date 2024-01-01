@@ -105,18 +105,28 @@ const classC = {
 
   getDetailinClass: async (req, res) => {
     try {
-      const { rows } = await classM.getDetail_inClass(req, res);
+      var data = [];
+      // chi tiet lop hoc
+      const { rows: Detail } = await classM.getDetail_inClass(req, res);
 
-      if (rows && rows.length > 0) {
-        res.json({ msg: "Detail", data: rows });
+      if (Detail && Detail.length > 0) {
+        data.push({ msg: "Detail", data: Detail });
+        //res.json({ msg: "Detail", data: rows });
       } else {
-        res.json({
-          errors: [
-            {
-              msg: "Ma lop ban nhap khong ton tai",
-            },
-          ],
-        });
+        data.push({ msg: "Ma lop ban nhap khong ton tai" });
+      }
+
+      // vai tro khi tham gia lop hoc
+      const { rows: Role } = await classM.Role_inClass(req, res);
+
+      if (Role && Role.length > 0) {
+        data.push({ msg: "Student" });
+      } else {
+        data.push({ msg: "Teacher" });
+      }
+
+      if (data.length > 0) {
+        res.json(data);
       }
     } catch (error) {
       res.json({
