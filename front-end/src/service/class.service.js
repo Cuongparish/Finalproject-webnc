@@ -23,12 +23,12 @@ const GetClasses = (idUser) => {
   });
 };
 
-const GetDetailClass = (MaLop) => {
+const GetDetailClass = (MaLop, idUser) => {
   return axios
-    .get(`${API_URL}/api/v1/user/${MaLop}/detailClass`)
+    .get(`${API_URL}/api/v1/user/${MaLop}/${idUser}/detailClass`)
     .then((res) => {
       //console.log("res-detail-class: ", res);
-      return res.data.data;
+      return res.data;
     });
 };
 
