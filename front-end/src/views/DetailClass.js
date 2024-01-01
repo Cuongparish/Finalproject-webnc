@@ -100,16 +100,18 @@ const DetailClass = (props) => {
 
   const [DataGradeStructure, setDataGradeStructure] = useState([]);
   const [HadCreateGradeStructer, setHadCreateGradeStructer] = useState(false);
+  const [UserRoleInClass, setUserRoleInClass] = useState();
 
   //----------------------------------------Màn hình bảng tinh
   const GetDetailClass = async () => {
     try {
-      console.log("1111");
-      await ClassService.GetDetailClass(malop).then(
+      await ClassService.GetDetailClass(malop, user.idUser).then(
         (res) => {
-          console.log("res-detail-class: ", res[0]);
+          console.log("res-detail-class: ", res );
           if (res) {
-            setDetailClass(res[0]);
+            setDetailClass(res[0].data[0]);
+            setUserRoleInClass(res[1].role);
+            console.log("user-role: ", UserRoleInClass);
           }
         },
         (error) => {
