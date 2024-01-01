@@ -54,7 +54,7 @@ const accountC = {
 
   getUser: async (req, res) => {
     try {
-      const { rows } = await accountM.getbyID(req, res);
+      const { rows } = await accountM.getbyID(req.params.idUser);
 
       if (rows && rows.length > 0) {
         res.json({ msg: "OKkkkk", data: rows });
@@ -181,8 +181,8 @@ const accountC = {
       accountM.editUser(IdUser, Email, Pw, DOB, Sex, Phone, StudentId);
       //console.log(IdUser)
       return res.jon({
-        msg: "Ok"
-      })
+        msg: "Ok",
+      });
     } catch (error) {
       return res.json({
         errors: [

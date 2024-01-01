@@ -38,7 +38,7 @@ const gradeC = {
   getPercentScore_inClass: async (req, res) => {
     let sum = 0;
     try {
-      const { rows } = await gradeM.getPercentScore_inClass(req, res);
+      const { rows } = await gradeM.getPercentScore_inClass(req.params.idLop);
 
       for (let i = 0; i < rows.length; i++) {
         sum += rows[i].PhanTramDiem;
@@ -154,7 +154,9 @@ const gradeC = {
 
   getGradesBoard: async (req, res) => {
     try {
-      const { rows: header } = await gradeM.getPercentScore_inClass(req, res);
+      const { rows: header } = await gradeM.getPercentScore_inClass(
+        req.params.idLop
+      );
       const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(
         req,
         res
@@ -248,7 +250,9 @@ const gradeC = {
 
   exporttoExcel_FullScore: async (req, res) => {
     try {
-      const { rows: header } = await gradeM.getPercentScore_inClass(req, res);
+      const { rows: header } = await gradeM.getPercentScore_inClass(
+        req.params.idLop
+      );
       const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(
         req,
         res

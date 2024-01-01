@@ -21,10 +21,10 @@ module.exports = {
     return { rows };
   },
 
-  getPercentScore_inClass: async (req, res) => {
+  getPercentScore_inClass: async (idLop) => {
     const { rows } = await postgre.query(
       'select * from "CotDiem" where "idLop"=$1',
-      [req.params.idLop]
+      [idLop]
     );
     return { rows };
   },
@@ -435,5 +435,13 @@ module.exports = {
       }
     }
     return { buggg };
+  },
+
+  getScore_inClass: async (idHocSinh, idCotDiem, idLop) => {
+    const { rows } = await postgre.query(
+      'select "Diem" from "BangDiemThanhPhan" where "idHocSinh"=$1 and "idCotDiem"=$2 and "idLop"=$3',
+      [idHocSinh, idCotDiem, idLop]
+    );
+    return { rows };
   },
 };

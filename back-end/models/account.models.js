@@ -9,12 +9,12 @@ module.exports = {
     return { rows };
   },
 
-  getbyID: async (req, res) => {
+  getbyID: async (idUser) => {
     const { rows } = await postgre.query(
       `select us.*, hs."idHocSinh", hs."StudentId"
       from "User" us left join "HocSinh" hs on us."idUser"=hs."idUser"
       where us."idUser"=$1`,
-      [req.params.idUser]
+      [idUser]
     );
 
     rows.forEach((element) => {

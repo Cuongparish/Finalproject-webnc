@@ -15,6 +15,7 @@ const authRouter = require("./routes/auth.router");
 const gradeRouter = require("./routes/grade.router");
 // const notifyRouter = require("./routes/notify.router");
 const reviewRouter = require("./routes/review.router");
+const banAccountRouter = require("./routes/banAccount.router");
 
 app.use(
   cookieSession({
@@ -41,6 +42,7 @@ app.use("/api/v1/user", classRouter);
 app.use("/api/v1/user", gradeRouter);
 // app.use("/api/v1/user", notifyRouter);
 app.use("/api/v1/user", reviewRouter);
+app.use("/api/v1/user", banAccountRouter);
 app.use("/auth", authRouter);
 
 app.listen(process.env.PORT, () =>
