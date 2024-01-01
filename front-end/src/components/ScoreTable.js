@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
-import { Row, Col, Table } from "react-bootstrap";
+import { Row, Col, Table, Form } from "react-bootstrap";
 import { RiSlideshowLine } from "react-icons/ri";
+import { RxUpdate } from "react-icons/rx";
 import { TbDatabaseExport } from "react-icons/tb";
 
 import '../App.css';
@@ -10,6 +11,7 @@ const ScoreTable = (props) => {
     const ListStudent = props.liststudent;
     console.log(ListStudent);
     const [TotalPercent, setTotalPercent] = useState(0);
+    const [SelectGrade, setSelectGrade] = useState(GradeStructures[0].TenCotDiem);
 
     const CaculateTotalPercent = () => {
         let total = 0;
@@ -47,7 +49,7 @@ const ScoreTable = (props) => {
                                     <div>{GradeStructure.PhanTramDiem}%</div>
                                 </td>
                             ))}
-                            <td></td> {/* input nothing */}
+                            <td className="align-middle" style={{ width: '10%' }}>Tổng kết</td> {/* input nothing */}
                         </tr>
                     </thead>
                     <tbody>
@@ -69,6 +71,33 @@ const ScoreTable = (props) => {
             </Row>
 
             <Row className="d-flex align-items-end justify-content-end my-5">
+                <Col sm={2}>
+                    <a className="btn btn-info">
+                        <RxUpdate className="mx-1" /> Update bảng điểm
+                    </a>
+                </Col>
+
+                <Col sm={2}>
+                    <Form.Group className="m-2" controlId="gender">
+                        <Form.Label className="fw-bold">Cột điểm:</Form.Label>
+                        <Form.Select
+                            defaultValue="Male"
+                            className="border-2 border-black"
+                            value={SelectGrade}
+                            onChange={(e) => setSelectGrade(e.target.value)}
+                        >
+                            {GradeStructures?.map((GradeStructure, index) => (
+                                <option>{GradeStructure.TenCotDiem}</option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+                </Col>
+                <Col sm={2}>
+                    <a className="btn btn-info">
+                        <RxUpdate className="mx-1" /> Upload điểm
+                    </a>
+                </Col>
+
                 <Col sm={2}>
                     <a className="btn btn-primary">
                         <RiSlideshowLine className="mx-1" /> Public bảng điểm

@@ -29,8 +29,8 @@ app.use(passport.session());
 // origin: "https://frontend-finalproject-webnc.vercel.app",
 app.use(
   cors({
-    // origin: "https://frontend-finalproject-webnc.vercel.app",
-    origin: "http://localhost:3000",
+    origin: "https://frontend-finalproject-webnc.vercel.app",
+    //origin: "http://localhost:3000"git ,
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })

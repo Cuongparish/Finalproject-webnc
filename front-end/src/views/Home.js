@@ -99,8 +99,6 @@ const Home = (props) => {
         try {
             await ClassService.GetClasses(user.idUser).then(
                 (res) => {
-                    //console.log("res[0].data: ", res[0].data);
-                    //console.log("res[1].data: ", res[1].data);
                     if (res[0].data) {
                         setTeacherClasses(res[0].data);
                     }
@@ -180,7 +178,7 @@ const Home = (props) => {
             </Row>
 
             <Row className='h-100 g-0'>
-                <MenuLeft TeacherClass={TeacherClasses} StudentClass={StudentClasses} />
+                <MenuLeft user={user} />
 
                 <Col as={Row} md={10} className='d-flex g-0 p-3 right-content'>
                     <ClassList ClassData={Classes} />
