@@ -37,8 +37,8 @@ module.exports = {
 
   postCreateClass: async (req, res, malop) => {
     const { rows } = await postgre.query(
-      "CALL createclass($1, $2, $3, $4, $5)",
-      [req.params.id, req.body.TenLop, req.body.ChuDe, req.body.Phong, malop]
+      "CALL createclass($1, $2, $3, $4, $5, $6)",
+      [req.params.id, req.body.TenLop, req.body.ChuDe, req.body.Phong, malop, 1]
     );
     return { rows };
   },

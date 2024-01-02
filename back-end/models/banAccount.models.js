@@ -1,6 +1,7 @@
 const postgre = require("./database");
 const moment = require("moment");
 module.exports = {
+  // --------------------------------------user
   // lấy idPhucKhao cuối cùng (done)
   getAll: async () => {
     const sql = `SELECT *
@@ -25,5 +26,14 @@ module.exports = {
 
     const rows = await postgre.query(sql, [idUser]);
     return rows;
+  },
+
+  // --------------------------------------class
+  changeSate: async (idLop, TenLop, ChuDe, Phong, MaLop, State) => {
+    const sql = `	UPDATE public."LopHoc"
+                  SET "TenLop"=$2, "ChuDe"=$3, "Phong"=$4, "MaLop"=$5, "State"=$6
+                  WHERE "idLop"=$1;`;
+
+    await postgre.query(sql, [idLop, TenLop, ChuDe, Phong, MaLop, State]);
   },
 };

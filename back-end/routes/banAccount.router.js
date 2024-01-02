@@ -13,6 +13,8 @@ router.post("/ban", banAccountC.banAccount);
 router.delete("/unban", banAccountC.unbanAccount);
 
 //----------------------------------class
-router.get("/ban/class", banAccountC.getAllClass);
+router.get("/ban/listClass", banAccountC.getAllClass);
+
+router.put("/ban/class", banAccountC.changeState);
 
 module.exports = router;

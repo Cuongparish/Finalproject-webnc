@@ -117,6 +117,35 @@ const banAccountC = {
       });
     }
   },
+
+  changeState: async (req, res) => {
+    try {
+      // console.log(1);
+      await banAccountM.changeSate(
+        req.body.idLop,
+        req.body.TenLop,
+        req.body.ChuDe,
+        req.body.Phong,
+        req.body.MaLop,
+        req.body.State
+      );
+
+      if (req.body.State == 1) {
+        res.json({ msg: "Đã mở lại active lớp" });
+      } else {
+        res.json({ msg: "Đã inactive lớp" });
+      }
+    } catch (error) {
+      // console.log(error);
+      res.json({
+        errors: [
+          {
+            msg: "Invalid credentials",
+          },
+        ],
+      });
+    }
+  },
 };
 
 module.exports = banAccountC;

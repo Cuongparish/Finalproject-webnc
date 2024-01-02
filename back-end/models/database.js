@@ -6,7 +6,7 @@ const pool = new Pool({
   connectionString: process.env.POSTGRES_URL + "?sslmode=require",
 });
 
-//Cua cuong
+// Cua cuong
 // const pool = new Pool({
 //   user: "postgres",
 //   host: "localhost",
