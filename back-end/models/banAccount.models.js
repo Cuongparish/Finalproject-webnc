@@ -36,6 +36,14 @@ module.exports = {
     await postgre.query(sql, [idHocSinh, StudentId]);
   },
 
+  getIDHS: async (idUser) => {
+    const sql = `	SELECT "idHocSinh"
+                  FROM "HocSinh"
+                  WHERE "idUser"=$1;`;
+
+    await postgre.query(sql, [idUser]);
+  },
+
   // --------------------------------------class
   changeSate: async (idLop, TenLop, ChuDe, Phong, MaLop, State) => {
     const sql = `	UPDATE public."LopHoc"
