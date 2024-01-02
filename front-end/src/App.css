@@ -306,3 +306,24 @@ a.element-left.nav-link:hover {
 .tab-menu > .tab-content {
   height: 100%;
 }
+
+.rv_element {
+  cursor: pointer;
+  position: relative;
+}
+
+.rv_element:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: none;
+  z-index: 0;
+}
+
+.rv_element:hover:before {
+  background-color: rgba(0, 0, 0, 0.185);
+  z-index: 1000;
+}
