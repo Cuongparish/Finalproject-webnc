@@ -245,3 +245,17 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."ThongBao"
     OWNER to postgres;
+
+
+CREATE TABLE IF NOT EXISTS public."BanAccount"
+(
+    "idUser" integer NOT NULL,
+    "ThoiGianKhoa" date NOT NULL,
+    "ThoiHanKhoa" date NOT NULL,
+    CONSTRAINT "BanAccount_pkey" PRIMARY KEY ("idUser")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."BanAccount"
+    OWNER to postgres;
