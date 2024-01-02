@@ -69,6 +69,7 @@ ALTER TABLE IF EXISTS public."GiaoVien"
 
 -- DROP TABLE IF EXISTS public."LopHoc";
 
+
 CREATE TABLE IF NOT EXISTS public."LopHoc"
 (
     "idLop" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
@@ -76,6 +77,7 @@ CREATE TABLE IF NOT EXISTS public."LopHoc"
     "ChuDe" character varying COLLATE pg_catalog."default",
     "Phong" character varying COLLATE pg_catalog."default",
     "MaLop" character varying COLLATE pg_catalog."default" NOT NULL,
+    "State" integer,
     CONSTRAINT "LopHoc_pkey" PRIMARY KEY ("idLop")
 )
 
@@ -244,4 +246,18 @@ CREATE TABLE IF NOT EXISTS public."ThongBao"
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."ThongBao"
+    OWNER to postgres;
+
+
+CREATE TABLE IF NOT EXISTS public."BanAccount"
+(
+    "idUser" integer NOT NULL,
+    "ThoiGianKhoa" date NOT NULL,
+    "ThoiHanKhoa" date NOT NULL,
+    CONSTRAINT "BanAccount_pkey" PRIMARY KEY ("idUser")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."BanAccount"
     OWNER to postgres;
