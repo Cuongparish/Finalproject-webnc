@@ -28,6 +28,14 @@ module.exports = {
     return rows;
   },
 
+  changeStateStudentID: async (idHocSinh, StudentId) => {
+    const sql = `	UPDATE public."HocSinh"
+                  SET  "StudentId"=$2
+                  WHERE "idHocSinh"=$1;`;
+
+    await postgre.query(sql, [idHocSinh, StudentId]);
+  },
+
   // --------------------------------------class
   changeSate: async (idLop, TenLop, ChuDe, Phong, MaLop, State) => {
     const sql = `	UPDATE public."LopHoc"

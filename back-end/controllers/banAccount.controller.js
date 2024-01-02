@@ -91,6 +91,30 @@ const banAccountC = {
     }
   },
 
+  changeStateStudentID: async (req, res) => {
+    try {
+      await banAccountM.changeStateStudentID(
+        req.body.idHocSinh,
+        req.body.StudentId
+      );
+
+      if (req.body.StudentId == null) {
+        res.json({ msg: "unmaping" });
+      } else {
+        res.json({ msg: "maping" });
+      }
+    } catch (error) {
+      // console.log(error);
+      res.json({
+        errors: [
+          {
+            msg: "Invalid credentials",
+          },
+        ],
+      });
+    }
+  },
+
   //----------------------------------class
   getAllClass: async (req, res) => {
     try {
