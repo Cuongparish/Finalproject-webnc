@@ -90,6 +90,33 @@ const banAccountC = {
       });
     }
   },
+
+  //----------------------------------class
+  getAllClass: async (req, res) => {
+    try {
+      const { rows } = await classM.getAll();
+
+      if (rows && rows.length > 0) {
+        res.json({ msg: "Danh sách lớp", data: rows });
+      } else {
+        res.json({
+          errors: [
+            {
+              msg: "Không có lớp nào hết",
+            },
+          ],
+        });
+      }
+    } catch (error) {
+      res.json({
+        errors: [
+          {
+            msg: "Invalid credentials",
+          },
+        ],
+      });
+    }
+  },
 };
 
 module.exports = banAccountC;

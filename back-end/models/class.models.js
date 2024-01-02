@@ -1,6 +1,14 @@
 const postgre = require("./database");
 
 module.exports = {
+  getAll: async () => {
+    const { rows } = await postgre.query(
+      `SELECT "LopHoc".*
+      FROM "LopHoc"`
+    );
+    return { rows };
+  },
+
   getStudentClass: async (req, res) => {
     const { rows } = await postgre.query(
       `SELECT "LopHoc".*
