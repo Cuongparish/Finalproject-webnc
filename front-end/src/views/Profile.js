@@ -5,6 +5,7 @@ import { FaBars, FaBell, FaPen } from "react-icons/fa";
 import MenuLeft from "../components/MenuLeft";
 import Loader from "../components/Loader";
 import AlertBox from "../components/AlertBox";
+import Notification from "../components/Notification";
 
 import AuthService from "../service/auth.service";
 import AccountService from "../service/account.service";
@@ -153,89 +154,7 @@ const Profile = (props) => {
               md={{ span: 2, offset: 1 }}
               className="d-flex justify-content-end align-items-center"
             >
-              <Dropdown as={Col}>
-                <Dropdown.Toggle split id="dropdown-split-basic">
-                    <FaBell />
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu style={{ width: '350px'}}>
-                  <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                    <Row className="h-100 g-0 align-items-center px-2">
-                      <Col sm={2}>
-                        <Image
-                          src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                          className="d-inline-block rounded"
-                          alt=""
-                          fluid
-                        />
-                      </Col>
-                      <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                        <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                      </Col>
-                    </Row>
-                  </Dropdown.Item>
-                  <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                    <Row className="h-100 g-0 align-items-center px-2">
-                      <Col sm={2}>
-                        <Image
-                          src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                          className="d-inline-block rounded"
-                          alt=""
-                          fluid
-                        />
-                      </Col>
-                      <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                        <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                      </Col>
-                    </Row>
-                  </Dropdown.Item>
-                  <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                    <Row className="h-100 g-0 align-items-center px-2">
-                      <Col sm={2}>
-                        <Image
-                          src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                          className="d-inline-block rounded"
-                          alt=""
-                          fluid
-                        />
-                      </Col>
-                      <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                        <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                      </Col>
-                    </Row>
-                  </Dropdown.Item>
-                  <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                    <Row className="h-100 g-0 align-items-center px-2">
-                      <Col sm={2}>
-                        <Image
-                          src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                          className="d-inline-block rounded"
-                          alt=""
-                          fluid
-                        />
-                      </Col>
-                      <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                        <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                      </Col>
-                    </Row>
-                  </Dropdown.Item>
-                  <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                    <Row className="h-100 g-0 align-items-center px-2">
-                      <Col sm={2}>
-                        <Image
-                          src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                          className="d-inline-block rounded"
-                          alt=""
-                          fluid
-                        />
-                      </Col>
-                      <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                        <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                      </Col>
-                    </Row>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <Notification />
                 
               <a href="/profile" className="mx-2 btn-member">
                 {user?.FullName}
@@ -268,7 +187,6 @@ const Profile = (props) => {
                           className="mb-3"
                         >
                           <Form.Control
-                            disabled
                             id="fullname"
                             type="text"
                             defaultValue={user.FullName}

@@ -6,6 +6,7 @@ import '../App.css';
 
 import ClassList from '../components/ClassList';
 import MenuLeft from '../components/MenuLeft';
+import Notification from "../components/Notification";
 import AlertBox from "../components/AlertBox";
 
 import AuthService from "../service/auth.service";
@@ -161,89 +162,8 @@ const Home = (props) => {
                     <h3 className='mb-0'>Grade Management</h3>
                 </Col>
                 <Col xs md={{ span: 2, offset: 1 }} className='d-flex justify-content-end align-items-center'>
-                    <Dropdown as={Col}>
-                        <Dropdown.Toggle split id="dropdown-split-basic">
-                            <FaBell />
-                        </Dropdown.Toggle>
+                    <Notification />
 
-                        <Dropdown.Menu style={{ width: '350px'}}>
-                            <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                            <Row className="h-100 g-0 align-items-center px-2">
-                            <Col sm={2}>
-                                <Image
-                                src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                                className="d-inline-block rounded"
-                                alt=""
-                                fluid
-                                />
-                            </Col>
-                            <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                                <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                            </Col>
-                            </Row>
-                            </Dropdown.Item>
-                            <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                                <Row className="h-100 g-0 align-items-center px-2">
-                                <Col sm={2}>
-                                    <Image
-                                    src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                                    className="d-inline-block rounded"
-                                    alt=""
-                                    fluid
-                                    />
-                                </Col>
-                                <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                                    <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                                </Col>
-                                </Row>
-                            </Dropdown.Item>
-                            <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                                <Row className="h-100 g-0 align-items-center px-2">
-                                <Col sm={2}>
-                                    <Image
-                                    src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                                    className="d-inline-block rounded"
-                                    alt=""
-                                    fluid
-                                    />
-                                </Col>
-                                <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                                    <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                                </Col>
-                                </Row>
-                            </Dropdown.Item>
-                            <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                                <Row className="h-100 g-0 align-items-center px-2">
-                                <Col sm={2}>
-                                    <Image
-                                    src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                                    className="d-inline-block rounded"
-                                    alt=""
-                                    fluid
-                                    />
-                                </Col>
-                                <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                                    <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                                </Col>
-                                </Row>
-                            </Dropdown.Item>
-                            <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
-                                <Row className="h-100 g-0 align-items-center px-2">
-                                <Col sm={2}>
-                                    <Image
-                                    src={process.env.PUBLIC_URL + "Images/announce_icon.png"}
-                                    className="d-inline-block rounded"
-                                    alt=""
-                                    fluid
-                                    />
-                                </Col>
-                                <Col sm={10} className="px-1" style={{ textWrap: 'wrap', fontSize: "13px" }}>
-                                    <strong>Phạm Trường Khoa</strong> đã đăng một thông báo mới
-                                </Col>
-                                </Row>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
                     <Dropdown as={Col}>
                         <Dropdown.Toggle split id="dropdown-split-basic">
                             <FaPlus />
