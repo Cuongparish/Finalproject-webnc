@@ -178,9 +178,15 @@ const accountC = {
     const { Email, Pw, DOB, Sex, Phone, StudentId } = req.body;
     const IdUser = req.params.idUser;
     try {
+      const { rows } = await accountM.getAll();
+      for (user of rows) {
+        if (user.StudentId == StudentId) {
+          res.json({ msg: "StudentId nãy đã có người sử dụng" });
+        }
+      }
       accountM.editUser(IdUser, Email, Pw, DOB, Sex, Phone, StudentId);
       //console.log(IdUser)
-      return res.jon({
+      return res.json({
         msg: "Ok",
       });
     } catch (error) {

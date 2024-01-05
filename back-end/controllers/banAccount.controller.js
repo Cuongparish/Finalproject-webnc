@@ -78,6 +78,14 @@ const banAccountC = {
   changeStateStudentID: async (req, res) => {
     try {
       const id = await banAccountM.getIDHS(req.body.IdUser);
+
+      const { rows } = await accountM.getAll();
+      for (user of rows) {
+        if (user.StudentId == StudentId) {
+          res.json({ msg: "StudentId nãy đã có người sử dụng" });
+        }
+      }
+
       await banAccountM.changeStateStudentID(id, req.body.StudentId);
 
       await accountM.editUser(
