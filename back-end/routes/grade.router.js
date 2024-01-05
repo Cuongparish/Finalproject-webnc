@@ -76,4 +76,13 @@ router.get(
   gradeController.exporttoExcel_FullScore
 );
 
+// cho phép học sinh xem điểm + phúc khảo 1 thành phần
+router.get(
+  "/grade/publicScoreinClass/:idLop",
+  gradeController.publicScore_inClass
+);
+
+// giáo viên không cho phúc khảo cột điểm đó nữa
+router.get("/grade/closeReview/:idLop", gradeController.closeReview);
+
 module.exports = router;

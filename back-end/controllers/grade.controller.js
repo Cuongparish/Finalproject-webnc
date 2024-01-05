@@ -1,9 +1,12 @@
 const gradeM = require("../models/grade.models.js");
+const notifyM = require("../models/notify.models.js");
+const classM = require("../models/class.models.js");
 const moment = require("moment");
 const excel = require("exceljs");
 const path = require("path");
 const fs = require("fs");
 const fastcsv = require("fast-csv");
+const { DateTime } = require("luxon");
 
 const nodemailer = require("nodemailer");
 require("dotenv").config;
@@ -115,9 +118,17 @@ const gradeC = {
     if (!req.body.TenCotDiem || !req.body.PhanTramDiem || !req.body.idCotDiem) {
       return res.json({ msg: "Theo dữ liệu req.body" });
     }
-
+    let AcpPhucKhao = 0;
+    let Khoa = 0;
     try {
-      const { rows } = await gradeM.updatePercentScore_inClass(req, res);
+      const { rows } = await gradeM.updatePercentScore_inClass(
+        req.body.TenCotDiem,
+        req.body.PhanTramDiem,
+        req.params.idLop,
+        req.body.idCotDiem,
+        Khoa,
+        AcpPhucKhao
+      );
       res.json({ msg: "Cập nhật thành công thành phần điểm", data: rows });
     } catch (error) {
       res.json({
@@ -389,6 +400,73 @@ const gradeC = {
       res.end();
 
       // res.json({ data });
+    } catch (error) {
+      res.json({
+        errors: [
+          {
+            msg: "Lỗi",
+          },
+        ],
+      });
+    }
+  },
+
+  publicScore_inClass: async (req, res) => {
+    // score.TenCotDiem, score.PhanTramDiem
+    let Khoa = 1;
+    let AcpPhucKhao = 1;
+    try {
+      // cập nhật cho công bố điểm + được quyền phúc khảo
+      await gradeM.updatePercentScore_inClass(
+        req.body.TenCotDiem,
+        req.body.PhanTramDiem,
+        req.params.idLop,
+        req.body.idCotDiem,
+        Khoa,
+        AcpPhucKhao
+      );
+
+      // gửi thông báo đến các học sinh rằng đã có điểm 1 thành phần
+      let NoiDung = `Điểm ${req.body.TenCotDiem} đã được công bố `;
+      const { rows } = await classM.getStudent_inClass(req.body.malop);
+      for (user of rows) {
+        await notifyM.addNotify(
+          req.body.Malop,
+          NoiDung,
+          ThoiGian,
+          user.idUser,
+          null
+        );
+      }
+
+      res.json({
+        msg: "Đã công bố thành công và được phép phúc khảo thành phần điểm",
+      });
+    } catch (error) {
+      res.json({
+        errors: [
+          {
+            msg: "Lỗi",
+          },
+        ],
+      });
+    }
+  },
+
+  // đóng phúc khảo 1 thành phần điểm
+  closeReview: async (req, res) => {
+    let Khoa = 1;
+    let AcpPhucKhao = 0;
+    try {
+      // cập nhật không cho phúc khảo nữa
+      await gradeM.closeReview(
+        req.params.idLop,
+        req.body.idCotDiem,
+        AcpPhucKhao
+      );
+      res.json({
+        msg: "cập nhật không cho phúc khảo nữa",
+      });
     } catch (error) {
       res.json({
         errors: [

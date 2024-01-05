@@ -81,7 +81,9 @@ const classC = {
         data.push({ msg: "Teacher empty" });
       }
 
-      const { rows: studentRows } = await classM.getStudent_inClass(req, res);
+      const { rows: studentRows } = await classM.getStudent_inClass(
+        req.params.malop
+      );
 
       if (studentRows && studentRows.length > 0) {
         data.push({ msg: "Student", data: studentRows });
@@ -93,6 +95,7 @@ const classC = {
         res.json(data);
       }
     } catch (error) {
+      console.log(error);
       res.json({
         errors: [
           {

@@ -37,12 +37,12 @@ module.exports = {
       console.log(percentScores);
       //return res.status(400).json({ error: "Invalid data format" });
     }
-
+    let number = 0;
     for (const score of percentScores) {
       console.log(score);
       const { rows } = await postgre.query(
-        'INSERT INTO public."CotDiem"("idLop", "TenCotDiem", "PhanTramDiem", "Khoa") VALUES ($1, $2, $3, $4) RETURNING *;',
-        [req.params.idLop, score.TenCotDiem, score.PhanTramDiem, 0]
+        'INSERT INTO public."CotDiem"("idLop", "TenCotDiem", "PhanTramDiem", "Khoa", "AcpPhucKhao") VALUES ($1, $2, $3, $4, $5) RETURNING *;',
+        [req.params.idLop, score.TenCotDiem, score.PhanTramDiem, number, number]
       );
       results.push(rows);
     }
@@ -57,15 +57,17 @@ module.exports = {
     return { rows };
   },
 
-  updatePercentScore_inClass: async (req, res) => {
+  updatePercentScore_inClass: async (
+    TenCotDiem,
+    PhanTramDiem,
+    idLop,
+    idCotDiem,
+    Khoa,
+    AcpPhucKhao
+  ) => {
     const { rows } = await postgre.query(
-      'UPDATE public."CotDiem" SET "TenCotDiem"=$1, "PhanTramDiem"=$2 WHERE "idLop"=$3 and "idCotDiem"=$4;',
-      [
-        req.body.TenCotDiem,
-        req.body.PhanTramDiem,
-        req.params.idLop,
-        req.body.idCotDiem,
-      ]
+      'UPDATE public."CotDiem" SET "TenCotDiem"=$1, "PhanTramDiem"=$2, "Khoa"=$5, "AcpPhucKhao"=$6 WHERE "idLop"=$3 and "idCotDiem"=$4;',
+      [TenCotDiem, PhanTramDiem, idLop, idCotDiem, Khoa, AcpPhucKhao]
     );
     return { rows };
   },
@@ -441,6 +443,14 @@ module.exports = {
     const { rows } = await postgre.query(
       'select "Diem" from "BangDiemThanhPhan" where "idHocSinh"=$1 and "idCotDiem"=$2 and "idLop"=$3',
       [idHocSinh, idCotDiem, idLop]
+    );
+    return { rows };
+  },
+
+  closeReview: async (idLop, idCotDiem, AcpPhucKhao) => {
+    const { rows } = await postgre.query(
+      'UPDATE public."CotDiem" SET  "AcpPhucKhao"=$3 WHERE "idLop"=$1 and "idCotDiem"=$2;',
+      [idLop, idCotDiem, AcpPhucKhao]
     );
     return { rows };
   },
