@@ -21,15 +21,21 @@ const Login = () => {
           const user = res;
           console.log(JSON.stringify(user));
           localStorage.setItem("user", JSON.stringify(user));
-          if(sessionStorage.getItem("lastVisitedUrl")){
+          if (sessionStorage.getItem("lastVisitedUrl")) {
             const JoinClassURL = sessionStorage.getItem("lastVisitedUrl");
             sessionStorage.removeItem("lastVisitedUrl");
             navigate(JoinClassURL);
             window.location.reload();
           }
-          else{
-            navigate("/home");
-            window.location.reload();
+          else {
+            if (user.Role === 1) {
+              navigate("/admin");
+              window.location.reload();
+            }
+            else {
+              navigate("/home");
+              window.location.reload();
+            }
           }
         },
         (error) => {

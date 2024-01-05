@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import {Row, Col, Image, Tabs, Tab, Card, FloatingLabel, Form, Modal, Button, Dropdown} from "react-bootstrap";
+import { Row, Col, Image, Tabs, Tab, Card, FloatingLabel, Form, Modal, Button, Dropdown } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { FaBars, FaBell } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
@@ -12,6 +12,8 @@ import News from "../components/News";
 import People from "../components/People";
 import ScoreTable from "../components/ScoreTable";
 
+import People_Student from "../components/People_Student";
+import ScoreTable_Student from "../components/ScoreTable_Student";
 
 import AuthService from "../service/auth.service";
 import ClassService from "../service/class.service";
@@ -47,7 +49,7 @@ const DetailClass = (props) => {
             id={`add_score_0`}
             type="text"
             placeholder="Exercise"
-            //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
+          //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
           />
         </FloatingLabel>
         <FloatingLabel controlId={`add_score_percentage_0`} label="% cột điểm">
@@ -55,7 +57,7 @@ const DetailClass = (props) => {
             id={`add_score_percentage_0`}
             type="number"
             placeholder="5%"
-            //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
+          //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
           />
         </FloatingLabel>
       </Card>
@@ -76,7 +78,7 @@ const DetailClass = (props) => {
               id={`add_score_0`}
               type="text"
               placeholder="Exercise"
-              //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
+            //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
             />
           </FloatingLabel>
           <FloatingLabel
@@ -87,7 +89,7 @@ const DetailClass = (props) => {
               id={`add_score_percentage_0`}
               type="number"
               placeholder="5%"
-              //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
+            //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
             />
           </FloatingLabel>
         </Card>
@@ -111,11 +113,11 @@ const DetailClass = (props) => {
     try {
       await ClassService.GetDetailClass(malop, user.idUser).then(
         (res) => {
-          console.log("res-detail-class: ", res );
+          //console.log("res-detail-class: ", res );
           if (res) {
             setDetailClass(res[0].data[0]);
             setUserRoleInClass(res[1].role);
-            console.log("user-role: ", UserRoleInClass);
+            //console.log("user-role: ", UserRoleInClass);
           }
         },
         (error) => {
@@ -175,7 +177,7 @@ const DetailClass = (props) => {
               id={`add_score_${GradeStructure.length}`}
               type="text"
               placeholder="Exercise"
-              // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
+            // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
             />
           </FloatingLabel>
           <FloatingLabel
@@ -186,7 +188,7 @@ const DetailClass = (props) => {
               id={`add_score_percentage_${GradeStructure.length}`}
               type="number"
               placeholder="5%"
-              // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
+            // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
             />
           </FloatingLabel>
         </Card>
@@ -280,7 +282,12 @@ const DetailClass = (props) => {
   }, [DetailClass]);
 
   useEffect(() => {
-    console.log(DataGradeStructure);
+    setUserRoleInClass(UserRoleInClass);
+    //console.log("Userrole: ", UserRoleInClass);
+  }, [UserRoleInClass]);
+
+  useEffect(() => {
+    //console.log(DataGradeStructure);
     if (HadCreateGradeStructer) {
       addGradeStructureToDB();
     }
@@ -314,11 +321,11 @@ const DetailClass = (props) => {
         >
           <Dropdown as={Col}>
             <Dropdown.Toggle split id="dropdown-split-basic">
-                <FaBell />
+              <FaBell />
             </Dropdown.Toggle>
 
-            <Dropdown.Menu style={{ width: '350px'}}>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+            <Dropdown.Menu style={{ width: '350px' }}>
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -333,7 +340,7 @@ const DetailClass = (props) => {
                   </Col>
                 </Row>
               </Dropdown.Item>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -348,7 +355,7 @@ const DetailClass = (props) => {
                   </Col>
                 </Row>
               </Dropdown.Item>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -363,7 +370,7 @@ const DetailClass = (props) => {
                   </Col>
                 </Row>
               </Dropdown.Item>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -378,7 +385,7 @@ const DetailClass = (props) => {
                   </Col>
                 </Row>
               </Dropdown.Item>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -420,7 +427,7 @@ const DetailClass = (props) => {
             >
               {/* Màn hình bảng tin */}
               <Tab eventKey="news" id="news" title="Bảng tin">
-                <News DetailClass={DetailClass}/>
+                <News DetailClass={DetailClass} />
               </Tab>
 
               {/* Màn hình bài tập */}
@@ -430,16 +437,24 @@ const DetailClass = (props) => {
 
               {/* Màn hình mọi người */}
               <Tab eventKey="members" title="Mọi người">
-                <People DetailClass={DetailClass} TeacherInClass={TeacherInClass} StudentInClass={StudentInClass}></People>
+                {UserRoleInClass === "Teacher" ? (
+                  <People DetailClass={DetailClass} TeacherInClass={TeacherInClass} StudentInClass={StudentInClass}></People>
+                ) : (
+                  <People_Student TeacherInClass={TeacherInClass} StudentInClass={StudentInClass}></People_Student>)
+                }
               </Tab>
 
               {/* Màn hình điểm */}
               <Tab eventKey="score" title="Điểm" className="h-100">
-                {hasScore ? (
+                {hasScore ? UserRoleInClass === "Teacher" ? (
                   <ScoreTable
                     gradestructure={DataGradeStructure}
                     liststudent={StudentInClass}
                   />
+                ) : (<ScoreTable_Student
+                  gradestructure={DataGradeStructure}
+                  liststudent={StudentInClass}
+                />
                 ) : (
                   <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
                     <Col sm={2}>
@@ -468,150 +483,150 @@ const DetailClass = (props) => {
 
               {/* Màn hình trao đổi */}
               <Tab eventKey="communication" title="Trao đổi" className="h-100 bg-body-secondary p-2">
-                  <Row 
-                    className="g-0 d-flex justify-content-center align-items-center bg-success mb-2 rv_element"
-                    onClick={handleReviewScoreShow}
-                  >
-                    <Col sm={1} className="p-1 text-white text-center">
-                      Đã trả lời
-                    </Col>
-                    <Col sm={11}>
-                      <Card className="border-0 bg-white rounded-0">
-                        <Card.Body>
-                          <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
-                          <Card.Text>
-                            phúc khảo bởi học sinh xyzabc
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row 
-                    className="g-0 d-flex justify-content-center align-items-center bg-success mb-2 rv_element"
-                    onClick={handleReviewScoreShow}  
-                  >
-                    <Col sm={1} className="p-1 text-white text-center">
-                      Đã trả lời
-                    </Col>
-                    <Col sm={11}>
-                      <Card className="border-0 bg-white rounded-0">
-                        <Card.Body>
-                          <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
-                          <Card.Text>
-                            phúc khảo bởi học sinh xyzabc
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row 
-                    className="g-0 d-flex justify-content-center align-items-center bg-danger mb-2 rv_element"
-                    onClick={handleReviewScoreShow}  
-                  >
-                    <Col sm={1} className="p-1 text-white text-center">
-                      Chưa trả lời
-                    </Col>
-                    <Col sm={11}>
-                      <Card className="border-0 bg-white rounded-0">
-                        <Card.Body>
-                          <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
-                          <Card.Text>
-                            phúc khảo bởi học sinh xyzabc
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row 
-                    className="g-0 d-flex justify-content-center align-items-center bg-success mb-2 rv_element"
-                    onClick={handleReviewScoreShow}  
-                  >
-                    <Col sm={1} className="p-1 text-white text-center">
-                      Đã trả lời
-                    </Col>
-                    <Col sm={11}>
-                      <Card className="border-0 bg-white rounded-0">
-                        <Card.Body>
-                          <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
-                          <Card.Text>
-                            phúc khảo bởi học sinh xyzabc
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row 
-                    className="g-0 d-flex justify-content-center align-items-center bg-danger mb-2 rv_element"
-                    onClick={handleReviewScoreShow}  
-                  >
-                    <Col sm={1} className="p-1 text-white text-center">
-                      Chưa trả lời
-                    </Col>
-                    <Col sm={11}>
-                      <Card className="border-0 bg-white rounded-0">
-                        <Card.Body>
-                          <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
-                          <Card.Text>
-                            phúc khảo bởi học sinh xyzabc
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row 
-                    className="g-0 d-flex justify-content-center align-items-center bg-danger mb-2 rv_element"
-                    onClick={handleReviewScoreShow}  
-                  >
-                    <Col sm={1} className="p-1 text-white text-center">
-                      Chưa trả lời
-                    </Col>
-                    <Col sm={11}>
-                      <Card className="border-0 bg-white rounded-0">
-                        <Card.Body>
-                          <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
-                          <Card.Text>
-                            phúc khảo bởi học sinh xyzabc
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row 
-                    className="g-0 d-flex justify-content-center align-items-center bg-success mb-2 rv_element"
-                    onClick={handleReviewScoreShow}  
-                  >
-                    <Col sm={1} className="p-1 text-white text-center">
-                      Đã trả lời
-                    </Col>
-                    <Col sm={11}>
-                      <Card className="border-0 bg-white rounded-0">
-                        <Card.Body>
-                          <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
-                          <Card.Text>
-                            phúc khảo bởi học sinh xyzabc
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row 
-                    className="g-0 d-flex justify-content-center align-items-center bg-danger mb-2 rv_element"
-                    onClick={handleReviewScoreShow}  
-                  >
-                    <Col sm={1} className="p-1 text-white text-center">
-                      Chưa trả lời
-                    </Col>
-                    <Col sm={11}>
-                      <Card className="border-0 bg-white rounded-0">
-                        <Card.Body>
-                          <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
-                          <Card.Text>
-                            phúc khảo bởi học sinh xyzabc
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
+                <Row
+                  className="g-0 d-flex justify-content-center align-items-center bg-success mb-2 rv_element"
+                  onClick={handleReviewScoreShow}
+                >
+                  <Col sm={1} className="p-1 text-white text-center">
+                    Đã trả lời
+                  </Col>
+                  <Col sm={11}>
+                    <Card className="border-0 bg-white rounded-0">
+                      <Card.Body>
+                        <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                        <Card.Text>
+                          phúc khảo bởi học sinh xyzabc
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row
+                  className="g-0 d-flex justify-content-center align-items-center bg-success mb-2 rv_element"
+                  onClick={handleReviewScoreShow}
+                >
+                  <Col sm={1} className="p-1 text-white text-center">
+                    Đã trả lời
+                  </Col>
+                  <Col sm={11}>
+                    <Card className="border-0 bg-white rounded-0">
+                      <Card.Body>
+                        <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                        <Card.Text>
+                          phúc khảo bởi học sinh xyzabc
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row
+                  className="g-0 d-flex justify-content-center align-items-center bg-danger mb-2 rv_element"
+                  onClick={handleReviewScoreShow}
+                >
+                  <Col sm={1} className="p-1 text-white text-center">
+                    Chưa trả lời
+                  </Col>
+                  <Col sm={11}>
+                    <Card className="border-0 bg-white rounded-0">
+                      <Card.Body>
+                        <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                        <Card.Text>
+                          phúc khảo bởi học sinh xyzabc
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row
+                  className="g-0 d-flex justify-content-center align-items-center bg-success mb-2 rv_element"
+                  onClick={handleReviewScoreShow}
+                >
+                  <Col sm={1} className="p-1 text-white text-center">
+                    Đã trả lời
+                  </Col>
+                  <Col sm={11}>
+                    <Card className="border-0 bg-white rounded-0">
+                      <Card.Body>
+                        <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                        <Card.Text>
+                          phúc khảo bởi học sinh xyzabc
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row
+                  className="g-0 d-flex justify-content-center align-items-center bg-danger mb-2 rv_element"
+                  onClick={handleReviewScoreShow}
+                >
+                  <Col sm={1} className="p-1 text-white text-center">
+                    Chưa trả lời
+                  </Col>
+                  <Col sm={11}>
+                    <Card className="border-0 bg-white rounded-0">
+                      <Card.Body>
+                        <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                        <Card.Text>
+                          phúc khảo bởi học sinh xyzabc
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row
+                  className="g-0 d-flex justify-content-center align-items-center bg-danger mb-2 rv_element"
+                  onClick={handleReviewScoreShow}
+                >
+                  <Col sm={1} className="p-1 text-white text-center">
+                    Chưa trả lời
+                  </Col>
+                  <Col sm={11}>
+                    <Card className="border-0 bg-white rounded-0">
+                      <Card.Body>
+                        <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                        <Card.Text>
+                          phúc khảo bởi học sinh xyzabc
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row
+                  className="g-0 d-flex justify-content-center align-items-center bg-success mb-2 rv_element"
+                  onClick={handleReviewScoreShow}
+                >
+                  <Col sm={1} className="p-1 text-white text-center">
+                    Đã trả lời
+                  </Col>
+                  <Col sm={11}>
+                    <Card className="border-0 bg-white rounded-0">
+                      <Card.Body>
+                        <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                        <Card.Text>
+                          phúc khảo bởi học sinh xyzabc
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row
+                  className="g-0 d-flex justify-content-center align-items-center bg-danger mb-2 rv_element"
+                  onClick={handleReviewScoreShow}
+                >
+                  <Col sm={1} className="p-1 text-white text-center">
+                    Chưa trả lời
+                  </Col>
+                  <Col sm={11}>
+                    <Card className="border-0 bg-white rounded-0">
+                      <Card.Body>
+                        <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                        <Card.Text>
+                          phúc khảo bởi học sinh xyzabc
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
               </Tab>
             </Tabs>
           </div>
@@ -761,8 +776,8 @@ const DetailClass = (props) => {
                 <Form>
                   <Form.Group className="mb-4" controlId="student_info">
                     <Form.Label>Họ và tên - MSSV:</Form.Label>
-                    <Form.Control 
-                      type="text" 
+                    <Form.Control
+                      type="text"
                       disabled
                       defaultValue="Phạm Trường Khoa - 18120419" />
                   </Form.Group>
@@ -808,8 +823,8 @@ const DetailClass = (props) => {
                 <Form>
                   <Form.Group className="mb-4" controlId="student_info">
                     <Form.Label>Giáo viên:</Form.Label>
-                    <Form.Control 
-                      type="text" 
+                    <Form.Control
+                      type="text"
                       disabled
                       defaultValue="Mai Anh Tuấn" />
                   </Form.Group>

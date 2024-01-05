@@ -1,18 +1,5 @@
 import { React, useState, useEffect } from "react";
-import {
-  Row,
-  Col,
-  Image,
-  Tabs,
-  Tab,
-  InputGroup,
-  FloatingLabel,
-  Form,
-  Modal,
-  Button,
-  Card,
-  Dropdown
-} from "react-bootstrap";
+import { Row, Col, Image, Tabs, Tab, InputGroup, FloatingLabel, Form, Modal, Button, Card, Dropdown } from "react-bootstrap";
 import Datatable from "react-data-table-component";
 import { FaBars, FaPencilAlt, FaPlus, FaFilter, FaBell } from "react-icons/fa";
 import { ImBin } from "react-icons/im";
@@ -20,23 +7,39 @@ import { TbDatabaseImport } from "react-icons/tb";
 
 import AuthService from "../service/auth.service";
 import AccountService from "../service/account.service";
+import AdminService from "../service/admin.service";
 
 import "../App.css";
 
 const AdminManagement = (props) => {
-  const user = props.User;
+  const admin = props.user;
+
+  const [Users, setUsers] = useState([]);
+  const [UserBans, setUserBans] = useState([]);
+  const [Classes, setClasses] = useState([]);
+  const [Load, setLoad] = useState(false);
+
+  const [DetailUser, setDetailUser] = useState();
+  const [UserSelected, setUserSelected] = useState();
+
+  const [ThoiGianKhoa, setThoiGianKhoa] = useState();
+  const [ThoiHanKhoa, setThoiHanKhoa] = useState();
 
   const [show_detail, setShowDetail] = useState(false);
   const handleShowDetailClose = () => setShowDetail(false);
-  const handleShowDetailOpen = () => setShowDetail(true);
+  const handleShowDetailOpen = (idUser) => {
+    setUserSelected(idUser);
+    GetDataUser(idUser);
+    setShowDetail(true);
+  }
 
   const [add_user, setAddUser] = useState(false);
   const handleAddUserClose = () => setAddUser(false);
   const handleAddUserOpen = () => setAddUser(true);
 
-  const GetDataUser = async () => {
+  const GetDataUser = async (idUser) => {
     try {
-      await AccountService.GetAccount(user.idUser).then(
+      await AccountService.GetAccount(idUser).then(
         (res) => {
           console.log(res.data[0]);
         },
@@ -49,9 +52,37 @@ const AdminManagement = (props) => {
     }
   };
 
+  const GetAllUser = async () => {
+    try {
+      await AdminService.GetUser().then(
+        (res) => {
+          //console.log("users", res);
+          setUsers(res.data.good);
+          setUserBans(res.data.bad);
+          setLoad(true);
+          //SetUsers(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    GetDataUser();
-  }, [user]);
+    //console.log(admin);
+    GetAllUser();
+  }, [admin]);
+
+  useEffect(() => {
+    if (Users || UserBans) {
+      setUsers(Users);
+      setUserBans(UserBans);
+      console.log(Users);
+    }
+  }, [UserBans, Users]);
 
   const customUserStyles = {
     table: {
@@ -119,44 +150,44 @@ const AdminManagement = (props) => {
       name: "ID",
       center: true,
       width: "5%",
-      selector: (row) => row.id,
+      selector: (row) => row.idUser,
     },
     {
       name: "FullName",
       center: true,
       wrap: true,
       width: "15%",
-      selector: (row) => row.fullname,
+      selector: (row) => row.FullName,
     },
     {
       name: "Email",
       center: true,
       width: "20%",
-      selector: (row) => row.email,
+      selector: (row) => row.Email,
     },
     {
       name: "Phone",
       center: true,
       width: "10%",
-      selector: (row) => row.phone,
+      selector: (row) => row.Phone,
     },
     {
       name: "Gender",
       center: true,
       width: "7%",
-      selector: (row) => row.gender,
+      selector: (row) => row.Sex,
     },
     {
       name: "DOB",
       center: true,
       width: "10%",
-      selector: (row) => row.dob,
+      selector: (row) => row.DOB,
     },
     {
       name: "StudentId",
       center: true,
       width: "10%",
-      selector: (row) => row.student_id,
+      selector: (row) => row.StudentId,
     },
     {
       name: "Lock/Unlock",
@@ -244,218 +275,218 @@ const AdminManagement = (props) => {
     },
   ];
 
-  const users = [
-    {
-      id: 1,
-      fullname: "Pham Truong Khoa Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: false,
-    },
-    {
-      id: 2,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: false,
-    },
-    {
-      id: 3,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: false,
-    },
-    {
-      id: 4,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: false,
-    },
-    {
-      id: 5,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 6,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 7,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 8,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 9,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 10,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 11,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 12,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 13,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 14,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 15,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 16,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 17,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 18,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 19,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 20,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-    {
-      id: 21,
-      fullname: "Pham Truong Khoa",
-      email: "phamtruongkhoa2000@gmail.com",
-      phone: "0123456789",
-      gender: "Male",
-      dob: "31/07/2000",
-      student_id: "18120419",
-      checked: true,
-    },
-  ];
+  // const users = [
+  //   {
+  //     id: 1,
+  //     fullname: "Pham Truong Khoa Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: false,
+  //   },
+  //   {
+  //     id: 2,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: false,
+  //   },
+  //   {
+  //     id: 3,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: false,
+  //   },
+  //   {
+  //     id: 4,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: false,
+  //   },
+  //   {
+  //     id: 5,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 6,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 7,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 8,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 9,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 10,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 11,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 12,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 13,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 14,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 15,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 16,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 17,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 18,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 19,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 20,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  //   {
+  //     id: 21,
+  //     fullname: "Pham Truong Khoa",
+  //     email: "phamtruongkhoa2000@gmail.com",
+  //     phone: "0123456789",
+  //     gender: "Male",
+  //     dob: "31/07/2000",
+  //     student_id: "18120419",
+  //     checked: true,
+  //   },
+  // ];
   const classes = [
     {
       id: 1,
@@ -599,11 +630,11 @@ const AdminManagement = (props) => {
         >
           <Dropdown as={Col}>
             <Dropdown.Toggle split id="dropdown-split-basic">
-                <FaBell />
+              <FaBell />
             </Dropdown.Toggle>
 
-            <Dropdown.Menu style={{ width: '350px'}}>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+            <Dropdown.Menu style={{ width: '350px' }}>
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -618,7 +649,7 @@ const AdminManagement = (props) => {
                   </Col>
                 </Row>
               </Dropdown.Item>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -633,7 +664,7 @@ const AdminManagement = (props) => {
                   </Col>
                 </Row>
               </Dropdown.Item>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -648,7 +679,7 @@ const AdminManagement = (props) => {
                   </Col>
                 </Row>
               </Dropdown.Item>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -663,7 +694,7 @@ const AdminManagement = (props) => {
                   </Col>
                 </Row>
               </Dropdown.Item>
-              <Dropdown.Item style={{ height: '65px'}} className="px-0 my-1">
+              <Dropdown.Item style={{ height: '65px' }} className="px-0 my-1">
                 <Row className="h-100 g-0 align-items-center px-2">
                   <Col sm={2}>
                     <Image
@@ -680,9 +711,9 @@ const AdminManagement = (props) => {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-          
+
           <a href="/profile" className="mx-2 btn-member">
-            {user?.FullName}
+            {admin?.FullName}
           </a>
           <a
             href="/logout"
@@ -706,7 +737,7 @@ const AdminManagement = (props) => {
               className="text-center"
               title="Danh sách người dùng"
               columns={user_columns}
-              data={users}
+              data={Users}
               customStyles={customUserStyles}
               highlightOnHover
               pagination
@@ -802,7 +833,7 @@ const AdminManagement = (props) => {
                   disabled
                   id="fullname"
                   type="text"
-                  // defaultValue={user.FullName}
+                // defaultValue={user.FullName}
                 />
               </FloatingLabel>
               <FloatingLabel controlId="gender" label="Gender" className="mb-3">
@@ -821,7 +852,7 @@ const AdminManagement = (props) => {
                   disabled
                   id="mail"
                   type="text"
-                  // defaultValue={user.Email}
+                // defaultValue={user.Email}
                 />
               </FloatingLabel>
               <FloatingLabel
@@ -833,8 +864,8 @@ const AdminManagement = (props) => {
                   //disabled
                   id="dob"
                   type="date"
-                  // value={DOB}
-                  // onChange={(e) => setDOB(e.target.value)}
+                // value={DOB}
+                // onChange={(e) => setDOB(e.target.value)}
                 />
               </FloatingLabel>
               <FloatingLabel controlId="phone" label="Phone" className="mb-3">
@@ -842,8 +873,8 @@ const AdminManagement = (props) => {
                   //disabled
                   id="phone"
                   type="tel"
-                  // defaultValue={Phone}
-                  // onChange={(e) => setPhone(e.target.value)}
+                // defaultValue={Phone}
+                // onChange={(e) => setPhone(e.target.value)}
                 />
               </FloatingLabel>
               <FloatingLabel
@@ -855,8 +886,8 @@ const AdminManagement = (props) => {
                   //disabled
                   id="studentid"
                   type="text"
-                  // defaultValue={StudentId}
-                  // onChange={(e) => setStudentId(e.target.value)}
+                // defaultValue={StudentId}
+                // onChange={(e) => setStudentId(e.target.value)}
                 />
               </FloatingLabel>
             </Card>
@@ -907,14 +938,14 @@ const AdminManagement = (props) => {
                 <Form.Control
                   id="dob"
                   type="date"
-                  // onChange={(e) => setDOB(e.target.value)}
+                // onChange={(e) => setDOB(e.target.value)}
                 />
               </FloatingLabel>
               <FloatingLabel controlId="phone" label="Phone" className="mb-3">
                 <Form.Control
                   id="phone"
                   type="tel"
-                  // onChange={(e) => setPhone(e.target.value)}
+                // onChange={(e) => setPhone(e.target.value)}
                 />
               </FloatingLabel>
               <FloatingLabel
@@ -925,7 +956,7 @@ const AdminManagement = (props) => {
                 <Form.Control
                   id="studentid"
                   type="text"
-                  // onChange={(e) => setStudentId(e.target.value)}
+                // onChange={(e) => setStudentId(e.target.value)}
                 />
               </FloatingLabel>
             </Card>

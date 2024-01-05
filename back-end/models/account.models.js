@@ -2,7 +2,10 @@ const postgre = require("./database");
 const moment = require("moment");
 module.exports = {
   getAll: async (req, res) => {
-    const { rows } = await postgre.query('select * from "User"');
+    const { rows } = await postgre.query(`
+    select us.*, hs."idHocSinh", hs."StudentId"
+    from "User" us left join "HocSinh" hs on us."idUser"=hs."idUser"
+    `);
     rows.forEach((element) => {
       element.DOB = moment(element.DOB).format("DD-MM-YYYY");
     });

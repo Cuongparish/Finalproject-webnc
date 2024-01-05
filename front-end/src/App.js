@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+//import axios from "axios";
 //import { Navbar, Container, Image, Nav} from 'react-bootstrap';
 
 import Loader from "./components/Loader";
@@ -61,7 +61,7 @@ function App() {
           <Route
             exact
             path="/login"
-            element={user ? <Navigate to="/home" /> : <Login />}
+            element={user ? user.Role === 1 ? <Navigate to="/admin" /> : <Navigate to="/home" /> : <Login />}
           />
           <Route
             exact
@@ -91,7 +91,7 @@ function App() {
           />
 
           {/* Admin */}
-          <Route path="/admin" element={<AdminManagement User={user} />} />
+          <Route path="/admin" element={user ? <AdminManagement user={user} /> : <Navigate to="/login" />} />
         </Routes>
       )}
     </>
