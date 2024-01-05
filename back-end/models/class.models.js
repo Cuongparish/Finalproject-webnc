@@ -56,7 +56,7 @@ module.exports = {
     return { rows };
   },
 
-  getTeacher_inClass: async (req, res) => {
+  getTeacher_inClass: async (malop) => {
     const { rows } = await postgre.query(
       `SELECT "User".*
       FROM "GiaoVien"
@@ -64,7 +64,7 @@ module.exports = {
       JOIN "LopHoc" ON "GiaoVienLopHoc"."idLop" = "LopHoc"."idLop"
       JOIN "User" ON "GiaoVien"."idUser" = "User"."idUser" 
       WHERE "LopHoc"."MaLop" = $1;`,
-      [req.params.malop]
+      [malop]
     );
     return { rows };
   },

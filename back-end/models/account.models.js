@@ -5,6 +5,7 @@ module.exports = {
     const { rows } = await postgre.query(`
     select us.*, hs."idHocSinh", hs."StudentId"
     from "User" us left join "HocSinh" hs on us."idUser"=hs."idUser"
+    ORDER BY us."idUser" ASC
     `);
     rows.forEach((element) => {
       element.DOB = moment(element.DOB).format("DD-MM-YYYY");

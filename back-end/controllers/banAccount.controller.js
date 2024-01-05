@@ -8,22 +8,23 @@ const banAccountM = require("../models/banAccount.models.js");
 const banAccountC = {
   // --------------------------------user
   // chi tiết đơn phúc khảo
+
   getAccount: async (req, res) => {
     try {
       const { rows: good } = await accountM.getAll();
       const { rows: bad } = await banAccountM.getAll();
+      console.log(good);
 
       let data = { good: [], bad: [] };
+      let count = 0;
 
       if (good && good.length > 0) {
         for (const user of good) {
-          if (user.Role == null) {
-            for (const user_bad of bad) {
-              if (user.idUser != user_bad.idUser) {
-                data.good.push(user);
-                break;
-              }
-            }
+          if (
+            user.Role == null &&
+            !bad.some((user_bad) => user.idUser === user_bad.idUser)
+          ) {
+            data.good.push(user);
           }
         }
       }

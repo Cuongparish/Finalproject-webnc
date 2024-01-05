@@ -6,7 +6,8 @@ module.exports = {
   getAll: async () => {
     const sql = `SELECT *
     FROM public."BanAccount" , "User"
-    WHERE "BanAccount"."idUser"="User"."idUser"`;
+    WHERE "BanAccount"."idUser"="User"."idUser"
+    ORDER BY "User"."idUser" ASC`;
 
     const rows = await postgre.query(sql);
     return rows;

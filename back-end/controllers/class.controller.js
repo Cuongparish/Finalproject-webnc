@@ -72,11 +72,27 @@ const classC = {
 
   getListUserinClass: async (req, res) => {
     try {
-      const { rows: teacherRows } = await classM.getTeacher_inClass(req, res);
-      var data = [];
+      const { rows: teacherRows } = await classM.getTeacher_inClass(
+        req.params.malop
+      );
 
-      if (teacherRows && teacherRows.length > 0) {
-        data.push({ msg: "Teacher", data: teacherRows });
+      const { rows: ban } = await banAccountM.getAll();
+
+      var data = [];
+      let count = 0;
+
+      let new_teacherRows = [];
+      for (const user of teacherRows) {
+        for (user_ban of ban) {
+          if (user.idUser != user_ban.idUser) {
+            new_teacherRows.push(user);
+            break;
+          }
+        }
+      }
+
+      if (new_teacherRows && new_teacherRows.length > 0) {
+        data.push({ msg: "Teacher", data: new_teacherRows });
       } else {
         data.push({ msg: "Teacher empty" });
       }
@@ -85,8 +101,18 @@ const classC = {
         req.params.malop
       );
 
-      if (studentRows && studentRows.length > 0) {
-        data.push({ msg: "Student", data: studentRows });
+      let new_studentRows = [];
+      for (const user of studentRows) {
+        for (user_ban of ban) {
+          if (user.idUser != user_ban.idUser) {
+            new_studentRows.push(user);
+            break;
+          }
+        }
+      }
+
+      if (new_studentRows && new_studentRows.length > 0) {
+        data.push({ msg: "Student", data: new_studentRows });
       } else {
         data.push({ msg: "Student empty" });
       }
