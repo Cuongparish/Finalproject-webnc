@@ -175,7 +175,7 @@ const accountC = {
   },
 
   postEditUser: async (req, res) => {
-    const { Email, Pw, DOB, Sex, Phone, StudentId } = req.body;
+    const { Email, Pw, FullName, DOB, Sex, Phone, StudentId } = req.body;
     const IdUser = req.params.idUser;
     try {
       const { rows } = await accountM.getAll();
@@ -184,7 +184,16 @@ const accountC = {
           res.json({ msg: "StudentId nãy đã có người sử dụng" });
         }
       }
-      accountM.editUser(IdUser, Email, Pw, DOB, Sex, Phone, StudentId);
+      accountM.editUser(
+        IdUser,
+        Email,
+        Pw,
+        FullName,
+        DOB,
+        Sex,
+        Phone,
+        StudentId
+      );
       //console.log(IdUser)
       return res.json({
         msg: "Ok",
