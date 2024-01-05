@@ -1,5 +1,6 @@
 const classM = require("../models/class.models.js");
 
+const banAccountM = require("../models/banAccount.models.js");
 const nodemailer = require("nodemailer");
 require("dotenv").config;
 
@@ -31,16 +32,34 @@ const classC = {
       const { rows: teacherRows } = await classM.getTeacherClass(req, res);
       var data = [];
 
+      var new_teacherRows = [];
       if (teacherRows && teacherRows.length > 0) {
-        data.push({ msg: "Teacher", data: teacherRows });
+        for (const user of teacherRows) {
+          if (user.State == 1) {
+            new_teacherRows.push(user);
+          }
+        }
+      }
+
+      if (new_teacherRows && new_teacherRows.length > 0) {
+        data.push({ msg: "Teacher", data: new_teacherRows });
       } else {
         data.push({ msg: "Teacher empty" });
       }
 
       const { rows: studentRows } = await classM.getStudentClass(req, res);
 
+      let new_studentRows = [];
       if (studentRows && studentRows.length > 0) {
-        data.push({ msg: "Student", data: studentRows });
+        for (const user of studentRows) {
+          if (user.State == 1) {
+            new_studentRows.push(user);
+          }
+        }
+      }
+
+      if (new_studentRows && new_studentRows.length > 0) {
+        data.push({ msg: "Student", data: new_studentRows });
       } else {
         data.push({ msg: "Student empty" });
       }
@@ -75,18 +94,20 @@ const classC = {
       const { rows: teacherRows } = await classM.getTeacher_inClass(
         req.params.malop
       );
-
-      const { rows: ban } = await banAccountM.getAll();
+      console.log(teacherRows);
+      const { rows: bad } = await banAccountM.getAll();
 
       var data = [];
-      let count = 0;
 
-      let new_teacherRows = [];
-      for (const user of teacherRows) {
-        for (user_ban of ban) {
-          if (user.idUser != user_ban.idUser) {
+      var new_teacherRows = [];
+
+      if (teacherRows && teacherRows.length > 0) {
+        for (const user of teacherRows) {
+          if (
+            user.Role == null &&
+            !bad.some((user_bad) => user.idUser === user_bad.idUser)
+          ) {
             new_teacherRows.push(user);
-            break;
           }
         }
       }
@@ -102,11 +123,13 @@ const classC = {
       );
 
       let new_studentRows = [];
-      for (const user of studentRows) {
-        for (user_ban of ban) {
-          if (user.idUser != user_ban.idUser) {
+      if (studentRows && studentRows.length > 0) {
+        for (const user of studentRows) {
+          if (
+            user.Role == null &&
+            !bad.some((user_bad) => user.idUser === user_bad.idUser)
+          ) {
             new_studentRows.push(user);
-            break;
           }
         }
       }
