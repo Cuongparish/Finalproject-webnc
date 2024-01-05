@@ -41,8 +41,8 @@ module.exports = {
     for (const score of percentScores) {
       console.log(score);
       const { rows } = await postgre.query(
-        'INSERT INTO public."CotDiem"("idLop", "TenCotDiem", "PhanTramDiem") VALUES ($1, $2, $3) RETURNING *;',
-        [req.params.idLop, score.TenCotDiem, score.PhanTramDiem]
+        'INSERT INTO public."CotDiem"("idLop", "TenCotDiem", "PhanTramDiem", "Khoa") VALUES ($1, $2, $3, $4) RETURNING *;',
+        [req.params.idLop, score.TenCotDiem, score.PhanTramDiem, 0]
       );
       results.push(rows);
     }
@@ -244,7 +244,7 @@ module.exports = {
     LEFT JOIN
         public."CotDiem" CD ON BDTP."idCotDiem" = CD."idCotDiem" AND BDTP."idLop" = CD."idLop"
     WHERE
-        LH."idLop" = $1
+        LH."idLop" = $1 and CD."Khoa"=1
     GROUP BY
         U."FullName", HS."StudentId"
     ORDER BY

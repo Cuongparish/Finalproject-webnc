@@ -143,6 +143,7 @@ CREATE TABLE IF NOT EXISTS public."CotDiem"
     "idLop" integer NOT NULL,
     "TenCotDiem" character varying COLLATE pg_catalog."default" NOT NULL,
     "PhanTramDiem" integer NOT NULL,
+    "Khoa" integer NOT NULL,
     CONSTRAINT "CotDiem_pkey" PRIMARY KEY ("idCotDiem", "idLop"),
     CONSTRAINT "FK_CotDiem_LopHoc" FOREIGN KEY ("idLop")
         REFERENCES public."LopHoc" ("idLop") MATCH SIMPLE

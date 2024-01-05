@@ -166,13 +166,24 @@ const gradeC = {
       const new_header = header.map((comp) => ({
         TenCotDiem: comp.TenCotDiem,
         PhanTramDiem: comp.PhanTramDiem,
+        Khoa: comp.Khoa,
       }));
+
+      let final_header = [];
+      for (let i = 0; i < new_header.length; i++) {
+        console.log(new_header[i].Khoa);
+        if (new_header[i].Khoa == 1) {
+          final_header.push(new_header[i]);
+        }
+      }
+
+      // console.log(final_header);
 
       for (let i = 0; i < gradeBoard.length; i++) {
         const student = gradeBoard[i];
 
-        for (let k = 0; k < new_header.length; k++) {
-          const percent = new_header[k];
+        for (let k = 0; k < final_header.length; k++) {
+          const percent = final_header[k];
           if (student.Diem[k] != null) {
             sum += (student.Diem[k] * percent.PhanTramDiem) / 100;
           } else {
@@ -187,11 +198,12 @@ const gradeC = {
         sum = 0;
       }
 
-      data.push({ msg: "header", data: new_header });
+      data.push({ msg: "header", data: final_header });
       data.push({ msg: "Grade_Board", data: gradeBoard });
 
       res.json({ data });
     } catch (error) {
+      console.log(error);
       res.json({
         errors: [
           {
