@@ -5,7 +5,8 @@ module.exports = {
   // lấy idPhucKhao cuối cùng (done)
   getAll: async () => {
     const sql = `SELECT *
-                  FROM public."BanAccount" `;
+    FROM public."BanAccount" , "User"
+    WHERE "BanAccount"."idUser"="User"."idUser"`;
 
     const rows = await postgre.query(sql);
     return rows;

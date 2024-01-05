@@ -11,17 +11,22 @@ const banAccountC = {
   getAccount: async (req, res) => {
     try {
       const { rows: good } = await accountM.getAll();
+      const { rows: bad } = await banAccountM.getAll();
+
       let data = { good: [], bad: [] };
 
       if (good && good.length > 0) {
         for (const user of good) {
           if (user.Role == null) {
-            data.good.push(user);
+            for (const user_bad of bad) {
+              if (user.idUser != user_bad.idUser) {
+                data.good.push(user);
+                break;
+              }
+            }
           }
         }
       }
-
-      const { rows: bad } = await banAccountM.getAll();
 
       if (bad && bad.length > 0) {
         data.bad = bad;
@@ -35,6 +40,7 @@ const banAccountC = {
         });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         errors: [{ msg: "Internal server error" }],
       });
