@@ -46,6 +46,18 @@ module.exports = {
     await postgre.query(sql, [idUser]);
   },
 
+  mapStudentID: async (data) => {
+    const sql = ` UPDATE "HocSinh"
+    SET "StudentId" = $1
+    FROM "User"
+    WHERE "User"."idUser" = "HocSinh"."idUser" AND "User"."Email" = $2`;
+
+    for (const row of data) {
+      //console.log(row.StudentId);
+      postgre.query(sql, [row.StudentId, row.Email]);
+    }
+  },
+
   // --------------------------------------class
   changeSate: async (idLop, TenLop, ChuDe, Phong, MaLop, State) => {
     const sql = `	UPDATE public."LopHoc"

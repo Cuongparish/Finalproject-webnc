@@ -121,6 +121,87 @@ const banAccountC = {
     }
   },
 
+  mapStudentID: async (req, res) => {
+    try {
+      const fileBuffer = req.file.buffer;
+      let data = [];
+      let data1 = [];
+      let isFirstRow = true;
+      let sum = 0;
+
+      // Kiểm tra định dạng file bằng cách kiểm tra đuôi mở rộng
+      const fileExtension = file.originalname.split(".").pop().toLowerCase();
+
+      if (fileExtension === "xlsx") {
+        // Sử dụng exceljs để đọc dữ liệu từ file xlsx
+        const workbook = new excel.Workbook();
+        await workbook.xlsx.load(fileBuffer);
+
+        const sheet = workbook.worksheets[0];
+
+        sheet.eachRow({ includeEmpty: false }, (row) => {
+          data1.push(row.values);
+        });
+
+        // kiểm tra số cột trong file
+        for (const row of data1) {
+          for (const column of row) {
+            if (column) {
+              sum += 1;
+            }
+          }
+          break;
+        }
+        if (sum != 2) {
+          throw new Error("Unsupported file format");
+        }
+
+        // bỏ dòng đầu đi
+        for (const row of data1) {
+          if (isFirstRow) {
+            isFirstRow = false;
+            continue;
+          }
+          const student = {};
+          student["Email"] = row[1];
+          for (const column of row) {
+            if (column) {
+              student["StudentId"] = column;
+            }
+          }
+
+          data.push(student);
+        }
+      } else if (fileExtension === "csv") {
+        // Sử dụng fast-csv để đọc dữ liệu từ file CSV
+        data = await new Promise((resolve, reject) => {
+          const parsedData = [];
+          fastcsv
+            .parseString(fileBuffer.toString(), {
+              headers: true,
+              ignoreEmpty: true,
+            })
+            .on("data", (row) => {
+              parsedData.push(row);
+            })
+            .on("end", () => {
+              resolve(parsedData);
+            })
+            .on("error", (error) => {
+              reject(error);
+            });
+        });
+      } else {
+        throw new Error("Unsupported file format");
+      }
+      await gradeM.importtoExcel_StudentList(data);
+      res.send("File uploaded successfully!");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+
   //----------------------------------class
   getAllClass: async (req, res) => {
     try {
