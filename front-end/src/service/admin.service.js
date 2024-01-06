@@ -23,7 +23,7 @@ const BanAccount = (idUser, ThoiGianKhoa, ThoiHanKhoa) => {
 
 const UnBanAccount = (idUser) => {
     return axios
-    .delete(`${API_URL}/api/v1/user/unban`, {idUser})
+    .post(`${API_URL}/api/v1/user/unban`, {idUser})
     .then((res) => {
       //console.log("res: ", res);
       return res.data;

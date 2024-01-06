@@ -176,16 +176,16 @@ const accountC = {
 
   postEditUser: async (req, res) => {
     const { Email, Pw, FullName, DOB, Sex, Phone, StudentId } = req.body;
-    const IdUser = req.params.idUser;
+    const idUser = req.params.idUser;
     try {
       const { rows } = await accountM.getAll();
       for (user of rows) {
-        if (user.StudentId == StudentId) {
-          res.json({ msg: "StudentId nãy đã có người sử dụng" });
+        if (user.StudentId == StudentId && user.idUser != idUser) {
+          return res.json({ msg: "StudentId nãy đã có người sử dụng" });
         }
       }
       accountM.editUser(
-        IdUser,
+        idUser,
         Email,
         Pw,
         FullName,

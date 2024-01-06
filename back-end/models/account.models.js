@@ -37,24 +37,24 @@ module.exports = {
     return { rows };
   },
 
-  editUser: async (IdUser, Email, Pw, FullName, DOB, Sex, Phone, StudentId) => {
+  editUser: async (idUser, Email, Pw, FullName, DOB, Sex, Phone, StudentId) => {
     const sql_user = `UPDATE "User" SET "Email" = $2, "Pw" = $3, "DOB"=$4, "Sex"=$5, "Phone"=$6, "FullName"=$7 where "idUser" = $1`;
     const sql_hocsinh = `UPDATE "HocSinh" SET "StudentId" = $2 WHERE "idUser" = $1`;
     const sql_create_hocsinh = `INSERT INTO public."HocSinh" ("idUser", "StudentId") VALUES ( $1, $2)`;
     const sql_select_hocsinh = `SELECT * FROM "HocSinh" WHERE "idUser"=$1`;
 
-    const { rows } = await postgre.query(sql_select_hocsinh, [IdUser]);
+    const { rows } = await postgre.query(sql_select_hocsinh, [idUser]);
 
     if (!StudentId) {
-      postgre.query(sql_user, [IdUser, Email, Pw, DOB, Sex, Phone, FullName]);
+      postgre.query(sql_user, [idUser, Email, Pw, DOB, Sex, Phone, FullName]);
     } else {
-      postgre.query(sql_user, [IdUser, Email, Pw, DOB, Sex, Phone, FullName]);
+      postgre.query(sql_user, [idUser, Email, Pw, DOB, Sex, Phone, FullName]);
       // nếu chưa là học sinh
       if (rows && rows.length > 0) {
-        postgre.query(sql_hocsinh, [IdUser, StudentId]);
+        postgre.query(sql_hocsinh, [idUser, StudentId]);
         // nếu đã là học sinh
       } else {
-        postgre.query(sql_create_hocsinh, [IdUser, StudentId]);
+        postgre.query(sql_create_hocsinh, [idUser, StudentId]);
       }
     }
   },
