@@ -33,9 +33,9 @@ const banAccountC = {
       }
 
       if (data.good.length > 0 || data.bad.length > 0) {
-        res.json({ msg: "OKkkkk", data });
+        return res.json({ msg: "OKkkkk", data });
       } else {
-        res.json({
+        return res.json({
           errors: [{ msg: "No account found or invalid credentials" }],
         });
       }
@@ -54,9 +54,9 @@ const banAccountC = {
         req.body.ThoiGianKhoa,
         req.body.ThoiHanKhoa
       );
-      res.json({ msg: "OKkkkk", data: data });
+      return res.json({ msg: "OKkkkk", data: data });
     } catch (error) {
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",
@@ -69,9 +69,9 @@ const banAccountC = {
   unbanAccount: async (req, res) => {
     try {
       await banAccountM.removeAccount(req.body.idUser);
-      res.json({ msg: "OKkkkk" });
+      return res.json({ msg: "OKkkkk" });
     } catch (error) {
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",
@@ -83,17 +83,24 @@ const banAccountC = {
 
   changeStateStudentID: async (req, res) => {
     try {
-      const id = await banAccountM.getIDHS(req.body.IdUser);
+      const id = await banAccountM.getIDHS(req.body.idUser);
+      console.log(id[0].idHocSinh);
 
+      // kiểm tra xem StudentId này đã có người sử dụng hay chưa
       const { rows } = await accountM.getAll();
       for (user of rows) {
-        if (user.StudentId == StudentId) {
-          res.json({ msg: "StudentId nãy đã có người sử dụng" });
+        if (user.StudentId != null && user.StudentId == req.body.StudentId) {
+          return res.json({ msg: "StudentId nãy đã có người sử dụng" });
         }
       }
 
-      await banAccountM.changeStateStudentID(id, req.body.StudentId);
+      // dùng để unmapping
+      await banAccountM.changeStateStudentID(
+        id[0].idHocSinh,
+        req.body.StudentId
+      );
 
+      // dùng để remapping
       await accountM.editUser(
         req.body.IdUser,
         req.body.Email,
@@ -103,14 +110,15 @@ const banAccountC = {
         req.body.Phone,
         req.body.StudentId
       );
+
       if (req.body.StudentId == null) {
-        res.json({ msg: "unmaping" });
+        return res.json({ msg: "unmaping" });
       } else {
-        res.json({ msg: "maping" });
+        return res.json({ msg: "maping" });
       }
     } catch (error) {
       // console.log(error);
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",
@@ -207,9 +215,9 @@ const banAccountC = {
       const { rows } = await classM.getAll();
 
       if (rows && rows.length > 0) {
-        res.json({ msg: "Danh sách lớp", data: rows });
+        return res.json({ msg: "Danh sách lớp", data: rows });
       } else {
-        res.json({
+        return res.json({
           errors: [
             {
               msg: "Không có lớp nào hết",
@@ -218,7 +226,7 @@ const banAccountC = {
         });
       }
     } catch (error) {
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",
@@ -241,13 +249,13 @@ const banAccountC = {
       );
 
       if (req.body.State == 1) {
-        res.json({ msg: "Đã mở lại active lớp" });
+        return res.json({ msg: "Đã mở lại active lớp" });
       } else {
-        res.json({ msg: "Đã inactive lớp" });
+        return res.json({ msg: "Đã inactive lớp" });
       }
     } catch (error) {
       // console.log(error);
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",

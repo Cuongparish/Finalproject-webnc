@@ -15,7 +15,7 @@ const reviewC = {
       !req.body.idLop ||
       !req.body.idUser
     ) {
-      res.json({ msg: "Dữ liệu trống" });
+      return res.json({ msg: "Dữ liệu trống" });
     }
     try {
       //tạo đơn phúc khảo
@@ -56,10 +56,10 @@ const reviewC = {
         );
       }
 
-      res.json({ msg: "Success" });
+      return res.json({ msg: "Success" });
     } catch (error) {
       console.log(error);
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",
@@ -72,7 +72,7 @@ const reviewC = {
   // chi tiết đơn phúc khảo
   getDetailReview: async (req, res) => {
     if (!req.body.idPhucKhao || !req.body.idUser) {
-      res.json({ msg: "Dữ liệu trống" });
+      return res.json({ msg: "Dữ liệu trống" });
     }
     try {
       let data = [];
@@ -129,10 +129,10 @@ const reviewC = {
         const key = Object.keys(item)[0];
         consolidatedData[key] = item[key];
       });
-      res.json({ msg: "Success", data: consolidatedData });
+      return res.json({ msg: "Success", data: consolidatedData });
     } catch (error) {
       console.log(error);
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",

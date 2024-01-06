@@ -41,10 +41,12 @@ module.exports = {
       NoiDung,
       idCotDiem,
       idLop,
+      HoanThanh,
     ]);
     return { rows };
   },
 
+  // danh sách các đơn phúc khảo của 1 học sinh
   getReview_Student: async (idPhucKhao) => {
     const sql = `select* 
                 from "PhucKhao"

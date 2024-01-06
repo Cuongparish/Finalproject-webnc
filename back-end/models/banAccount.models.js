@@ -43,7 +43,8 @@ module.exports = {
                   FROM "HocSinh"
                   WHERE "idUser"=$1;`;
 
-    await postgre.query(sql, [idUser]);
+    const { rows } = await postgre.query(sql, [idUser]);
+    return rows;
   },
 
   mapStudentID: async (data) => {

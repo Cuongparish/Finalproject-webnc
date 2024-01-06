@@ -6,19 +6,19 @@ const notifyC = {
     try {
       const { rows } = await notifyM.getNotify(req, res);
       if (rows && rows.length > 0) {
-        res.json({ msg: "OKkkkk", data: rows });
+        return res.json({ msg: "OKkkkk", data: rows });
       } else {
-        res.json({
+        return res.json({
           errors: [
             {
-              msg: "sai",
+              msg: "Không có thông báo nào hết",
             },
           ],
         });
       }
     } catch (error) {
       console.log(error);
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",
