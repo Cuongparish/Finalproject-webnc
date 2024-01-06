@@ -456,13 +456,6 @@ const gradeC = {
     let AcpPhucKhao = 0;
     // let TenCotDiem;
     try {
-      // // cập nhật không cho phúc khảo nữa
-      // await gradeM.closeReview(
-      //   req.params.idLop,
-      //   req.body.idCotDiem,
-      //   AcpPhucKhao
-      // );
-
       //lấy tên lớp học
       const NameClass = await classM.getNameClass(req.params.idLop);
       console.log(NameClass.rows[0].TenLop);
@@ -476,14 +469,12 @@ const gradeC = {
         }
       }
 
-      // chưa fix đến đây
       // thông báo đến học sinh
       let Notify_NoiDung_Student = `Cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop} đã khóa, bạn không thể phúc khảo nữa`;
       var idd;
       const { rows: idLop } = await classM.getAll();
 
       for (const id of idLop) {
-        console.log(req.params.idLop);
         if (id.idLop == req.params.idLop) {
           idd = id.MaLop;
           console.log(idd);
@@ -493,8 +484,10 @@ const gradeC = {
 
       const { rows: studentRows } = await classM.getStudent_inClass(idd);
 
-      if (studentRows && studentRows.length > 0) {
-        console.log(Khoa);
+      if (studentRows && studentRows.length < 0) {
+        return res.json({
+          msg: "Không có học sinh nào trong lớp này",
+        });
       }
       let idPK = null;
       for (const user of studentRows) {
@@ -506,6 +499,13 @@ const gradeC = {
           idPK
         );
       }
+
+      // cập nhật không cho phúc khảo nữa
+      await gradeM.closeReview(
+        req.params.idLop,
+        req.body.idCotDiem,
+        AcpPhucKhao
+      );
 
       return res.json({
         msg: "cập nhật không cho phúc khảo nữa",
