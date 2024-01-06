@@ -21,7 +21,7 @@ const AdminManagement = (props) => {
     <>
       <Row className="justify-content-center py-3 menu-top align-items-center">
         <Col xs md={1}>
-          <a href="/home" className="fs-3 btn-menu">
+          <a href="/admin" className="fs-3 btn-menu">
             <FaBars />
           </a>
         </Col>

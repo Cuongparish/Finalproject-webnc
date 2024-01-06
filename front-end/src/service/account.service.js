@@ -10,15 +10,16 @@ const GetAccount = (idUser) => {
   });
 };
 
-const UpdateAccount = (idUser, Email, Pw, DOB, Sex, Phone, StudentId) => {
+const UpdateAccount = (idUser, Email, Pw, FullName, DOB, Sex, Phone, StudentId) => {
   return axios
     .put(`${API_URL}/api/v1/user/profile/${idUser}`, {
       Email,
       Pw,
+      FullName,
       DOB,
       Sex,
       Phone,
-      StudentId,
+      StudentId
     })
     .then((res) => {
       console.log(res.data);

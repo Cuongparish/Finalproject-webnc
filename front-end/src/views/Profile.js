@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
-import { Row, Col, Image, Tabs, Tab, Card, FloatingLabel, Form, Dropdown, Table, Modal, Button } from "react-bootstrap";
-import { FaBars, FaBell, FaPen } from "react-icons/fa";
+import { Row, Col, Image, Tabs, Tab, Card, FloatingLabel, Form, Table, Modal, Button } from "react-bootstrap";
+import { FaBars, FaPen } from "react-icons/fa";
 
 import MenuLeft from "../components/MenuLeft";
 import Loader from "../components/Loader";
@@ -15,20 +15,11 @@ import "../App.css";
 const Profile = (props) => {
 
   const user = props.user;
-  
+
   const [show_request, setShowRequest] = useState(false);
   const handleShowRequestClose = () => setShowRequest(false);
   const handleShowRequestOpen = () => setShowRequest(true);
 
-  // const user = {
-  //   idUser: "1",
-  //   Email: "phamtruongkhoa2000@gmail.com",
-  //   Pw: "1",
-  //   DOB: "2000-07-31",
-  //   Sex: "Male",
-  //   Phone: "0386169097",
-  //   StudentId: "18120419",
-  // }
   const parts = user.DOB.split('-');
   let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
 
@@ -40,28 +31,35 @@ const Profile = (props) => {
   const [Sex, setSex] = useState(user.Sex);
   const [DOB, setDOB] = useState(formattedDate);
   const [Phone, setPhone] = useState(user.Phone);
+  const [FullName, setFullName] = useState(user.FullName);
   const [StudentId, setStudentId] = useState();
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    //console.log("DOB:", DOB);
 
     try {
-      await AccountService.UpdateAccount(user.idUser, user.Email, user.Pw, DOB, Sex, Phone, StudentId).then(
+      await AccountService.UpdateAccount(user.idUser, user.Email, user.Pw, FullName, DOB, Sex, Phone, StudentId).then(
         (res) => {
-          console.log(res);
-          setnewuser(() => {
-            const partss = DOB.split('-');
-            const formatDate = `${partss[2]}-${partss[1]}-${partss[0]}`;
-            newuser.DOB = formatDate;
-            newuser.Sex = Sex;
-            newuser.Phone = Phone;
-            newuser.StudentId = StudentId;
-          })
-          console.log(newuser);
-          localStorage.setItem("user", JSON.stringify(newuser));
-          setMessage("Update thành công");
-          setShowAlert(true);
+          //console.log(res);
+          if(res.msg === "Ok")
+          {
+            setnewuser(() => {
+              const partss = DOB.split('-');
+              const formatDate = `${partss[2]}-${partss[1]}-${partss[0]}`;
+              newuser.DOB = formatDate;
+              newuser.Sex = Sex;
+              newuser.Phone = Phone;
+              newuser.StudentId = StudentId;
+            })
+            //console.log(newuser);
+            localStorage.setItem("user", JSON.stringify(newuser));
+            setMessage("Update thành công");
+            setShowAlert(true);
+          }
+          else if(res.msg === "StudentId nãy đã có người sử dụng") {
+            setMessage("StudentId nãy đã có người sử dụng");
+            setShowAlert(true);
+          }
         },
         (err) => {
           setMessage("Update thất bại");
@@ -155,7 +153,7 @@ const Profile = (props) => {
               className="d-flex justify-content-end align-items-center"
             >
               <Notification />
-                
+
               <a href="/profile" className="mx-2 btn-member">
                 {user?.FullName}
               </a>
@@ -190,6 +188,7 @@ const Profile = (props) => {
                             id="fullname"
                             type="text"
                             defaultValue={user.FullName}
+                            onChange={(e) => setFullName(e.target.value)}
                           />
                         </FloatingLabel>
                         <FloatingLabel
@@ -198,7 +197,6 @@ const Profile = (props) => {
                           className="mb-3"
                         >
                           <Form.Select
-                            //disabled
                             defaultValue={Sex}
                             onChange={(e) => setSex(e.target.value)}
                           >
@@ -225,32 +223,18 @@ const Profile = (props) => {
                           className="mb-3"
                         >
                           <Form.Control
-                            //disabled
                             id="dob"
                             type="date"
                             value={DOB}
                             onChange={(e) => setDOB(e.target.value)}
                           />
                         </FloatingLabel>
-                        {/* <FloatingLabel
-                      controlId="password"
-                      label="Password"
-                      className="mb-3"
-                    >
-                      <Form.Control
-                        //disabled
-                        id="password"
-                        type="password"
-                        defaultValue={user.Pw}
-                      />
-                    </FloatingLabel> */}
                         <FloatingLabel
                           controlId="phone"
                           label="Phone"
                           className="mb-3"
                         >
                           <Form.Control
-                            //disabled
                             id="phone"
                             type="tel"
                             defaultValue={Phone}
@@ -263,7 +247,6 @@ const Profile = (props) => {
                           className="mb-3"
                         >
                           <Form.Control
-                            //disabled
                             id="studentid"
                             type="text"
                             defaultValue={StudentId}
@@ -275,62 +258,62 @@ const Profile = (props) => {
 
                     <Row className="d-flex align-items-end justify-content-end my-5">
                       <Col sm={2}>
-                        <a className="btn btn-primary" onClick={handleUpdate}>
+                        <Button variant="primary" onClick={handleUpdate}>
                           Update
-                        </a>
+                        </Button>
                       </Col>
                     </Row>
                   </Tab>
 
                   <Tab eventKey="score" title="Điểm" className="h-100">
-                      <Row className="g-0 px-0">
-                        {/* Table Score */}
-                          <Table className="m-0" bordered hover>
-                              <thead>
-                                  <tr style={{ height: '100px' }} className="text-center fw-bold table-secondary">
-                                      <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
-                                      <td className="align-middle" style={{ width: '7%' }}>Điểm 2</td>
-                                      <td className="align-middle" style={{ width: '7%' }}>Điểm 3</td>
-                                      <td className="align-middle" style={{ width: '7%' }}>Điểm 4</td>
-                                      <td className="align-middle" style={{ width: '7%' }}>Điểm 5</td>
-                                      <td className="align-middle" style={{ width: '7%' }}>Điểm 6</td>
-                                      {/* {GradeStructures?.map((GradeStructure, index) => (
+                    <Row className="g-0 px-0">
+                      {/* Table Score */}
+                      <Table className="m-0" bordered hover>
+                        <thead>
+                          <tr style={{ height: '100px' }} className="text-center fw-bold table-secondary">
+                            <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
+                            <td className="align-middle" style={{ width: '7%' }}>Điểm 2</td>
+                            <td className="align-middle" style={{ width: '7%' }}>Điểm 3</td>
+                            <td className="align-middle" style={{ width: '7%' }}>Điểm 4</td>
+                            <td className="align-middle" style={{ width: '7%' }}>Điểm 5</td>
+                            <td className="align-middle" style={{ width: '7%' }}>Điểm 6</td>
+                            {/* {GradeStructures?.map((GradeStructure, index) => (
                                           <td className="align-middle" style={{ width: '7%' }}>
                                               <div>{GradeStructure.TenCotDiem}</div>
                                               <div>{GradeStructure.PhanTramDiem}%</div>
                                           </td>
                                       ))} */}
-                                      <td className="align-middle" style={{ width: '10%' }}>Tổng kết</td> {/* input nothing */}
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  {/* data start */}
-                                  <tr>
-                                      <td className="text-center">8</td>
-                                      <td className="text-center">8</td>
-                                      <td className="text-center">8</td>
-                                      <td className="text-center">8</td>
-                                      <td className="text-center">8</td>
-                                      <td className="text-center">8</td>
-                                      <td className="text-center">8</td>
-                                  </tr>
-                                  {/* data end */}
-                              </tbody>
-                          </Table>
-                      </Row>
-                      <Row className="d-flex align-items-end justify-content-end my-5">
-                          <Col sm={2} className="text-end mx-3">
-                              <a onClick={handleShowRequestOpen} className="btn btn-success">
-                                  <FaPen className="mx-1" /> Phúc khảo
-                              </a>
-                          </Col>
-                      </Row>
+                            <td className="align-middle" style={{ width: '10%' }}>Tổng kết</td> {/* input nothing */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* data start */}
+                          <tr>
+                            <td className="text-center">8</td>
+                            <td className="text-center">8</td>
+                            <td className="text-center">8</td>
+                            <td className="text-center">8</td>
+                            <td className="text-center">8</td>
+                            <td className="text-center">8</td>
+                            <td className="text-center">8</td>
+                          </tr>
+                          {/* data end */}
+                        </tbody>
+                      </Table>
+                    </Row>
+                    <Row className="d-flex align-items-end justify-content-end my-5">
+                      <Col sm={2} className="text-end mx-3">
+                        <Button variant="success" onClick={handleShowRequestOpen}>
+                          <FaPen className="mx-1" /> Phúc khảo
+                        </Button>
+                      </Col>
+                    </Row>
                   </Tab>
                 </Tabs>
               </div>
             </Col>
           </Row>
-          
+
           {/* Modal Show Detail */}
           <Modal show={show_request} size="lg" onHide={handleShowRequestClose}>
             <Modal.Header closeButton>
@@ -365,8 +348,8 @@ const Profile = (props) => {
                       min="0"
                       max="10"
                       step="0.25"
-                      // defaultValue={StudentId}
-                      // onChange={(e) => setStudentId(e.target.value)}
+                    // defaultValue={StudentId}
+                    // onChange={(e) => setStudentId(e.target.value)}
                     />
                   </FloatingLabel>
                   <FloatingLabel
@@ -384,13 +367,13 @@ const Profile = (props) => {
               </Row>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleShowRequestClose}>
-                  Hủy
-                </Button>
-                <Button variant="primary">
-                  Xác nhận
-                </Button>
-              </Modal.Footer>
+              <Button variant="secondary" onClick={handleShowRequestClose}>
+                Hủy
+              </Button>
+              <Button variant="primary">
+                Xác nhận
+              </Button>
+            </Modal.Footer>
           </Modal>
         </>
       )}

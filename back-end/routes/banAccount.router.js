@@ -10,7 +10,7 @@ router.get("/getban", banAccountC.getAccount);
 router.post("/ban", banAccountC.banAccount);
 
 // unban tài khoản
-router.delete("/unban", banAccountC.unbanAccount);
+router.post("/unban", banAccountC.unbanAccount);
 
 // manual mapping or unmapping
 router.put("/ban/manualMapID", banAccountC.changeStateStudentID);

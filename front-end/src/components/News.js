@@ -1,5 +1,5 @@
-import { React, useState} from "react";
-import { Row, Col, Card, FloatingLabel, Form } from "react-bootstrap";
+import { React, useState } from "react";
+import { Row, Col, Card, FloatingLabel, Form, Button } from "react-bootstrap";
 import { FaRegCopy, FaLink } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import copy from "clipboard-copy";
@@ -60,13 +60,13 @@ const News = (props) => {
         // Xử lý khi nút xác nhận được nhấn
         console.log("Đã xác nhận");
         setShowAlert(false); // Đóng box thông báo sau khi xác nhận
-      };
-    
-      const handleCancel = () => {
+    };
+
+    const handleCancel = () => {
         // Xử lý khi nút hủy được nhấn
         console.log("Đã hủy");
         setShowAlert(false); // Đóng box thông báo sau khi hủy
-      };
+    };
 
     return (
         <>
@@ -85,20 +85,22 @@ const News = (props) => {
                                 </Card.Text>
                                 <Row className="d-flex g-3">
                                     <Col>
-                                        <a
-                                            onClick={CopyCode(DetailClass?.MaLop)}
-                                            className="btn-outline-info btn d-flex align-items-center justify-content-center"
+                                        <Button
+                                            onClick={() => CopyCode(DetailClass?.MaLop)}
+                                            variant="outline-info"
+                                            className="d-flex align-items-center justify-content-center"
                                         >
                                             <FaRegCopy />
-                                        </a>
+                                        </Button>
                                     </Col>
                                     <Col>
-                                        <a
-                                            onClick={CopyLink(link)}
-                                            className="btn-outline-success btn d-flex align-items-center justify-content-center"
+                                        <Button
+                                            onClick={() => CopyLink(link)}
+                                            variant="outline-success"
+                                            className="d-flex align-items-center justify-content-center"
                                         >
                                             <FaLink />
-                                        </a>
+                                        </Button>
                                     </Col>
                                 </Row>
                             </Card.Body>
@@ -136,10 +138,14 @@ const News = (props) => {
                                     Sử dụng bảng tin để thông báo, đăng bài tập và trả
                                     lời câu hỏi của học viên
                                 </Card.Subtitle>
-                                <a className="btn-outline-dark float-end btn d-flex align-items-center justify-content-center">
-                                    <IoSettingsOutline className="mx-1" /> Cài đặt bảng
-                                    tin
-                                </a>
+                                <Button
+                                    variant="outline-dark"
+                                    className="float-end d-flex align-items-center justify-content-center"
+                                    //onClick={handleSettingsClick} // Thay 'handleSettingsClick' bằng hàm xử lý sự kiện của bạn
+                                >
+                                    <IoSettingsOutline className="mx-1" />
+                                    Cài đặt bảng tin
+                                </Button>
                             </Card.Body>
                         </Card>
                     </Col>

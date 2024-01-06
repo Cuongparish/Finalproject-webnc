@@ -13,7 +13,6 @@ const banAccountC = {
     try {
       const { rows: good } = await accountM.getAll();
       const { rows: bad } = await banAccountM.getAll();
-      console.log(good);
 
       let data = { good: [], bad: [] };
       let count = 0;

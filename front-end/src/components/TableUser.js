@@ -1,9 +1,11 @@
 import { React, useState, useEffect } from "react";
-import { Row, Col, InputGroup, FloatingLabel, Form, Modal, Button, Card  } from "react-bootstrap";
+import { Row, Col, InputGroup, FloatingLabel, Form, Modal, Button, Card } from "react-bootstrap";
 import Datatable from "react-data-table-component";
 import { FaPencilAlt, FaPlus, FaFilter } from "react-icons/fa";
 import { ImBin } from "react-icons/im";
 import { TbDatabaseImport } from "react-icons/tb";
+
+import AlertBox from "./AlertBox";
 
 import AccountService from "../service/account.service";
 import AdminService from "../service/admin.service";
@@ -12,73 +14,6 @@ import "../App.css";
 
 const TableUser = (props) => {
     const admin = props.admin
-
-    const [AllUser, setAllUser] = useState([]);
-
-    const [DetailUser, setDetailUser] = useState();
-    const [UserSelected, setUserSelected] = useState();
-  
-    const [ThoiGianKhoa, setThoiGianKhoa] = useState();
-    const [ThoiHanKhoa, setThoiHanKhoa] = useState();
-  
-    const [show_detail, setShowDetail] = useState(false);
-    const handleShowDetailClose = () => setShowDetail(false);
-    const handleShowDetailOpen = (idUser) => {
-      setUserSelected(idUser);
-      GetDataUser(idUser);
-      setShowDetail(true);
-    }
-  
-    const [add_user, setAddUser] = useState(false);
-    const handleAddUserClose = () => setAddUser(false);
-    const handleAddUserOpen = () => setAddUser(true);
-  
-    const GetDataUser = async (idUser) => {
-      try {
-        await AccountService.GetAccount(idUser).then(
-          (res) => {
-            console.log(res.data[0]);
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
-    const GetAllUser = async () => {
-      try {
-        await AdminService.GetUser().then(
-          (res) => {
-            //console.log("users", res);
-            const usersData = res.data.good.map(user => ({ ...user, ban: false }));
-            const bannedUsersData = res.data.bad.map(user => ({ ...user, ban: true }));
-  
-            const alluser = [...usersData, ...bannedUsersData];
-            setAllUser(alluser);
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  
-    useEffect(() => {
-      //console.log(admin);
-      GetAllUser();
-    }, [admin]);
-  
-    useEffect(() => {
-      if (AllUser) {
-        setAllUser(AllUser);
-        //console.log("get user");
-      }
-    }, [AllUser]);
 
     const customUserStyles = {
         table: {
@@ -109,6 +44,200 @@ const TableUser = (props) => {
             },
         },
     };
+
+    const [AllUser, setAllUser] = useState([]);
+
+    const [DetailUser, setDetailUser] = useState();
+
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [selectedUserBan, setSelectedUserBan] = useState(false);
+
+    const ThoiGianKhoa = new Date();
+    const ThoiHanKhoa = new Date();
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [Message, setMessage] = useState();
+
+    const [Sex, setSex] = useState();
+    const [DOB, setDOB] = useState();
+    const [Phone, setPhone] = useState();
+    const [FullName, setFullName] = useState();
+    const [StudentId, setStudentId] = useState();
+
+    const [studentIdError, setStudentIdError] = useState(false);
+
+    const [show_detail, setShowDetail] = useState(false);
+    const handleShowDetailClose = () => setShowDetail(false);
+    const handleShowDetailOpen = (idUser) => {
+        GetDataUser(idUser);
+        setShowDetail(true);
+    }
+
+    const [add_user, setAddUser] = useState(false);
+    const handleAddUserClose = () => setAddUser(false);
+    const handleAddUserOpen = () => setAddUser(true);
+
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const GetDataUser = async (idUser) => {
+        console.log(idUser);
+        try {
+            await AccountService.GetAccount(idUser).then(
+                (res) => {
+                    //console.log(res.data[0]);
+                    setDetailUser(res.data[0]);
+                    const parts = res.data[0].DOB.split('-');
+                    let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                    setDetailUser((prevDetailUser) => ({
+                        ...prevDetailUser,
+                        DOB: formattedDate
+                    }));
+                    setSex(res.data[0].Sex);
+                    setDOB(formattedDate);
+                    setPhone(res.data[0].Phone);
+                    setFullName(res.data[0].FullName);
+                    setStudentId(res.data[0].StudentId);
+                },
+                (err) => {
+                    console.log(err);
+                }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const GetAllUser = async () => {
+        try {
+            await AdminService.GetUser().then(
+                (res) => {
+                    //console.log("users", res);
+                    const usersData = res.data.good.map(user => ({ ...user, ban: false }));
+                    const bannedUsersData = res.data.bad.map(user => ({ ...user, ban: true }));
+
+                    const alluser = [...usersData, ...bannedUsersData];
+                    setAllUser(alluser);
+                },
+                (err) => {
+                    console.log(err);
+                }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleConfirm = async () => {
+        if (!selectedUserBan) {
+            try {
+                await AdminService.BanAccount(selectedUserId, ThoiGianKhoa, ThoiHanKhoa).then(
+                    (res) => {
+                        console.log(res);
+                    },
+                    (err) => {
+                        console.log(err);
+                    }
+                );
+                const updatedCheckboxStatus = AllUser.map(user => {
+                    if (user.idUser === selectedUserId) {
+                        return { ...user, ban: true };
+                    }
+                    return user;
+                });
+                setAllUser(updatedCheckboxStatus);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else {
+            try {
+                await AdminService.UnBanAccount(selectedUserId).then(
+                    (res) => {
+                        console.log(res);
+                    },
+                    (err) => {
+                        console.log(err);
+                    }
+                );
+                const updatedCheckboxStatus = AllUser.map(user => {
+                    if (user.idUser === selectedUserId) {
+                        return { ...user, ban: false };
+                    }
+                    return user;
+                });
+                setAllUser(updatedCheckboxStatus);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        setShowAlert(false);
+    };
+
+    const handleCancel = () => {
+        setSelectedUserId(null);
+        setSelectedUserBan(false);
+        setShowAlert(false);
+    };
+
+    const handleCheckboxChange = (idUser, ban) => {
+        setSelectedUserId(idUser);
+        setSelectedUserBan(ban);
+        if (!ban) {
+            setMessage(`Bạn có muốn Lock tài khoản có id: ${idUser} không?`);
+        }
+        else {
+            setMessage(`Bạn có muốn UnLock tài khoản có id: ${idUser} không?`);
+        }
+        setShowAlert(true); // Hiển thị modal khi checkbox thay đổi
+    };
+
+    const handleUpdateUser = async (e) => {
+        e.preventDefault();
+
+        // Kiểm tra StudentId mới với danh sách người dùng
+        const isStudentIdDuplicate = AllUser.some(user => user.StudentId === StudentId && user.idUser !== DetailUser.idUser);
+
+        if (isStudentIdDuplicate) {
+            // Nếu StudentId mới trùng lặp với người dùng khác, hiển thị thông báo lỗi và không đóng modal
+            setStudentIdError(true);
+            return;
+        }
+
+        try {
+            await AccountService.UpdateAccount(DetailUser.idUser, DetailUser.Email, DetailUser.Pw, FullName, DOB, Sex, Phone, StudentId).then(
+                (res) => {
+                    console.log(res);
+                    const updatedUser = AllUser.map(user => {
+                        if (user.idUser === DetailUser.idUser) {
+                            return {
+                                ...user,
+                                FullName: FullName,
+                                DOB: DOB,
+                                Sex: Sex,
+                                Phone: Phone,
+                                StudentId: StudentId
+                            };
+                        }
+                        return user;
+                    });
+                    setAllUser(updatedUser);
+                    setShowDetail(false)
+                },
+                (err) => {
+                    console.log(err);
+                }
+            );
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const filteredUsers = searchTerm
+        ? AllUser.filter((user) =>
+            user.Email.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        : AllUser;
 
     // User: ID, FullName, Email, Phone, Gender, DOB, StudentId, Lock/Unlock, Action
     const user_columns = [
@@ -162,7 +291,8 @@ const TableUser = (props) => {
             selector: (row) => (
                 <InputGroup.Checkbox
                     aria-label="checkbox"
-                    defaultChecked={row.ban}
+                    checked={row.ban}
+                    onChange={() => handleCheckboxChange(row.idUser, row.ban)}
                 />
             ),
         },
@@ -173,28 +303,47 @@ const TableUser = (props) => {
             cell: (row) => (
                 <Row className="d-flex g-3">
                     <Col>
-                        <a
+                        {/* <a
                             href="javascript:void(0)"
                             onClick={handleShowDetailOpen}
                             className="btn-primary btn d-flex align-items-center justify-content-center btn-edit"
                             data-id={row.id}
                         >
                             <FaPencilAlt />
-                        </a>
+                        </a> */}
+                        <Button
+                            variant="primary"
+                            className="btn d-flex align-items-center justify-content-center btn-edit"
+                            onClick={() => handleShowDetailOpen(row.idUser)}
+                        >
+                            <FaPencilAlt />
+                        </Button>
                     </Col>
                     <Col>
-                        <a
-                            href="javascript:void(0)"
-                            className="btn-danger btn d-flex align-items-center justify-content-center btn-delete"
-                            data-id={row.id}
+                        <Button
+                            variant="danger"
+                            className="btn d-flex align-items-center justify-content-center btn-delete"
+                        // onClick={() => handleDelete(row.id)}
                         >
                             <ImBin />
-                        </a>
+                        </Button>
                     </Col>
                 </Row>
             ),
         },
     ];
+
+    useEffect(() => {
+        //console.log(admin);
+        GetAllUser();
+    }, [admin]);
+
+    useEffect(() => {
+        if (AllUser) {
+            setAllUser(AllUser);
+            //console.log("get user");
+        }
+    }, [AllUser]);
 
     return (
         <>
@@ -202,7 +351,7 @@ const TableUser = (props) => {
                 className="text-center"
                 title="Danh sách người dùng"
                 columns={user_columns}
-                data={AllUser}
+                data={filteredUsers}
                 customStyles={customUserStyles}
                 highlightOnHover
                 pagination
@@ -212,34 +361,37 @@ const TableUser = (props) => {
                         <Col sm={5}>
                             <input
                                 type="text"
-                                placeholder="Search here"
+                                placeholder="Search email here"
                                 className="form-control mx-2"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </Col>
                         <Col sm={1}>
-                            <a
-                                href="javascript:void(0)"
-                                className="btn-warning btn d-flex align-items-center justify-content-center text-white btn-filter-user"
+                            <Button
+                                variant="warning"
+                                className="btn d-flex align-items-center justify-content-center text-white btn-filter-user"
                             >
-                                <FaFilter className="mx-2" /> Lọc
-                            </a>
+                                <FaFilter className="mx-2" /> Search
+                            </Button>
                         </Col>
                         <Col sm={2}>
-                            <a
-                                href="javascript:void(0)"
-                                className="btn-success btn d-flex align-items-center justify-content-center text-white btn-upload-user"
+                            <Button
+                                variant="success"
+                                className="btn d-flex align-items-center justify-content-center text-white btn-upload-user"
+                            // onClick={handleUpload}
                             >
                                 <TbDatabaseImport className="mx-2" /> Upload CSV/XLSX
-                            </a>
+                            </Button>
                         </Col>
                         <Col sm={2}>
-                            <a
-                                href="javascript:void(0)"
+                            <Button
+                                variant="info"
+                                className="btn d-flex align-items-center justify-content-center text-white btn-add-user"
                                 onClick={handleAddUserOpen}
-                                className="btn-info btn d-flex align-items-center justify-content-center text-white btn-add-user"
                             >
                                 <FaPlus className="mx-2" /> Thêm mới
-                            </a>
+                            </Button>
                         </Col>
                     </Row>
                 }
@@ -260,17 +412,16 @@ const TableUser = (props) => {
                                 className="mb-3"
                             >
                                 <Form.Control
-                                    disabled
                                     id="fullname"
                                     type="text"
-                                // defaultValue={user.FullName}
+                                    defaultValue={DetailUser?.FullName}
+                                    onChange={(e) => setFullName(e.target.value)}
                                 />
                             </FloatingLabel>
                             <FloatingLabel controlId="gender" label="Gender" className="mb-3">
                                 <Form.Select
-                                //disabled
-                                // defaultValue={Sex}
-                                // onChange={(e) => setSex(e.target.value)}
+                                    defaultValue={DetailUser?.Sex}
+                                    onChange={(e) => setSex(e.target.value)}
                                 >
                                     <option>Male</option>
                                     <option>Female</option>
@@ -282,7 +433,7 @@ const TableUser = (props) => {
                                     disabled
                                     id="mail"
                                     type="text"
-                                // defaultValue={user.Email}
+                                    defaultValue={DetailUser?.Email}
                                 />
                             </FloatingLabel>
                             <FloatingLabel
@@ -291,20 +442,18 @@ const TableUser = (props) => {
                                 className="mb-3"
                             >
                                 <Form.Control
-                                    //disabled
                                     id="dob"
                                     type="date"
-                                // value={DOB}
-                                // onChange={(e) => setDOB(e.target.value)}
+                                    defaultValue={DetailUser?.DOB}
+                                    onChange={(e) => setDOB(e.target.value)}
                                 />
                             </FloatingLabel>
                             <FloatingLabel controlId="phone" label="Phone" className="mb-3">
                                 <Form.Control
-                                    //disabled
                                     id="phone"
                                     type="tel"
-                                // defaultValue={Phone}
-                                // onChange={(e) => setPhone(e.target.value)}
+                                    defaultValue={DetailUser?.Phone}
+                                    onChange={(e) => setPhone(e.target.value)}
                                 />
                             </FloatingLabel>
                             <FloatingLabel
@@ -313,24 +462,24 @@ const TableUser = (props) => {
                                 className="mb-3"
                             >
                                 <Form.Control
-                                    //disabled
                                     id="studentid"
                                     type="text"
-                                // defaultValue={StudentId}
-                                // onChange={(e) => setStudentId(e.target.value)}
+                                    defaultValue={DetailUser?.StudentId}
+                                    onChange={(e) => setStudentId(e.target.value)}
                                 />
+                                {studentIdError && <p style={{ color: 'red' }}>StudentId đã tồn tại</p>}
                             </FloatingLabel>
                         </Card>
                     </Row>
                 </Modal.Body>
-                {/* <Modal.Footer>
-          <Button variant="secondary" onClick={handleShowDetailClose}>
-            Hủy
-          </Button>
-          <Button variant="primary">
-            Mời
-          </Button>
-        </Modal.Footer> */}
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleShowDetailClose}>
+                        Hủy
+                    </Button>
+                    <Button variant="primary" onClick={handleUpdateUser}>
+                        Cập nhật
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
             {/* Modal Add User */}
@@ -399,6 +548,13 @@ const TableUser = (props) => {
                     <Button variant="primary">Thêm mới</Button>
                 </Modal.Footer>
             </Modal>
+
+            <AlertBox
+                show={showAlert}
+                message={Message}
+                onHide={handleCancel}
+                onConfirm={handleConfirm}
+            />
         </>
 
     )
