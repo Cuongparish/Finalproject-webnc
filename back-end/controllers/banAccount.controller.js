@@ -89,7 +89,11 @@ const banAccountC = {
       // kiểm tra xem StudentId này đã có người sử dụng hay chưa
       const { rows } = await accountM.getAll();
       for (user of rows) {
-        if (user.StudentId != null && user.StudentId == req.body.StudentId) {
+        if (
+          user.StudentId != null &&
+          user.StudentId == req.body.StudentId &&
+          user.idUser != req.body.idUser
+        ) {
           return res.json({ msg: "StudentId nãy đã có người sử dụng" });
         }
       }
