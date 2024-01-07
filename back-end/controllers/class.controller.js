@@ -65,10 +65,10 @@ const classC = {
       }
 
       if (data.length > 0) {
-        res.json(data);
+        return res.json(data);
       }
     } catch (error) {
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Invalid credentials",
@@ -141,11 +141,11 @@ const classC = {
       }
 
       if (data.length > 0) {
-        res.json(data);
+        return res.json(data);
       }
     } catch (error) {
       console.log(error);
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Lấy danh sách thất bại",
@@ -178,10 +178,10 @@ const classC = {
       }
 
       if (data.length > 0) {
-        res.json(data);
+        return res.json(data);
       }
     } catch (error) {
-      res.json({
+      return res.json({
         errors: [
           {
             msg: "Lay danh sach that bai",

@@ -83,6 +83,6 @@ router.get(
 );
 
 // giáo viên không cho phúc khảo cột điểm đó nữa
-router.get("/grade/closeReview/:idLop", gradeController.closeReview);
+router.post("/grade/closeReview/:idLop", gradeController.closeReview);
 
 module.exports = router;

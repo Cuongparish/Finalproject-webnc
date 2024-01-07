@@ -58,6 +58,8 @@ const TableUser = (props) => {
     const [showAlert, setShowAlert] = useState(false);
     const [Message, setMessage] = useState();
 
+    const [UserIdSelect, setUserIdSelect] = useState();
+
     const [Sex, setSex] = useState();
     const [DOB, setDOB] = useState();
     const [Phone, setPhone] = useState();
@@ -69,7 +71,8 @@ const TableUser = (props) => {
     const [show_detail, setShowDetail] = useState(false);
     const handleShowDetailClose = () => setShowDetail(false);
     const handleShowDetailOpen = (idUser) => {
-        GetDataUser(idUser);
+        //GetDataUser(idUser);
+        setUserIdSelect(idUser);
         setShowDetail(true);
     }
 
@@ -79,10 +82,9 @@ const TableUser = (props) => {
 
     const [searchTerm, setSearchTerm] = useState('');
 
-    const GetDataUser = async (idUser) => {
-        console.log(idUser);
+    const GetDataUser = async () => {
         try {
-            await AccountService.GetAccount(idUser).then(
+            await AccountService.GetAccount(UserIdSelect).then(
                 (res) => {
                     //console.log(res.data[0]);
                     setDetailUser(res.data[0]);
@@ -203,9 +205,19 @@ const TableUser = (props) => {
             setStudentIdError(true);
             return;
         }
+        
+        if(StudentId === "")
+        {
+            setStudentId(null);
+        }
+        if(DetailUser.idUser === null)
+        {
+            setShowDetail(false);
+            return;
+        }
 
         try {
-            await AccountService.UpdateAccount(DetailUser.idUser, DetailUser.Email, DetailUser.Pw, FullName, DOB, Sex, Phone, StudentId).then(
+            await AdminService.ManualMapping(DetailUser.idUser, DetailUser.Email, DetailUser.Pw, FullName, DOB, Sex, Phone, StudentId).then(
                 (res) => {
                     console.log(res);
                     const updatedUser = AllUser.map(user => {
@@ -222,7 +234,7 @@ const TableUser = (props) => {
                         return user;
                     });
                     setAllUser(updatedUser);
-                    setShowDetail(false)
+                    setShowDetail(false);
                 },
                 (err) => {
                     console.log(err);
@@ -303,14 +315,6 @@ const TableUser = (props) => {
             cell: (row) => (
                 <Row className="d-flex g-3">
                     <Col>
-                        {/* <a
-                            href="javascript:void(0)"
-                            onClick={handleShowDetailOpen}
-                            className="btn-primary btn d-flex align-items-center justify-content-center btn-edit"
-                            data-id={row.id}
-                        >
-                            <FaPencilAlt />
-                        </a> */}
                         <Button
                             variant="primary"
                             className="btn d-flex align-items-center justify-content-center btn-edit"
@@ -344,6 +348,13 @@ const TableUser = (props) => {
             //console.log("get user");
         }
     }, [AllUser]);
+
+    useEffect(() => {
+        if(UserIdSelect)
+        {
+            GetDataUser();
+        }
+    }, [UserIdSelect])
 
     return (
         <>

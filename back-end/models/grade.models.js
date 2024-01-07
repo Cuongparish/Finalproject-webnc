@@ -8,7 +8,16 @@ const fastcsv = require("fast-csv");
 module.exports = {
   getAll: async (req, res) => {
     const { rows } = await postgre.query(
-      'SELECT cd."TenCotDiem", bd."Diem" FROM "BangDiemThanhPhan" bd JOIN "CotDiem" cd ON bd."idCotDiem" = cd."idCotDiem" WHERE bd."idHocSinh" = 100'
+      // 'SELECT cd."TenCotDiem", bd."Diem" FROM "BangDiemThanhPhan" bd JOIN "CotDiem" cd ON bd."idCotDiem" = cd."idCotDiem" WHERE bd."idHocSinh" = 100'
+      'SELECT * FROM "BangDiemThanhPhan" '
+    );
+    return { rows };
+  },
+
+  getAll_GradeComposition: async () => {
+    const { rows } = await postgre.query(
+      // 'SELECT cd."TenCotDiem", bd."Diem" FROM "BangDiemThanhPhan" bd JOIN "CotDiem" cd ON bd."idCotDiem" = cd."idCotDiem" WHERE bd."idHocSinh" = 100'
+      'SELECT * FROM "CotDiem" '
     );
     return { rows };
   },

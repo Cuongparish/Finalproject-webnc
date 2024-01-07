@@ -142,9 +142,6 @@ const gradeC = {
   },
 
   exporttoExcel_StudentList: async (req, res) => {
-    // const directory = "D:/";
-
-    // return res.json({ msg: "Xuất file danh sách học sinh thành công" });
     try {
       await gradeM.exporttoExcel_StudentList(req, res);
     } catch (error) {
@@ -457,18 +454,65 @@ const gradeC = {
   closeReview: async (req, res) => {
     let Khoa = 1;
     let AcpPhucKhao = 0;
+    // let TenCotDiem;
     try {
+      //lấy tên lớp học
+      const NameClass = await classM.getNameClass(req.params.idLop);
+      console.log(NameClass.rows[0].TenLop);
+
+      // lấy tên cột điểm
+      const NameGradeComposition = await gradeM.getAll_GradeComposition();
+      for (grade of NameGradeComposition.rows) {
+        // console.log(grade.idCotDiem);
+        if (grade.idCotDiem == req.body.idCotDiem) {
+          var TenCotDiem = grade.TenCotDiem;
+        }
+      }
+
+      // thông báo đến học sinh
+      let Notify_NoiDung_Student = `Cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop} đã khóa, bạn không thể phúc khảo nữa`;
+      var idd;
+      const { rows: idLop } = await classM.getAll();
+
+      for (const id of idLop) {
+        if (id.idLop == req.params.idLop) {
+          idd = id.MaLop;
+          console.log(idd);
+          break;
+        }
+      }
+
+      const { rows: studentRows } = await classM.getStudent_inClass(idd);
+
+      if (studentRows && studentRows.length < 0) {
+        return res.json({
+          msg: "Không có học sinh nào trong lớp này",
+        });
+      }
+      let idPK = null;
+      for (const user of studentRows) {
+        await notifyM.addNotify(
+          req.params.idLop,
+          Notify_NoiDung_Student,
+          req.body.ThoiGian,
+          user.idUser,
+          idPK
+        );
+      }
+
       // cập nhật không cho phúc khảo nữa
       await gradeM.closeReview(
         req.params.idLop,
         req.body.idCotDiem,
         AcpPhucKhao
       );
-      res.json({
+
+      return res.json({
         msg: "cập nhật không cho phúc khảo nữa",
       });
     } catch (error) {
-      res.json({
+      console.log(error);
+      return res.json({
         errors: [
           {
             msg: "Lỗi",

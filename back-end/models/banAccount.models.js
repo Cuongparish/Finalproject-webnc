@@ -2,12 +2,13 @@ const postgre = require("./database");
 const moment = require("moment");
 module.exports = {
   // --------------------------------------user
-  // lấy idPhucKhao cuối cùng (done)
+  //
   getAll: async () => {
-    const sql = `SELECT *
-    FROM public."BanAccount" , "User"
-    WHERE "BanAccount"."idUser"="User"."idUser"
-    ORDER BY "User"."idUser" ASC`;
+    const sql = `select us.*, hs."StudentId"
+    from "User" us 
+    left join "HocSinh" hs on us."idUser"=hs."idUser"
+    join "BanAccount" ban on us."idUser"=ban."idUser"
+    ORDER BY us."idUser" ASC`;
 
     const rows = await postgre.query(sql);
     return rows;
@@ -43,7 +44,8 @@ module.exports = {
                   FROM "HocSinh"
                   WHERE "idUser"=$1;`;
 
-    await postgre.query(sql, [idUser]);
+    const { rows } = await postgre.query(sql, [idUser]);
+    return rows;
   },
 
   mapStudentID: async (data) => {
