@@ -1,7 +1,6 @@
 import { React} from "react";
-import { Row, Col, Image, Tabs, Tab, InputGroup, Dropdown } from "react-bootstrap";
-import Datatable from "react-data-table-component";
-import { FaBars, FaFilter, FaBell } from "react-icons/fa";
+import { Row, Col, Image, Tabs, Tab } from "react-bootstrap";
+import { FaBars } from "react-icons/fa";
 
 
 import AuthService from "../service/auth.service";
