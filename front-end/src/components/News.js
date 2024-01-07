@@ -10,7 +10,7 @@ import AlertBox from "../components/AlertBox";
 import "../App.css";
 
 //const Client_URL = "http://localhost:3000";
-const Client_URL = "https://finalproject-webnc.vercel.app";
+const Client_URL = "https://frontend-finalproject-webnc.vercel.app";
 
 const News = (props) => {
     const DetailClass = props.DetailClass

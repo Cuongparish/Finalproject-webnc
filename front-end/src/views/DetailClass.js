@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 import { FaBars, FaBell, FaChevronLeft } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { TbDatabaseImport } from "react-icons/tb";
-import { sortableContainer, sortableElement } from 'react-sortable-hoc';
-import arrayMove from 'array-move';
+//import { sortableContainer, sortableElement } from 'react-sortable-hoc';
+//import arrayMove from 'array-move';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import MenuLeft from "../components/MenuLeft";
@@ -302,11 +302,11 @@ const DetailClass = (props) => {
     }
   }, [DataGradeStructure]);
 
-  const SortableItem = sortableElement(({ value }) => <li>{value}</li>);
+  // const SortableItem = sortableElement(({ value }) => <li>{value}</li>);
 
-  const SortableContainer = sortableContainer(({ children }) => {
-    return <ul>{children}</ul>;
-  });
+  // const SortableContainer = sortableContainer(({ children }) => {
+  //   return <ul>{children}</ul>;
+  // });
 
   return (
     <>
@@ -495,12 +495,8 @@ const DetailClass = (props) => {
                   </Row>
                 ) : (
                   <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
-                    <Col sm={2}>
-                      <Card className="border-0 text-center">
-                        <Card.Body className="mb-3">
-                          Giáo viên chưa public bảng điểm
-                        </Card.Body>
-                      </Card>
+                    <Col>
+                      <h1 className="text-center">Rất tiếc chưa có điểm</h1>
                     </Col>
                   </Row>
                 )}
