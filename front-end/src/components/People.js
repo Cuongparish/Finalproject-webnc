@@ -210,48 +210,42 @@ const People = (props) => {
         </Row>
 
         <Row className="banner-members mb-4">
-          <Col className="text-end border-2">
-            <Col sm={3}>
-              <Form>
-                <Form.Group controlId="formFile" className="mb-3">
-                  <Form.Label>Select file to upload:</Form.Label>
-                  <Form.Control
-                    type="file"
-                    onChange={handleFileChange}
-                  />
-                </Form.Group>
-                <Button
-                  variant="primary"
-                  onClick={handleUploadStudentList}
-                >
-                  Upload StudentList
-                </Button>
-              </Form>
-            </Col>
+          <Form className="mb-3">
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>Select file to upload:</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={handleFileChange}
+              />
+            </Form.Group>
+            <Button
+              variant="primary"
+              onClick={handleUploadStudentList}
+            >
+              Upload StudentList
+            </Button>
+          </Form>
 
-            <Col sm={3} className="float-end">
-              <FloatingLabel
-                controlId="type"
-                label="FileType"
-                className="mb-3"
-              >
-                <Form.Select
-                  defaultValue={Type}
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <option>xlsx</option>
-                  <option>csv</option>
-                </Form.Select>
-              </FloatingLabel>
+          <FloatingLabel
+            controlId="type"
+            label="FileType"
+            className="mb-3"
+          >
+            <Form.Select
+              defaultValue={Type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <option>xlsx</option>
+              <option>csv</option>
+            </Form.Select>
+          </FloatingLabel>
 
-              <Button
-                variant="primary"
-                onClick={handleDownloadStudentList}
-              >
-                Download StudentList
-              </Button>
-            </Col>
-          </Col>
+          <Button
+            variant="primary"
+            onClick={handleDownloadStudentList}
+          >
+            Download StudentList
+          </Button>
         </Row>
       </div>
 
