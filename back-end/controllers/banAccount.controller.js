@@ -109,6 +109,7 @@ const banAccountC = {
         req.body.IdUser,
         req.body.Email,
         req.body.Pw,
+        req.body.FullName,
         req.body.DOB,
         req.body.Sex,
         req.body.Phone,
