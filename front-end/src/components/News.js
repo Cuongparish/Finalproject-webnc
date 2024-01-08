@@ -20,9 +20,9 @@ const News = (props) => {
 
     const link = `${Client_URL}/join-class/${DetailClass?.MaLop}/hs`;
 
-    function CopyCode(code) {
+    const CopyCode = (code) => {
         const textToCopy = code;
-
+        //console.log(textToCopy);
         const copyText = () => {
             copy(textToCopy)
                 .then(() => {
@@ -34,11 +34,11 @@ const News = (props) => {
                     alert("Lỗi khi sao chép: " + err);
                 });
         };
-
-        return copyText;
+        copyText();
+        //return copyText;
     }
 
-    function CopyLink(link) {
+    const CopyLink = (link) => {
         const textToCopy = link;
 
         const copyText = () => {
@@ -53,18 +53,17 @@ const News = (props) => {
                 });
         };
 
-        return copyText;
+        copyText();
+        //return copyText;
     }
 
     const handleConfirm = () => {
         // Xử lý khi nút xác nhận được nhấn
-        console.log("Đã xác nhận");
         setShowAlert(false); // Đóng box thông báo sau khi xác nhận
     };
 
     const handleCancel = () => {
         // Xử lý khi nút hủy được nhấn
-        console.log("Đã hủy");
         setShowAlert(false); // Đóng box thông báo sau khi hủy
     };
 
@@ -141,7 +140,7 @@ const News = (props) => {
                                 <Button
                                     variant="outline-dark"
                                     className="float-end d-flex align-items-center justify-content-center"
-                                    //onClick={handleSettingsClick} // Thay 'handleSettingsClick' bằng hàm xử lý sự kiện của bạn
+                                //onClick={handleSettingsClick} // Thay 'handleSettingsClick' bằng hàm xử lý sự kiện của bạn
                                 >
                                     <IoSettingsOutline className="mx-1" />
                                     Cài đặt bảng tin

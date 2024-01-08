@@ -218,19 +218,17 @@ const DetailClass = (props) => {
     setDataGradeStructure(
       GradeStructure.map((item, index) => ({
         TenCotDiem: document.getElementById(`add_score_${index}`).value,
-        PhanTramDiem: document.getElementById(`add_score_percentage_${index}`)
-          .value,
+        PhanTramDiem: document.getElementById(`add_score_percentage_${index}`).value,
       }))
     );
 
-    //console.log(DataGradeStructure);
     sethasScore(true);
     setHadCreateGradeStructer(true);
     handleAddScoreClose();
   };
 
   const handleclick = () => {
-    console.log(DataGradeStructure);
+    //console.log(DataGradeStructure);
   };
 
   const addGradeStructureToDB = async () => {
@@ -252,22 +250,22 @@ const DetailClass = (props) => {
   };
 
   const GetGradeStructures = async () => {
-    console.log(1111);
     try {
       await GradeService.GetGradeStructure(DetailClass.idLop).then(
         (res) => {
-          console.log("gradestructure: ", res);
           if (res.data) {
-            const newData = res.data.map((element, index) => {
-              return {
-                TenCotDiem: element.TenCotDiem,
-                PhanTramDiem: element.PhanTramDiem,
-              };
-            });
+            // const newData = res.data.map((element, index) => {
+            //   return {
+            //     idCotDiem: element.idCotDiem,
+            //     TenCotDiem: element.TenCotDiem,
+            //     PhanTramDiem: element.PhanTramDiem,
+            //   };
+            // });
 
-            if (newData.length > 0) {
-              setDataGradeStructure(newData);
-            }
+            // if (newData.length > 0) {
+            //   setDataGradeStructure(newData);
+            // }
+            setDataGradeStructure(res.data);
             sethasScore(true);
           }
         },
@@ -282,7 +280,6 @@ const DetailClass = (props) => {
 
   //----------------------------------------Use effect
   useEffect(() => {
-    //console.log("123");
     Promise.all([GetDetailClass(), GetListUserInClass()]);
   }, [user]);
 

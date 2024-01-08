@@ -49,7 +49,7 @@ router.post(
 router.get("/grade/listClass/:idLop", gradeController.getGradesBoard);
 
 // nhap diem cho  hoc sinh
-router.post("/grade/inputScore/", gradeController.addScore_Student_inClass);
+router.post("/grade/inputScore", gradeController.addScore_Student_inClass);
 
 //download file danh sach diem 1 thanh phan cua tat ca hoc sinh
 router.get(

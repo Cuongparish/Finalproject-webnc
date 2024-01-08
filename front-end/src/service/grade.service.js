@@ -83,6 +83,14 @@ const ImportToExcel_StudentList = async (idLop, formData) => {
   }
 };
 
+const InputGradeStudent = (Data) => {
+  return axios
+    .post(`${API_URL}/api/v1/user/grade/inputScore`, { Data })
+    .then((res) => {
+      return res.data;
+    });
+};
+
 const GradeService = {
   CreateGradeStructure,
   GetGradeStructure,
@@ -90,6 +98,7 @@ const GradeService = {
   UpdateGradeStructure,
   ExportToExcel_StudentList,
   ImportToExcel_StudentList,
+  InputGradeStudent,
 };
 
 export default GradeService;

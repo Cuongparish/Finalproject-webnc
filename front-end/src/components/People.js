@@ -210,42 +210,47 @@ const People = (props) => {
         </Row>
 
         <Row className="banner-members mb-4">
-          <Form className="mb-3">
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Select file to upload:</Form.Label>
-              <Form.Control
-                type="file"
-                onChange={handleFileChange}
-              />
-            </Form.Group>
-            <Button
-              variant="primary"
-              onClick={handleUploadStudentList}
-            >
-              Upload StudentList
-            </Button>
-          </Form>
+          <Col xs={12} md={6} className="mb-3">
+            <Form>
+              <Form.Group controlId="formFile" className="mb-3">
+                <Form.Label>Select file to upload:</Form.Label>
+                <Form.Control
+                  type="file"
+                  onChange={handleFileChange}
+                  style={{ width: '300px' }} // Điều chỉnh chiều rộng của input
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                onClick={handleUploadStudentList}
+                style={{ width: '200px' }} // Điều chỉnh chiều rộng của nút
+              >
+                Upload StudentList
+              </Button>
+            </Form>
+          </Col>
 
-          <FloatingLabel
-            controlId="type"
-            label="FileType"
-            className="mb-3"
-          >
-            <Form.Select
-              defaultValue={Type}
-              onChange={(e) => setType(e.target.value)}
-            >
-              <option>xlsx</option>
-              <option>csv</option>
-            </Form.Select>
-          </FloatingLabel>
+          <Col xs={12} md={6} className="text-md-end align-items-md-end d-flex justify-content-md-end">
+            <FloatingLabel controlId="type" label="FileType" className="mb-3" style={{ display: 'flex', flexDirection: 'column' }}>
+              <Form.Select
+                defaultValue={Type}
+                onChange={(e) => setType(e.target.value)}
+                style={{ width: '150px', marginBottom: '20px' }} // Điều chỉnh chiều rộng của dropdown
+              >
+                <option>xlsx</option>
+                <option>csv</option>
+              </Form.Select>
 
-          <Button
-            variant="primary"
-            onClick={handleDownloadStudentList}
-          >
-            Download StudentList
-          </Button>
+              <Button
+                variant="primary"
+                onClick={handleDownloadStudentList}
+                style={{ width: '200px' }} // Điều chỉnh chiều rộng của nút
+              >
+                Download StudentList
+              </Button>
+            </FloatingLabel>
+          </Col>
+
         </Row>
       </div>
 
