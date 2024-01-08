@@ -231,13 +231,29 @@ const gradeC = {
     let AllScore = req.body.Data;
     console.log(AllScore);
     try {
+      //nếu chưa có điểm thì thêm
+      //sửa điểm hoặc xóa điểm
       for (score of AllScore) {
-        await gradeM.inputGrade_Student_inClass(
+        const { rows: Diem } = await gradeM.getGrade_Student_inClass(
           score.idHocSinh,
           score.idCotDiem,
-          score.idLop,
-          score.Diem
+          score.idLop
         );
+        if (!Diem) {
+          await gradeM.inputGrade_Student_inClass(
+            score.idHocSinh,
+            score.idCotDiem,
+            score.idLop,
+            score.Diem
+          );
+        } else {
+          await gradeM.updateGrade_Student_inClass(
+            score.idHocSinh,
+            score.idCotDiem,
+            score.idLop,
+            score.Diem
+          );
+        }
       }
 
       res.json({ msg: "Thêm thành công" });
