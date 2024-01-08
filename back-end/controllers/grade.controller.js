@@ -78,7 +78,7 @@ const gradeC = {
     }
     try {
       gradeM.addPercentScore_inClass(req, res);
-      res.json({ msg: "Thêm thành công" });
+      return res.json({ msg: "Thêm thành công" });
     } catch (error) {
       res.json({
         errors: [
@@ -224,11 +224,22 @@ const gradeC = {
 
   addScore_Student_inClass: async (req, res) => {
     // score.TenCotDiem, score.PhanTramDiem
+
     if (!req.body) {
       return res.json({ msg: "Theo dữ liệu req.body" });
     }
+    let AllScore = req.body.Data;
+    console.log(AllScore);
     try {
-      gradeM.inputGrade_Student_inClass(req, res);
+      for (score of AllScore) {
+        await gradeM.inputGrade_Student_inClass(
+          score.idHocSinh,
+          score.idCotDiem,
+          score.idLop,
+          score.Diem
+        );
+      }
+
       res.json({ msg: "Thêm thành công" });
     } catch (error) {
       res.json({

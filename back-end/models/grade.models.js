@@ -46,6 +46,7 @@ module.exports = {
       console.log(percentScores);
       //return res.status(400).json({ error: "Invalid data format" });
     }
+
     let number = 0;
     for (const score of percentScores) {
       console.log(score);
@@ -267,13 +268,13 @@ module.exports = {
     return { rows };
   },
 
-  inputGrade_Student_inClass: async (req, res) => {
+  inputGrade_Student_inClass: async (idHocSinh, idCotDiem, idLop, Diem) => {
     const sql = `INSERT INTO "BangDiemThanhPhan"("idHocSinh", "idCotDiem", "idLop", "Diem") VALUES ($1, $2, $3, $4);`;
     const { rows } = await postgre.query(sql, [
-      req.body.idHocSinh,
-      req.body.idCotDiem,
-      req.params.idLop,
-      req.body.Diem,
+      idHocSinh,
+      idCotDiem,
+      idLop,
+      Diem,
     ]);
     return { rows };
   },
