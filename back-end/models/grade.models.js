@@ -280,7 +280,7 @@ module.exports = {
   },
 
   updateGrade_Student_inClass: async (idHocSinh, idCotDiem, idLop, Diem) => {
-    const sql = `UPDATE public."BangDiemThanhPhan" SET "Diem"=$4 WHERE "idHocSinh"=$1, "idCotDiem"=$2, "idLop"=$3`;
+    const sql = `UPDATE public."BangDiemThanhPhan" SET "Diem"=$4 WHERE "idHocSinh"=$1 AND "idCotDiem"=$2 AND "idLop"=$3`;
     const { rows } = await postgre.query(sql, [
       idHocSinh,
       idCotDiem,
@@ -295,7 +295,7 @@ module.exports = {
     FROM
     "BangDiemThanhPhan"
     WHERE
-    "BangDiemThanhPhan"."idHocSinh"=$1, "BangDiemThanhPhan"."idCotDiem"=$2, "BangDiemThanhPhan"."idLop"=$3;
+    "BangDiemThanhPhan"."idHocSinh"=$1 AND "BangDiemThanhPhan"."idCotDiem"=$2 AND "BangDiemThanhPhan"."idLop"=$3;
 `;
     const { rows } = await postgre.query(sql, [idHocSinh, idCotDiem, idLop]);
     return { rows };

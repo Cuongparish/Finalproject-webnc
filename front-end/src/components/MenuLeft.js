@@ -35,7 +35,7 @@ const MenuLeft = (props) => {
       };
 
     useEffect(() => {
-        console.log("123");
+        //console.log("123");
         GetClassList();
       }, [user]);
 

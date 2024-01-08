@@ -7,7 +7,6 @@ import '../App.css';
 const ScoreTable_Student = (props) => {
     const GradeStructures = props.gradestructure;
     const ListStudent = props.liststudent;
-    console.log(ListStudent);
     const [TotalPercent, setTotalPercent] = useState(0);
 
     const CaculateTotalPercent = () => {
@@ -16,16 +15,11 @@ const ScoreTable_Student = (props) => {
             total += parseInt(GradeStructure.PhanTramDiem, 10);
         });
         setTotalPercent(total);
-        console.log(total);
     }
 
     useEffect(() => {
         CaculateTotalPercent();
     }, [GradeStructures]);
-
-    useEffect(() => {
-        console.log(TotalPercent);
-    }, [TotalPercent]);
 
     return (
         <>
@@ -37,17 +31,16 @@ const ScoreTable_Student = (props) => {
                         <tr style={{ height: '100px' }} className="text-center fw-bold table-secondary">
                             <td className="align-middle border-2 border-start-0" style={{ width: '15%' }}>Họ và tên</td>
                             <td className="align-middle" style={{ width: '10%' }}>MSSV</td>
-                            {/* <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
-                            <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
-                            <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td>
-                            <td className="align-middle" style={{ width: '7%' }}>Điểm 1</td> */}
                             {GradeStructures?.map((GradeStructure, index) => (
                                 <td className="align-middle" style={{ width: '7%' }}>
                                     <div>{GradeStructure.TenCotDiem}</div>
                                     <div>{GradeStructure.PhanTramDiem}%</div>
                                 </td>
                             ))}
-                            <td className="align-middle" style={{ width: '10%' }}>Tổng kết</td> {/* input nothing */}
+                            <td className="align-middle" style={{ width: '10%' }}>
+                                <div>Tổng kết</div>
+                                <div>{TotalPercent}</div>
+                            </td>
                         </tr>
                     </thead>
                     <tbody>
