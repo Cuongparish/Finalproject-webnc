@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Row, Col, Table, Form, InputGroup, FormControl } from "react-bootstrap";
+import { Row, Col, Table, Form, FloatingLabel, Button } from "react-bootstrap";
 import { RiSlideshowLine } from "react-icons/ri";
 import { RxUpdate } from "react-icons/rx";
 import { TbDatabaseExport } from "react-icons/tb";
@@ -12,11 +12,13 @@ const ScoreTable = (props) => {
     const GradeStructures = props.gradestructure;
     const ListStudent = props.liststudent;
     const [TotalPercent, setTotalPercent] = useState(0);
-    const [SelectGrade, setSelectGrade] = useState(GradeStructures[0].TenCotDiem);
+    const [SelectGradeColumn, setSelectGradeColumn] = useState(GradeStructures[0].TenCotDiem);
 
     const [GradeBoard, setGradeBoard] = useState([]);
 
     const [GradeError, setGradeError] = useState(false);
+
+    const [Type, setType] = useState("xlsx");
 
     const CaculateTotalPercent = () => {
         let total = 0;
@@ -63,6 +65,49 @@ const ScoreTable = (props) => {
             );
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    const handleDownloadGradeBoard = async () => {
+        try {
+            if (SelectGradeColumn === "Tất Cả") {
+                const blobData = await GradeService.ExportToExcel_GradeBoard(
+                    GradeStructures[0].idLop,
+                    Type
+                );
+                //console.log(blobData);
+                const url = window.URL.createObjectURL(new Blob([blobData]));
+
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", `Bảng Điểm.${Type}`); // Đặt tên file
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+            }
+            else {
+                const blobData = await GradeService.ExportToExcel_GradeColumn(
+                    GradeStructures[0].idLop,
+                    SelectGradeColumn,
+                    Type
+                );
+                //console.log(blobData);
+                const url = window.URL.createObjectURL(new Blob([blobData]));
+
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", `Bảng Điểm Cột ${SelectGradeColumn}.${Type}`); // Đặt tên file
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+            }
+        } catch (error) {
+            console.error("Error handling download:", error);
+            // Xử lý lỗi nếu cần
         }
     };
 
@@ -116,13 +161,12 @@ const ScoreTable = (props) => {
                                                     );
                                                     setGradeError(false);
                                                 }
-                                                else
-                                                {
+                                                else {
                                                     setGradeError(true);
                                                 }
                                             }}
                                         />
-                                         {GradeError && <p style={{ color: 'red' }}>Số điểm không phù hợp</p>}
+                                        {GradeError && <p style={{ color: 'red' }}>Số điểm không phù hợp</p>}
                                     </td>
                                 ))}
                                 <td className="text-center"></td>
@@ -148,19 +192,21 @@ const ScoreTable = (props) => {
 
                 <Col sm={2}>
                     <Form.Group className="m-2" controlId="gender">
-                        <Form.Label className="fw-bold">Cột điểm:</Form.Label>
+                        <Form.Label className="fw-bold">Chọn cột điểm để down/upload:</Form.Label>
                         <Form.Select
                             defaultValue="Male"
                             className="border-2 border-black"
-                            value={SelectGrade}
-                            onChange={(e) => setSelectGrade(e.target.value)}
+                            value={SelectGradeColumn}
+                            onChange={(e) => setSelectGradeColumn(e.target.value)}
                         >
                             {GradeStructures?.map((GradeStructure, index) => (
                                 <option>{GradeStructure.TenCotDiem}</option>
                             ))}
+                            <option>Tất Cả</option>
                         </Form.Select>
                     </Form.Group>
                 </Col>
+
                 <Col sm={2}>
                     <a className="btn btn-info">
                         <RxUpdate className="mx-1" /> Upload điểm
@@ -173,9 +219,36 @@ const ScoreTable = (props) => {
                     </a>
                 </Col>
                 <Col sm={2}>
-                    <a className="btn btn-success">
+                    {/* <Form.Select
+                        defaultValue={Type}
+                        onChange={(e) => setType(e.target.value)}
+                        style={{ width: '150px', marginBottom: '20px' }} // Điều chỉnh chiều rộng của dropdown
+                    >
+                        <option>xlsx</option>
+                        <option>csv</option>
+                    </Form.Select>
+
+                    <a className="btn btn-success" onClick={handleDownloadGradeBoard}>
                         <TbDatabaseExport className="mx-1" /> Export bảng điểm
-                    </a>
+                    </a> */}
+                    <FloatingLabel controlId="type" label="FileType" className="mb-3" style={{ display: 'flex', flexDirection: 'column' }}>
+                        <Form.Select
+                            defaultValue={Type}
+                            onChange={(e) => setType(e.target.value)}
+                            style={{ width: '150px', marginBottom: '20px' }} // Điều chỉnh chiều rộng của dropdown
+                        >
+                            <option>xlsx</option>
+                            <option>csv</option>
+                        </Form.Select>
+
+                        <Button
+                            variant="primary"
+                            onClick={handleDownloadGradeBoard}
+                            style={{ width: '200px' }} // Điều chỉnh chiều rộng của nút
+                        >
+                            <TbDatabaseExport className="mx-1" />Export bảng điểm
+                        </Button>
+                    </FloatingLabel>
                 </Col>
             </Row>
         </>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL = "https://finalproject-webnc.vercel.app";
-// const API_URL = "http://localhost:5000";
+//const API_URL = "http://localhost:5000";
 
 const GetGradeStructure = (idLop) => {
   return axios
@@ -62,7 +62,7 @@ const ExportToExcel_StudentList = async (idLop, type) => {
 };
 
 const ImportToExcel_StudentList = async (idLop, formData) => {
-  console.log(formData);
+  //console.log(formData);
 
   try {
     const response = await axios.post(
@@ -91,6 +91,38 @@ const InputGradeStudent = (Data) => {
     });
 };
 
+const ExportToExcel_GradeColumn = async (idLop, TenCotDiem, type) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/v1/user/grade/exporttoExcel_Score/${idLop}/${TenCotDiem}/type?format=${type}`,
+      {
+        responseType: "blob", // Sử dụng 'blob' để nhận dữ liệu dưới dạng file
+      }
+    );
+    //console.log(response);
+    return response.data; // Trả về dữ liệu blob từ response
+  } catch (error) {
+    console.error("Error exporting to Excel:", error);
+    //throw error; // Re-throw lỗi để xử lý ở phía gọi hàm nếu cần
+  }
+}
+
+const ExportToExcel_GradeBoard = async (idLop, type) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/v1/user/grade/exportListClass/${idLop}/type?format=${type}`,
+      {
+        responseType: "blob", // Sử dụng 'blob' để nhận dữ liệu dưới dạng file
+      }
+    );
+    //console.log(response);
+    return response.data; // Trả về dữ liệu blob từ response
+  } catch (error) {
+    console.error("Error exporting to Excel:", error);
+    //throw error; // Re-throw lỗi để xử lý ở phía gọi hàm nếu cần
+  }
+}
+
 const GradeService = {
   CreateGradeStructure,
   GetGradeStructure,
@@ -99,6 +131,8 @@ const GradeService = {
   ExportToExcel_StudentList,
   ImportToExcel_StudentList,
   InputGradeStudent,
+  ExportToExcel_GradeColumn,
+  ExportToExcel_GradeBoard,
 };
 
 export default GradeService;
