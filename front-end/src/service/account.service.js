@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://finalproject-webnc.vercel.app";
-//const API_URL = "http://localhost:5000";
+// const API_URL = "https://finalproject-webnc.vercel.app";
+const API_URL = "http://localhost:5000";
 
 const GetAccount = (idUser) => {
   return axios.get(`${API_URL}/api/v1/user/profile/${idUser}`).then((res) => {
@@ -10,7 +10,16 @@ const GetAccount = (idUser) => {
   });
 };
 
-const UpdateAccount = (idUser, Email, Pw, FullName, DOB, Sex, Phone, StudentId) => {
+const UpdateAccount = (
+  idUser,
+  Email,
+  Pw,
+  FullName,
+  DOB,
+  Sex,
+  Phone,
+  StudentId
+) => {
   return axios
     .put(`${API_URL}/api/v1/user/profile/${idUser}`, {
       Email,
@@ -19,7 +28,7 @@ const UpdateAccount = (idUser, Email, Pw, FullName, DOB, Sex, Phone, StudentId) 
       DOB,
       Sex,
       Phone,
-      StudentId
+      StudentId,
     })
     .then((res) => {
       console.log(res.data);

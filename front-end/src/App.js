@@ -61,7 +61,17 @@ function App() {
           <Route
             exact
             path="/login"
-            element={user ? user.Role === 1 ? <Navigate to="/admin" /> : <Navigate to="/home" /> : <Login />}
+            element={
+              user ? (
+                user.Role === 1 ? (
+                  <Navigate to="/admin" />
+                ) : (
+                  <Navigate to="/home" />
+                )
+              ) : (
+                <Login />
+              )
+            }
           />
           <Route
             exact
@@ -91,7 +101,12 @@ function App() {
           />
 
           {/* Admin */}
-          <Route path="/admin" element={user ? <AdminManagement user={user} /> : <Navigate to="/login" />} />
+          <Route
+            path="/admin"
+            element={
+              user ? <AdminManagement user={user} /> : <Navigate to="/login" />
+            }
+          />
         </Routes>
       )}
     </>

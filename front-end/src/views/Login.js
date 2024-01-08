@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [Email, setEmail] = useState("");
   const [Pw, setPw] = useState("");
+  const [studentIdError, setStudentIdError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,24 +18,26 @@ const Login = () => {
     try {
       await AuthService.localAuth(Email, Pw).then(
         (res) => {
-          //console.log(res)
-          const user = res;
-          console.log(JSON.stringify(user));
-          localStorage.setItem("user", JSON.stringify(user));
-          if (sessionStorage.getItem("lastVisitedUrl")) {
-            const JoinClassURL = sessionStorage.getItem("lastVisitedUrl");
-            sessionStorage.removeItem("lastVisitedUrl");
-            navigate(JoinClassURL);
-            window.location.reload();
-          }
-          else {
-            if (user.Role === 1) {
-              navigate("/admin");
+          if (res.msg === "Log in failure") {
+            setStudentIdError(true);
+          } else {
+            const user = res.data.rows[0];
+
+            setStudentIdError(false);
+            localStorage.setItem("user", JSON.stringify(user));
+            if (sessionStorage.getItem("lastVisitedUrl")) {
+              const JoinClassURL = sessionStorage.getItem("lastVisitedUrl");
+              sessionStorage.removeItem("lastVisitedUrl");
+              navigate(JoinClassURL);
               window.location.reload();
-            }
-            else {
-              navigate("/home");
-              window.location.reload();
+            } else {
+              if (user.Role === 1) {
+                navigate("/admin");
+                window.location.reload();
+              } else {
+                navigate("/home");
+                window.location.reload();
+              }
             }
           }
         },
@@ -78,7 +81,7 @@ const Login = () => {
                     controlId="formBasicEmail"
                     type="email"
                     placeholder="Email"
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
@@ -92,16 +95,26 @@ const Login = () => {
                     controlId="formBasicPassword"
                     type="password"
                     placeholder="Password"
-                    onChange={e => setPw(e.target.value)}
+                    onChange={(e) => setPw(e.target.value)}
                     className="border-2 border-black"
                   />
                 </Form.Group>
               </Col>
             </Row>
-            <Button as={Col} lg={3} type="submit" className="bg-dark mb-2" onClick={handleLogin}>
+            <Button
+              as={Col}
+              lg={3}
+              type="submit"
+              className="bg-dark mb-2"
+              onClick={handleLogin}
+            >
               Log in
             </Button>
           </Form>
+
+          {studentIdError && (
+            <p style={{ color: "red" }}>Thông tin đăng nhập không hợp lệ</p>
+          )}
           <a href="/ResetPW">
             <p>Having Issues with your Password?</p>
           </a>
