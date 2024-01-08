@@ -81,6 +81,9 @@ CREATE TABLE IF NOT EXISTS public."LopHoc"
     CONSTRAINT "LopHoc_pkey" PRIMARY KEY ("idLop")
 )
 
+ALTER TABLE "LopHoc"
+ADD "State" integer;
+
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."LopHoc"
@@ -163,7 +166,7 @@ CREATE TABLE IF NOT EXISTS public."BangDiemThanhPhan"
     "idHocSinh" integer NOT NULL,
     "idCotDiem" integer NOT NULL,
     "idLop" integer NOT NULL,
-    "Diem" numeric NOT NULL,
+    "Diem" numeric,
     CONSTRAINT "BangDiemThanhPhan_pkey" PRIMARY KEY ("idHocSinh", "idCotDiem", "idLop"),
     CONSTRAINT "FK_BangDiemThanhPha_HocSinh" FOREIGN KEY ("idHocSinh")
         REFERENCES public."HocSinh" ("idHocSinh") MATCH SIMPLE
