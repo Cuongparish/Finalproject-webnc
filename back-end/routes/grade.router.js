@@ -64,7 +64,7 @@ router.post(
   gradeController.importtoExcel_Score
 );
 
-//download file danh sach toan bo diem
+// download file danh sach toan bo diem
 // router.get(
 //   "/grade/exporttoExcel_Score/:idLop/:TenCotDiem/type?",
 //   gradeController.exporttoExcel_Score
@@ -81,8 +81,5 @@ router.get(
   "/grade/publicScoreinClass/:idLop",
   gradeController.publicScore_inClass
 );
-
-// giáo viên không cho phúc khảo cột điểm đó nữa
-router.post("/grade/closeReview/:idLop", gradeController.closeReview);
 
 module.exports = router;

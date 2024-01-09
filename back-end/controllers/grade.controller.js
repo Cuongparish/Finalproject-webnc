@@ -231,14 +231,14 @@ const gradeC = {
     let AllScore = req.body.Data;
     console.log(AllScore);
     try {
-      //nếu chưa có điểm thì thêm
-      //sửa điểm hoặc xóa điểm
       for (score of AllScore) {
         const { rows: Diem } = await gradeM.getGrade_Student_inClass(
           score.idHocSinh,
           score.idCotDiem,
           score.idLop
         );
+
+        //nếu chưa có điểm thì thêm
         if (!Diem) {
           await gradeM.inputGrade_Student_inClass(
             score.idHocSinh,
@@ -246,6 +246,7 @@ const gradeC = {
             score.idLop,
             score.Diem
           );
+          //sửa điểm hoặc xóa điểm
         } else {
           await gradeM.updateGrade_Student_inClass(
             score.idHocSinh,
@@ -450,10 +451,11 @@ const gradeC = {
         AcpPhucKhao
       );
 
+      const NameClass = await classM.getNameClass(req.params.idLop);
       // gửi thông báo đến các học sinh rằng đã có điểm 1 thành phần
-      let NoiDung = `Điểm ${req.body.TenCotDiem} đã được công bố `;
-      const { rows } = await classM.getStudent_inClass(req.body.malop);
-      for (user of rows) {
+      let NoiDung = `Điểm ${req.body.TenCotDiem} của lớp ${NameClass.rows[0].TenLop} đã được công bố `;
+      const { rows: student } = await classM.getStudent_inClass(req.body.malop);
+      for (const user of student) {
         await notifyM.addNotify(
           req.body.Malop,
           NoiDung,
@@ -463,82 +465,22 @@ const gradeC = {
         );
       }
 
-      res.json({
-        msg: "Đã công bố thành công và được phép phúc khảo thành phần điểm",
-      });
-    } catch (error) {
-      res.json({
-        errors: [
-          {
-            msg: "Lỗi",
-          },
-        ],
-      });
-    }
-  },
-
-  // đóng phúc khảo 1 thành phần điểm
-  closeReview: async (req, res) => {
-    let Khoa = 1;
-    let AcpPhucKhao = 0;
-    // let TenCotDiem;
-    try {
-      //lấy tên lớp học
-      const NameClass = await classM.getNameClass(req.params.idLop);
-      console.log(NameClass.rows[0].TenLop);
-
-      // lấy tên cột điểm
-      const NameGradeComposition = await gradeM.getAll_GradeComposition();
-      for (grade of NameGradeComposition.rows) {
-        // console.log(grade.idCotDiem);
-        if (grade.idCotDiem == req.body.idCotDiem) {
-          var TenCotDiem = grade.TenCotDiem;
-        }
-      }
-
-      // thông báo đến học sinh
-      let Notify_NoiDung_Student = `Cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop} đã khóa, bạn không thể phúc khảo nữa`;
-      var idd;
-      const { rows: idLop } = await classM.getAll();
-
-      for (const id of idLop) {
-        if (id.idLop == req.params.idLop) {
-          idd = id.MaLop;
-          console.log(idd);
-          break;
-        }
-      }
-
-      const { rows: studentRows } = await classM.getStudent_inClass(idd);
-
-      if (studentRows && studentRows.length < 0) {
-        return res.json({
-          msg: "Không có học sinh nào trong lớp này",
-        });
-      }
-      let idPK = null;
-      for (const user of studentRows) {
+      // gửi thông báo đến các giáo viên còn lại rằng đã có điểm 1 thành phần
+      const { rows: teacher } = await classM.getTeacher_inClass(req.body.malop);
+      for (const user of teacher) {
         await notifyM.addNotify(
-          req.params.idLop,
-          Notify_NoiDung_Student,
-          req.body.ThoiGian,
+          req.body.Malop,
+          NoiDung,
+          ThoiGian,
           user.idUser,
-          idPK
+          null
         );
       }
 
-      // cập nhật không cho phúc khảo nữa
-      await gradeM.closeReview(
-        req.params.idLop,
-        req.body.idCotDiem,
-        AcpPhucKhao
-      );
-
       return res.json({
-        msg: "cập nhật không cho phúc khảo nữa",
+        msg: "Đã công bố thành công và được phép phúc khảo thành phần điểm",
       });
     } catch (error) {
-      console.log(error);
       return res.json({
         errors: [
           {

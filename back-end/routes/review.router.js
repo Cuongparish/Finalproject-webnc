@@ -7,6 +7,9 @@ const reviewC = require("../controllers/review.controller");
 router.post("/review", reviewC.addReview_Student);
 
 // chi tiết đơn phúc khảo
-router.post("/detailReview", reviewC.getDetailReview);
+router.post("/review/detailReview", reviewC.getDetailReview);
+
+// đóng đơn phúc khảo
+router.post("/review/closeReview/:idLop", reviewC.closeReview);
 
 module.exports = router;

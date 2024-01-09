@@ -141,6 +141,79 @@ const reviewC = {
       });
     }
   },
+
+  // đóng phúc khảo 1 thành phần điểm
+  //(req.params.idLop, req.body.idCotDiem, req.body.ThoiGian)
+  closeReview: async (req, res) => {
+    let Khoa = 1;
+    let AcpPhucKhao = 0;
+
+    try {
+      //lấy tên lớp học
+      const NameClass = await classM.getNameClass(req.params.idLop);
+      console.log(NameClass.rows[0].TenLop);
+
+      // lấy tên cột điểm
+      const NameGradeComposition = await gradeM.getAll_GradeComposition();
+      for (grade of NameGradeComposition.rows) {
+        // console.log(grade.idCotDiem);
+        if (grade.idCotDiem == req.body.idCotDiem) {
+          var TenCotDiem = grade.TenCotDiem;
+        }
+      }
+
+      // thông báo đến học sinh
+      let Notify_NoiDung_Student = `Cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop} đã khóa, bạn không thể phúc khảo nữa`;
+      var idd;
+      const { rows: idLop } = await classM.getAll();
+
+      for (const id of idLop) {
+        if (id.idLop == req.params.idLop) {
+          idd = id.MaLop;
+          console.log(idd);
+          break;
+        }
+      }
+
+      const { rows: studentRows } = await classM.getStudent_inClass(idd);
+
+      if (studentRows && studentRows.length < 0) {
+        return res.json({
+          msg: "Không có học sinh nào trong lớp này",
+        });
+      }
+      let idPK = null;
+      for (const user of studentRows) {
+        await notifyM.addNotify(
+          req.params.idLop,
+          Notify_NoiDung_Student,
+          req.body.ThoiGian,
+          user.idUser,
+          idPK
+        );
+      }
+
+      // cập nhật không cho phúc khảo nữa
+      await reviewM.closeReview(
+        req.params.idLop,
+        req.body.idCotDiem,
+        AcpPhucKhao
+      );
+
+      return res.json({
+        msg: "cập nhật không cho phúc khảo nữa",
+      });
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        errors: [
+          {
+            msg: "Lỗi",
+          },
+        ],
+      });
+    }
+  },
 };
 
 module.exports = reviewC;

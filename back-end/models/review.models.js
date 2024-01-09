@@ -12,6 +12,15 @@ module.exports = {
     return { rows };
   },
 
+  // đóng không cho phúc khảo nữa (done)
+  closeReview: async (idLop, idCotDiem, AcpPhucKhao) => {
+    const { rows } = await postgre.query(
+      'UPDATE public."CotDiem" SET  "AcpPhucKhao"=$3 WHERE "idLop"=$1 and "idCotDiem"=$2;',
+      [idLop, idCotDiem, AcpPhucKhao]
+    );
+    return { rows };
+  },
+
   //--------------------------------------Student------------------------
 
   // lấy idPhucKhao cuối cùng (done)
