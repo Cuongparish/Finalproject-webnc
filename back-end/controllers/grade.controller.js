@@ -301,10 +301,7 @@ const gradeC = {
       const { rows: header } = await gradeM.getPercentScore_inClass(
         req.params.idLop
       );
-      const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(
-        req,
-        res
-      );
+      const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(req, res);
       var data = [];
       let sum = 0;
       const new_header = header.map((comp) => ({
