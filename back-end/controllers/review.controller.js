@@ -4,11 +4,12 @@ const classM = require("../models/class.models.js");
 const accountM = require("../models/account.models.js");
 const gradeM = require("../models/grade.models.js");
 
+const { DateTime } = require("luxon");
+
 const reviewC = {
   // tạo đơn phúc khảo, thông báo đến các giáo viên trong lớp, thông báo đến học sinh tạo đơn phúc khảo
   addReview_Student: async (req, res) => {
     if (
-      !req.body.ThoiGian ||
       !req.body.DiemMongMuon ||
       !req.body.NoiDung ||
       !req.body.idCotDiem ||
@@ -18,9 +19,10 @@ const reviewC = {
       return res.json({ msg: "Dữ liệu trống" });
     }
     try {
+      const now = DateTime.now();
       //tạo đơn phúc khảo
       await reviewM.addReview_Student(
-        req.body.ThoiGian,
+        now,
         req.body.DiemMongMuon,
         req.body.NoiDung,
         req.body.idCotDiem,
@@ -37,7 +39,7 @@ const reviewC = {
       await notifyM.addNotify(
         req.body.idLop,
         Notify_NoiDung_Student,
-        req.body.ThoiGian,
+        now,
         req.body.idUser,
         idPK.rows[0].idLop
       );
@@ -50,7 +52,7 @@ const reviewC = {
         await notifyM.addNotify(
           req.body.idLop,
           Notify_NoiDung_Teacher,
-          req.body.ThoiGian,
+          now,
           teacher.idUser,
           idPK.rows[0].idLop
         );
@@ -120,7 +122,7 @@ const reviewC = {
       );
 
       temp = part4[0].Diem;
-      data.push({ Diem: temp });
+      data.push({ Diem_hien_tai: temp });
 
       // merge
       const consolidatedData = {};
@@ -142,6 +144,26 @@ const reviewC = {
     }
   },
 
+  // danh sách các phản hồi của đơn phúc khảo đó
+  // req.params.idPhucKhao
+  getRepliesReview: async (req, res) => {
+    try {
+      let data = [];
+      //lấy DiemMongMuon, NoiDung
+      const { rows } = await reviewM.getRepliesReview(req.params.idPhucKhao);
+      return res.json({ msg: "Success", data: rows });
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        errors: [
+          {
+            msg: "Invalid credentials",
+          },
+        ],
+      });
+    }
+  },
+
   // đóng phúc khảo 1 thành phần điểm
   //(req.params.idLop, req.body.idCotDiem, req.body.ThoiGian)
   closeReview: async (req, res) => {
@@ -149,6 +171,7 @@ const reviewC = {
     let AcpPhucKhao = 0;
 
     try {
+      const now = DateTime.now();
       //lấy tên lớp học
       const NameClass = await classM.getNameClass(req.params.idLop);
       console.log(NameClass.rows[0].TenLop);
@@ -189,7 +212,7 @@ const reviewC = {
         await notifyM.addNotify(
           req.params.idLop,
           Notify_NoiDung_Student,
-          req.body.ThoiGian,
+          now,
           user.idUser,
           idPK
         );
@@ -202,7 +225,7 @@ const reviewC = {
         await notifyM.addNotify(
           req.params.idLop,
           Notify_NoiDung_Student,
-          req.body.ThoiGian,
+          now,
           user.idUser,
           idPK
         );
@@ -234,11 +257,11 @@ const reviewC = {
   //(req.params.idPhucKhao, req.body.idUser, req.body.TraoDoi,
   //req.body.ThoiGian, req.params.idLop, req.body.idCotDiem)
   repliesReview: async (req, res) => {
+    const now = DateTime.now();
     if (
       !req.params.idPhucKhao ||
       !req.body.idUser ||
       !req.body.TraoDoi ||
-      !req.body.ThoiGian ||
       !req.params.idLop ||
       !req.body.idCotDiem
     ) {
@@ -250,7 +273,7 @@ const reviewC = {
         req.params.idPhucKhao,
         req.body.idUser,
         req.body.TraoDoi,
-        req.body.ThoiGian
+        now
       );
 
       // lấy malop
@@ -305,7 +328,7 @@ const reviewC = {
         await notifyM.addNotify(
           req.params.idLop,
           Notify_NoiDung_Student,
-          req.body.ThoiGian,
+          now,
           idUser_Cre_Review,
           req.params.idPhucKhao
         );
@@ -321,7 +344,7 @@ const reviewC = {
           await notifyM.addNotify(
             req.params.idLop,
             Notify_NoiDung_Teacher,
-            req.body.ThoiGian,
+            now,
             user.idUser,
             req.params.idPhucKhao
           );

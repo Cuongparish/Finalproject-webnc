@@ -17,4 +17,7 @@ router.post("/review/closeReview/:idLop", reviewC.closeReview);
 //req.body.ThoiGian, req.params.idLop, req.body.idCotDiem)
 router.post("/review/replies/:idLop/:idPhucKhao", reviewC.repliesReview);
 
+// danh sach cac phản hồi
+router.get("/review/listReplies/:idPhucKhao", reviewC.getRepliesReview);
+
 module.exports = router;

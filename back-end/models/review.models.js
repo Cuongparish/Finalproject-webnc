@@ -1,7 +1,7 @@
 const postgre = require("./database");
 const moment = require("moment");
 module.exports = {
-  // đóng không cho phúc khảo nữa (done)
+  // tra loi don phuc khao
   repliesReview: async (idPhucKhao, idUser, TraoDoi, ThoiGian) => {
     const sql = `INSERT INTO public."NoiDungTraoDoi"(
                 "idPhucKhao", "idUser", "TraoDoi", "ThoiGian")
@@ -9,13 +9,11 @@ module.exports = {
     await postgre.query(sql, [idPhucKhao, idUser, TraoDoi, ThoiGian]);
   },
 
-  // lấy danh sách các đơn phúc khảo
-  getReview: async (req, res) => {
-    const sql = `select *
-                from "PhucKhao" pk
-                ORDER BY pk."idPhucKhao" DESC;`;
-    const { rows } = await postgre.query(sql);
-    return { rows };
+  getRepliesReview: async (idPhucKhao) => {
+    const sql = ` select* 
+                  from "NoiDungTraoDoi" ndtd, "User"
+                  where ndtd."idPhucKhao"=$1 and "User"."idUser"=ndtd."idUser"`;
+    await postgre.query(sql, [idPhucKhao]);
   },
 
   //--------------------------------------Teacher------------------------
@@ -67,7 +65,6 @@ module.exports = {
       NoiDung,
       idCotDiem,
       idLop,
-      HoanThanh,
     ]);
     return { rows };
   },
