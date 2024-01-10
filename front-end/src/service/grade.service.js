@@ -63,7 +63,6 @@ const ExportToExcel_StudentList = async (idLop, type) => {
 
 const ImportToExcel_StudentList = async (idLop, formData) => {
   //console.log(formData);
-
   try {
     const response = await axios.post(
       `${API_URL}/api/v1/user/grade/importtoExcel_StudentList/${idLop}`,
@@ -81,6 +80,15 @@ const ImportToExcel_StudentList = async (idLop, formData) => {
     // Xử lý lỗi
     console.error("Error uploading file:", error);
   }
+};
+
+const GetGradeBoard = async (idLop) => {
+  return axios
+    .get(`${API_URL}/api/v1/user/grade/listClass/${idLop}`)
+    .then((res) => {
+      //console.log("res: ", res);
+      return res.data;
+    });
 };
 
 const InputGradeStudent = (Data) => {
@@ -105,7 +113,29 @@ const ExportToExcel_GradeColumn = async (idLop, TenCotDiem, type) => {
     console.error("Error exporting to Excel:", error);
     //throw error; // Re-throw lỗi để xử lý ở phía gọi hàm nếu cần
   }
-}
+};
+
+const ImportToExcel_GradeColumn = async (idLop, TenCotDiem, formData) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/api/v1/user/grade/importtoExcel_Score/`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        idLop,
+        TenCotDiem,
+      }
+    );
+    // Xử lý phản hồi từ server nếu cần
+    console.log("Server response:", response.data);
+    return response.data;
+  } catch (error) {
+    // Xử lý lỗi
+    console.error("Error uploading file:", error);
+  }
+};
 
 const ExportToExcel_GradeBoard = async (idLop, type) => {
   try {
@@ -121,7 +151,28 @@ const ExportToExcel_GradeBoard = async (idLop, type) => {
     console.error("Error exporting to Excel:", error);
     //throw error; // Re-throw lỗi để xử lý ở phía gọi hàm nếu cần
   }
-}
+};
+
+// const ImportToExcel_GradeBoard = async (idLop, formData) => {
+//   try {
+//     const response = await axios.post(
+//       `${API_URL}/api/v1/user/grade/importtoExcel_StudentList/${idLop}`,
+//       formData,
+//       {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
+//       }
+//     );
+//     // Xử lý phản hồi từ server nếu cần
+//     console.log("Server response:", response.data);
+//     return response.data;
+//   } catch (error) {
+//     // Xử lý lỗi
+//     console.error("Error uploading file:", error);
+//   }
+// }
+
 
 const GradeService = {
   CreateGradeStructure,
@@ -130,9 +181,12 @@ const GradeService = {
   UpdateGradeStructure,
   ExportToExcel_StudentList,
   ImportToExcel_StudentList,
+  GetGradeBoard,
   InputGradeStudent,
   ExportToExcel_GradeColumn,
+  ImportToExcel_GradeColumn,
   ExportToExcel_GradeBoard,
+  //ImportToExcel_GradeBoard,
 };
 
 export default GradeService;

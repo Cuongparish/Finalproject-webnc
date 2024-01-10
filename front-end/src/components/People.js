@@ -97,16 +97,21 @@ const People = (props) => {
 
   const handleUploadStudentList = async () => {
     if (selectedFile) {
-      console.log("selectedFiled: ", selectedFile);
+      //console.log("selectedFiled: ", selectedFile);
       const formData = new FormData();
       formData.append("file", selectedFile);
-      console.log("formdata: ", formData);
+      //console.log("formdata: ", formData);
 
       const res = await GradeService.ImportToExcel_StudentList(
         DetailClass.idLop,
         formData
       );
       console.log("File", res);
+      if(res === "File uploaded successfully!")
+      {
+        sessionStorage.setItem("Tab", "members");
+        window.location.reload();
+      }
     } else {
       console.log("Please select a file to upload");
     }
@@ -186,7 +191,7 @@ const People = (props) => {
                   <div>
                     <td
                       className="align-middle"
-                      style={{ width: "20%", padding: "5px" }}
+                      style={{ width: "5%", padding: "5px" }}
                     >
                       <input
                         type="checkbox"
@@ -197,9 +202,15 @@ const People = (props) => {
                     </td>
                     <td
                       className="align-middle"
-                      style={{ width: "75%" }}
+                      style={{ width: "20%", padding: "5px" }}
                     >
                       <h5>{Student.FullName}</h5>
+                    </td>
+                    <td
+                      className="align-middle"
+                      style={{ width: "55%" }}
+                    >
+                      <h5>{Student.StudentId}</h5>
                     </td>
                   </div>
                 ))}

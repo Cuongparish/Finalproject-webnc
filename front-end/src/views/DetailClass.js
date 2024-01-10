@@ -26,6 +26,7 @@ import GradeService from "../service/grade.service";
 const DetailClass = (props) => {
   const { malop } = useParams();
   const user = props.user;
+  const tab = sessionStorage.getItem("Tab");
   // const user = {
   //   idUser: "1",
   //   Email:  "phamtruongkhoa2000@gmail.com",
@@ -434,7 +435,7 @@ const DetailClass = (props) => {
         <Col md={10}>
           <div className="w-100 h-100 tab-menu">
             <Tabs
-              defaultActiveKey="news"
+              defaultActiveKey={tab}
               className="border-bottom border-2 px-3"
             >
               {/* Màn hình bảng tin */}
