@@ -162,54 +162,105 @@ const gradeC = {
 
   getGradesBoard: async (req, res) => {
     try {
+      let Key;
+
       const { rows: header } = await gradeM.getPercentScore_inClass(
         req.params.idLop
       );
-      const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(
-        req,
-        res
-      );
+
+      const { rows: Teacher } = await classM.getIDTeacher(req.params.idLop);
+
+      let checkRole = false;
+      for (const user of Teacher) {
+        if (user.idUser == req.body.idUser) {
+          checkRole = true;
+        }
+      }
+
       var data = [];
       let sum = 0;
-      const new_header = header.map((comp) => ({
-        TenCotDiem: comp.TenCotDiem,
-        PhanTramDiem: comp.PhanTramDiem,
-        Khoa: comp.Khoa,
-      }));
+      //bảng điểm của học sinh
+      if (checkRole == false) {
+        Key = 1;
+        const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(
+          req.params.idLop,
+          Key
+        );
+        const new_header = header.map((comp) => ({
+          TenCotDiem: comp.TenCotDiem,
+          PhanTramDiem: comp.PhanTramDiem,
+          Khoa: comp.Khoa,
+        }));
 
-      let final_header = [];
-      for (let i = 0; i < new_header.length; i++) {
-        console.log(new_header[i].Khoa);
-        if (new_header[i].Khoa == 1) {
-          final_header.push(new_header[i]);
-        }
-      }
-
-      // console.log(final_header);
-
-      for (let i = 0; i < gradeBoard.length; i++) {
-        const student = gradeBoard[i];
-
-        for (let k = 0; k < final_header.length; k++) {
-          const percent = final_header[k];
-          if (student.Diem[k] != null) {
-            sum += (student.Diem[k] * percent.PhanTramDiem) / 100;
-          } else {
-            sum += 0;
+        let final_header = [];
+        for (let i = 0; i < new_header.length; i++) {
+          console.log(new_header[i].Khoa);
+          if (new_header[i].Khoa == 1) {
+            final_header.push(new_header[i]);
           }
         }
-        sum = Number(sum.toFixed(2));
-        if (sum > 10) {
-          sum = 10;
+
+        for (let i = 0; i < gradeBoard.length; i++) {
+          const student = gradeBoard[i];
+
+          for (let k = 0; k < final_header.length; k++) {
+            const percent = final_header[k];
+            if (student.Diem[k] != null) {
+              sum += (student.Diem[k] * percent.PhanTramDiem) / 100;
+            } else {
+              sum += 0;
+            }
+          }
+          sum = Number(sum.toFixed(2));
+          if (sum > 10) {
+            sum = 10;
+          }
+          student.total = sum;
+          sum = 0;
         }
-        student.total = sum;
-        sum = 0;
+
+        data.push({ msg: "header", data: final_header });
+        data.push({ msg: "Grade_Board", data: gradeBoard });
+        return res.json({ data });
       }
+      // bảng điểm của giáo viên
+      else {
+        Key = 0;
+        const { rows: gradeBoard } =
+          await gradeM.getGradesBoard_inClass_Teacher(req.params.idLop);
+        const new_header = header.map((comp) => ({
+          TenCotDiem: comp.TenCotDiem,
+          PhanTramDiem: comp.PhanTramDiem,
+        }));
 
-      data.push({ msg: "header", data: final_header });
-      data.push({ msg: "Grade_Board", data: gradeBoard });
+        let final_header = [];
+        for (let i = 0; i < new_header.length; i++) {
+          final_header.push(new_header[i]);
+        }
 
-      res.json({ data });
+        for (let i = 0; i < gradeBoard.length; i++) {
+          const student = gradeBoard[i];
+
+          for (let k = 0; k < final_header.length; k++) {
+            const percent = final_header[k];
+            if (student.Diem[k] != null) {
+              sum += (student.Diem[k] * percent.PhanTramDiem) / 100;
+            } else {
+              sum += 0;
+            }
+          }
+          sum = Number(sum.toFixed(2));
+          if (sum > 10) {
+            sum = 10;
+          }
+          student.total = sum;
+          sum = 0;
+        }
+
+        data.push({ msg: "header", data: final_header });
+        data.push({ msg: "Grade_Board", data: gradeBoard });
+        return res.json({ data });
+      }
     } catch (error) {
       console.log(error);
       res.json({

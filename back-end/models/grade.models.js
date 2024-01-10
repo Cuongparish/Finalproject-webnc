@@ -237,7 +237,7 @@ module.exports = {
     }
   },
 
-  getGradesBoard_inClass: async (req, res) => {
+  getGradesBoard_inClass: async (idLop, Khoa) => {
     const sql = `
     SELECT
         U."FullName",
@@ -256,14 +256,14 @@ module.exports = {
     LEFT JOIN
         public."CotDiem" CD ON BDTP."idCotDiem" = CD."idCotDiem" AND BDTP."idLop" = CD."idLop"
     WHERE
-        LH."idLop" = $1 and CD."Khoa"=1
+        LH."idLop" = $1 and CD."Khoa"=$2
     GROUP BY
         U."FullName", HS."StudentId"
     ORDER BY
         U."FullName";
 `;
 
-    const { rows } = await postgre.query(sql, [req.params.idLop]);
+    const { rows } = await postgre.query(sql, [idLop, Khoa]);
 
     return { rows };
   },
@@ -481,6 +481,37 @@ module.exports = {
 
   getAll_HocSinh: async () => {
     const { rows } = await postgre.query('SELECT * FROM "HocSinh" ');
+    return { rows };
+  },
+
+  getGradesBoard_inClass_Teacher: async (idLop) => {
+    const sql = `
+    SELECT
+        U."FullName",
+        HS."StudentId",
+        ARRAY_AGG(BDTP."Diem" ORDER BY CD."idCotDiem") AS "Diem"
+    FROM
+        public."LopHoc" LH
+    JOIN
+        public."HocSinhLopHoc" HSLH ON LH."idLop" = HSLH."idLop"
+    JOIN
+        public."HocSinh" HS ON HSLH."idHocSinh" = HS."idHocSinh"
+    JOIN
+        public."User" U ON HS."idUser" = U."idUser"
+    LEFT JOIN
+        public."BangDiemThanhPhan" BDTP ON HSLH."idHocSinh" = BDTP."idHocSinh" AND LH."idLop" = BDTP."idLop"
+    LEFT JOIN
+        public."CotDiem" CD ON BDTP."idCotDiem" = CD."idCotDiem" AND BDTP."idLop" = CD."idLop"
+    WHERE
+        LH."idLop" = $1 
+    GROUP BY
+        U."FullName", HS."StudentId"
+    ORDER BY
+        U."FullName";
+`;
+
+    const { rows } = await postgre.query(sql, [idLop]);
+
     return { rows };
   },
 };
