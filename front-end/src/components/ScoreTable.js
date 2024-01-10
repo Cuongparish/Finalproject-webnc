@@ -1,8 +1,9 @@
 import { React, useState, useEffect } from "react";
-import { Row, Col, Table, Form, FloatingLabel, Button } from "react-bootstrap";
-import { RiSlideshowLine } from "react-icons/ri";
+import { Row, Col, Table, Form, FloatingLabel, Button, Modal, Card, Tabs, Tab } from "react-bootstrap";
+import { IoSettings } from "react-icons/io5";
 import { RxUpdate } from "react-icons/rx";
-import { TbDatabaseExport } from "react-icons/tb";
+import { TbDatabaseExport, TbDatabaseImport } from "react-icons/tb";
+import { FaTable } from "react-icons/fa6";
 
 import GradeService from "../service/grade.service";
 
@@ -11,6 +12,14 @@ import '../App.css';
 const ScoreTable = (props) => {
     //const GradeStructures = props.gradestructure;
     //const ListStudent = props.liststudent;
+    const [show_setting, setShowSetting] = useState(false);
+    const handleShowSettingClose = () => setShowSetting(false);
+    const handleShowSettingOpen = () => setShowSetting(true);
+    
+    const [score_options, setScoreOptions] = useState(false);
+    const handleScoreOptionsClose = () => setScoreOptions(false);
+    const handleScoreOptionsOpen = () => setScoreOptions(true);
+
     const [GradeStructures, setGradeStructures] = useState(props.gradestructure)
     const [ListStudent, setListStudent] = useState(props.liststudent)
 
@@ -169,6 +178,75 @@ const ScoreTable = (props) => {
         return studentWithScore ? studentWithScore.Diem : GradeStructures.map(() => '');
     });
 
+    const [GradeStructure, setGradeStructure] = useState([
+        <Row key={0} className="mx-2 mb-0 justify-content-center">
+          <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
+            <FloatingLabel
+              controlId={`add_score_0`}
+              label="Tên cột điểm"
+              className="mb-3"
+            >
+              <Form.Control
+                id={`add_score_0`}
+                type="text"
+                placeholder="Exercise"
+              //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
+              />
+            </FloatingLabel>
+            <FloatingLabel controlId={`add_score_percentage_0`} label="% cột điểm">
+              <Form.Control
+                id={`add_score_percentage_0`}
+                type="number"
+                placeholder="5%"
+              //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
+              />
+            </FloatingLabel>
+          </Card>
+        </Row>,
+    ]);
+    //-----------------------------------------Tạo grade structure
+  const addGradeStructure = () => {
+    const newGradeStructure = (
+        <Row key={0} className="mx-2 mb-0 justify-content-center">
+            <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
+            <FloatingLabel
+                controlId={`add_score_${GradeStructure.length}`}
+                label="Tên cột điểm"
+                className="mb-3"
+            >
+                <Form.Control
+                id={`add_score_${GradeStructure.length}`}
+                type="text"
+                placeholder="Exercise"
+                // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
+                />
+            </FloatingLabel>
+            <FloatingLabel
+                controlId={`add_score_percentage_${GradeStructure.length}`}
+                label="% cột điểm"
+            >
+                <Form.Control
+                id={`add_score_percentage_${GradeStructure.length}`}
+                type="number"
+                placeholder="5%"
+                // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
+                />
+            </FloatingLabel>
+            </Card>
+        </Row>
+    );
+
+    setGradeStructure([...GradeStructure, newGradeStructure]);
+    };
+
+    const RemoveGradeStructure = (indexToRemove) => {
+        const updatedGradeStructure = GradeStructure.filter(
+        (_, index) => index !== indexToRemove
+        );
+        setGradeStructure(updatedGradeStructure);
+    };
+
+
     useEffect(() => {
         CaculateTotalPercent();
         GetGradeBoard();
@@ -176,7 +254,7 @@ const ScoreTable = (props) => {
 
     return (
         <>
-            <Row className="g-0 px-0">
+            <Row className="g-0 px-0 mb-5">
                 {/* Table Score */}
                 <Table className="m-0" bordered hover>
                     <thead>
@@ -246,94 +324,217 @@ const ScoreTable = (props) => {
                 </Table>
             </Row>
 
-            <Row className="d-flex align-items-end justify-content-end my-5">
+            <Row className="justify-content-end text-end mb-3 px-3">
                 <Col sm={2}>
                     <a className="btn btn-info" onClick={handleSave}>
                         <RxUpdate className="mx-1" /> Lưu bảng điểm
                     </a>
                 </Col>
+            </Row>
 
+            <Row className="justify-content-end text-end mb-3 px-3">
                 <Col sm={2}>
-                    <a className="btn btn-info">
-                        <RxUpdate className="mx-1" /> Update bảng điểm
+                    <a onClick={handleShowSettingOpen} className="btn btn-danger">
+                        <IoSettings className="mx-1" /> Cài đặt
                     </a>
-                </Col>
-
-                <Col sm={2}>
-                    <Form.Group className="m-2" controlId="gender">
-                        <Form.Label className="fw-bold">Chọn cột điểm để down/upload:</Form.Label>
-                        <Form.Select
-                            defaultValue="Male"
-                            className="border-2 border-black"
-                            value={SelectGradeColumn}
-                            onChange={(e) => setSelectGradeColumn(e.target.value)}
-                        >
-                            {GradeStructures?.map((GradeStructure, index) => (
-                                <option>{GradeStructure.TenCotDiem}</option>
-                            ))}
-                            <option>Tất Cả</option>
-                        </Form.Select>
-                    </Form.Group>
-                </Col>
-
-                <Col sm={2}>
-                    <Form>
-                        <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Select file to upload:</Form.Label>
-                            <Form.Control
-                                type="file"
-                                onChange={handleFileChange}
-                                style={{ width: '300px' }} // Điều chỉnh chiều rộng của input
-                            />
-                        </Form.Group>
-                        <Button
-                            variant="primary"
-                            //onClick={handleUploadGradeBoard}
-                            style={{ width: '200px' }} // Điều chỉnh chiều rộng của nút
-                        >
-                            Upload Grade Board
-                        </Button>
-                    </Form>
-                </Col>
-
-                <Col sm={2}>
-                    <a className="btn btn-primary">
-                        <RiSlideshowLine className="mx-1" /> Public bảng điểm
-                    </a>
-                </Col>
-                <Col sm={2}>
-                    {/* <Form.Select
-                        defaultValue={Type}
-                        onChange={(e) => setType(e.target.value)}
-                        style={{ width: '150px', marginBottom: '20px' }} // Điều chỉnh chiều rộng của dropdown
-                    >
-                        <option>xlsx</option>
-                        <option>csv</option>
-                    </Form.Select>
-
-                    <a className="btn btn-success" onClick={handleDownloadGradeBoard}>
-                        <TbDatabaseExport className="mx-1" /> Export bảng điểm
-                    </a> */}
-                    <FloatingLabel controlId="type" label="FileType" className="mb-3" style={{ display: 'flex', flexDirection: 'column' }}>
-                        <Form.Select
-                            defaultValue={Type}
-                            onChange={(e) => setType(e.target.value)}
-                            style={{ width: '150px', marginBottom: '20px' }} // Điều chỉnh chiều rộng của dropdown
-                        >
-                            <option>xlsx</option>
-                            <option>csv</option>
-                        </Form.Select>
-
-                        <Button
-                            variant="primary"
-                            onClick={handleDownloadGradeBoard}
-                            style={{ width: '200px' }} // Điều chỉnh chiều rộng của nút
-                        >
-                            <TbDatabaseExport className="mx-1" />Export bảng điểm
-                        </Button>
-                    </FloatingLabel>
                 </Col>
             </Row>
+            
+            <Row className="justify-content-end text-end mb-3 px-3">
+                <Col sm={2}>
+                    <a onClick={handleScoreOptionsOpen} className="btn btn-success">
+                        <FaTable className="mx-1" /> Điểm
+                    </a>
+                </Col>
+            </Row>
+
+            {/* Modal Show Setting */}
+            <Modal show={show_setting} size="lg" onHide={handleShowSettingClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title className="fw-bold">Cài đặt</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Row className="mb-0 justify-content-center">
+                        <Card className="border-0">
+                            <FloatingLabel controlId="name_score" label="Tên cột điểm" className="mb-3">
+                                <Form.Select
+                                    className="border-2 border-black"
+                                    value={SelectGradeColumn}
+                                    onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                >
+                                    {GradeStructures?.map((GradeStructure, index) => (
+                                        <option>{GradeStructure.TenCotDiem}</option>
+                                    ))}
+                                    <option>Tất Cả</option>
+                                </Form.Select>
+                            </FloatingLabel>
+                            <FloatingLabel controlId="public_score" label="Công bố điểm" className="mb-3">
+                                <Form.Select
+                                // onChange={(e) => setSex(e.target.value)}
+                                >
+                                    <option>Công bố</option>
+                                    <option>Ẩn</option>
+                                </Form.Select>
+                            </FloatingLabel>
+                            <FloatingLabel controlId="review_opt" label="Phúc khảo" className="mb-3">
+                                <Form.Select
+                                // onChange={(e) => setSex(e.target.value)}
+                                >
+                                    <option>Cho phúc khảo</option>
+                                    <option>Chốt điểm</option>
+                                </Form.Select>
+                            </FloatingLabel>
+                            
+                        </Card>
+                    </Row>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleShowSettingClose}>
+                        Hủy
+                    </Button>
+                    <Button variant="primary">Thêm mới</Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Modal Show Score Options */}
+            <Modal show={score_options} size="lg" onHide={handleScoreOptionsClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title className="fw-bold">Điểm</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Row className="mb-0 justify-content-center">
+                        <Card className="border-0">
+                            <Tabs
+                                defaultActiveKey="export_score"
+                                id="uncontrolled-tab-example"
+                                className="mb-3"
+                            >
+                                <Tab eventKey="export_score" title="Export bảng điểm">
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="fw-bold mb-2">Chọn loại file để export:</Form.Label>
+                                        <Form.Select
+                                            defaultValue={Type}
+                                            onChange={(e) => setType(e.target.value)}
+                                            className="border-2 border-black mb-3"
+                                        >
+                                            <option>xlsx</option>
+                                            <option>csv</option>
+                                        </Form.Select>
+
+                                        <Button
+                                            className="border-2 border-black mb-3"
+                                            variant="success"
+                                            onClick={handleDownloadGradeBoard}
+                                        >
+                                            <TbDatabaseExport className="mx-1" />Export bảng điểm
+                                        </Button>
+                                    </Form.Group>
+                                </Tab>
+                                <Tab eventKey="import_score" title="Import bảng điểm">
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="fw-bold mb-2">Chọn cột điểm để import:</Form.Label>
+                                        <Form.Select
+                                            className="border-2 border-black"
+                                            value={SelectGradeColumn}
+                                            onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                        >
+                                            {GradeStructures?.map((GradeStructure, index) => (
+                                                <option>{GradeStructure.TenCotDiem}</option>
+                                            ))}
+                                            <option>Tất Cả</option>
+                                        </Form.Select>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="fw-bold mb-2">Input file:</Form.Label>
+                                        <Form.Control type="file" className="border-2 border-black" />
+                                    </Form.Group>
+                                    <Button
+                                        className="border-2 border-black mb-3"
+                                        variant="warning"
+                                        // onClick={handleDownloadGradeBoard}
+                                    >
+                                        <TbDatabaseImport className="mx-1" />Import bảng điểm
+                                    </Button>
+                                </Tab>
+                                <Tab eventKey="update_score" title="Update bảng điểm">
+                                    {GradeStructure.map((gradestructure, index) => (
+                                        <div key={index}>
+                                            {gradestructure}
+                                            <Row className="mx-2 mb-3 justify-content-center">
+                                                <Button
+                                                variant="danger"
+                                                size="sm"
+                                                onClick={() => RemoveGradeStructure(index)}
+                                                style={{
+                                                    borderRadius: "0 0 10px 10px",
+                                                    width: "100%",
+                                                    height: "40px",
+                                                    fontSize: "24px",
+                                                    lineHeight: "24px",
+                                                    fontWeight: "bold",
+                                                    boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
+                                                    display: "inline-flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    cursor: "pointer",
+                                                }}
+                                                >
+                                                -
+                                                </Button>
+                                            </Row>
+                                        </div> // Wrap in a container like div
+                                    ))}
+
+                                    <Row className="mb-3 justify-content-center">
+                                        <Col xs={12} className="text-center">
+                                            <Button
+                                                variant="primary"
+                                                size="sm"
+                                                onClick={addGradeStructure}
+                                                style={{
+                                                borderRadius: "50%",
+                                                width: "40px",
+                                                height: "40px",
+                                                fontSize: "24px",
+                                                lineHeight: "24px",
+                                                fontWeight: "bold",
+                                                boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
+                                                display: "inline-flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                cursor: "pointer",
+                                                }}
+                                            >
+                                                +
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                    
+                                    <Row className="mx-2 mb-3 justify-content-end">
+                                        <Col xs={2} className="p-0 text-center">
+                                            <Button
+                                                variant="success"
+                                                size="sm"
+                                                // onClick={addGradeStructure}
+                                                style={{
+                                                width: "100%",
+                                                height: "40px",
+                                                fontSize: "18px",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                cursor: "pointer",
+                                                }}
+                                            >
+                                                Xác nhận
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Tab>
+                            </Tabs>
+                        </Card>
+                    </Row>
+                </Modal.Body>
+            </Modal>
         </>
     );
 };
