@@ -19,6 +19,7 @@ const ScoreTable = (props) => {
     const [GradeError, setGradeError] = useState(false);
 
     const [Type, setType] = useState("xlsx");
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const CaculateTotalPercent = () => {
         let total = 0;
@@ -108,6 +109,28 @@ const ScoreTable = (props) => {
         } catch (error) {
             console.error("Error handling download:", error);
             // Xử lý lỗi nếu cần
+        }
+    };
+
+    const handleUploadGradeBoard = async () => {
+        if (selectedFile) {
+            //console.log("selectedFiled: ", selectedFile);
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+            //console.log("formdata: ", formData);
+
+            const res = await GradeService.ImportToExcel_GradeColumn(
+                GradeStructures[0].idLop,
+                SelectGradeColumn,
+                formData
+            );
+            //console.log("File", res);
+            if (res === "File uploaded successfully!") {
+                sessionStorage.setItem("Tab", "score");
+                window.location.reload();
+            }
+        } else {
+            console.log("Please select a file to upload");
         }
     };
 

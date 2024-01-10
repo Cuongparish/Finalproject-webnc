@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL = "https://finalproject-webnc.vercel.app";
-// const API_URL = "http://localhost:5000";
+//const API_URL = "http://localhost:5000";
 
 const GetAccount = (idUser) => {
   return axios.get(`${API_URL}/api/v1/user/profile/${idUser}`).then((res) => {

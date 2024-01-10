@@ -12,6 +12,10 @@ const ClassRoom = (props) => {
 
   const detail_class_link = `/detail-class/${MaLop}`;
 
+  const handleClick = () => {
+    sessionStorage.setItem("Tab", "news"); 
+  }
+
   return (
     <>
       <Card className="class-item" style={{ position: 'relative' }}>
@@ -25,7 +29,7 @@ const ClassRoom = (props) => {
           <Card.Subtitle className="mb-2 text-muted">{ChuDe}</Card.Subtitle>
         </Card.Body>
         <div style={{ position: 'absolute', bottom: '0', left: '0', right: '0', padding: '10px', display: 'flex', justifyContent: 'flex-end' }}>
-          <Button href={detail_class_link} variant="primary">Truy cập <RxEnter /></Button>
+          <Button href={detail_class_link} onClick={handleClick} variant="primary">Truy cập <RxEnter /></Button>
           <Button variant="danger" className='mx-2'>Hủy <ImCancelCircle /></Button>
         </div>
       </Card>
