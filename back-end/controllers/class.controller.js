@@ -94,7 +94,7 @@ const classC = {
       const { rows: teacherRows } = await classM.getTeacher_inClass(
         req.params.malop
       );
-      console.log(teacherRows);
+      //console.log(teacherRows);
       const { rows: bad } = await banAccountM.getAll();
 
       var data = [];
@@ -172,7 +172,7 @@ const classC = {
       const { rows: Role } = await classM.Role_inClass(req, res);
 
       if (Role && Role.length > 0) {
-        data.push({ role: "Student" });
+        data.push({ role: "Student", StudentId: Role[0].StudentId });
       } else {
         data.push({ role: "Teacher" });
       }

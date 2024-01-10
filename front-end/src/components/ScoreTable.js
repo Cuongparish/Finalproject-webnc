@@ -11,6 +11,7 @@ import '../App.css';
 const ScoreTable = (props) => {
     //const GradeStructures = props.gradestructure;
     //const ListStudent = props.liststudent;
+    const user = props.user;
     const [GradeStructures, setGradeStructures] = useState(props.gradestructure)
     const [ListStudent, setListStudent] = useState(props.liststudent)
 
@@ -36,9 +37,8 @@ const ScoreTable = (props) => {
 
     const GetGradeBoard = async () => {
         try {
-            await GradeService.GetGradeBoard(GradeStructures[0].idLop).then(
+            await GradeService.GetGradeBoard(GradeStructures[0].idLop, user.idUser).then(
                 (res) => {
-                    //console.log("Grade board: ", res);
                     if (res.data) {
                         if (res.data && res.data[1]?.data) {
                             setListStudentHaveScore(res.data[1].data);
@@ -140,17 +140,14 @@ const ScoreTable = (props) => {
 
     const handleUploadGradeBoard = async () => {
         if (selectedFile) {
-            //console.log("selectedFiled: ", selectedFile);
             const formData = new FormData();
             formData.append("file", selectedFile);
-            //console.log("formdata: ", formData);
 
             const res = await GradeService.ImportToExcel_GradeColumn(
                 GradeStructures[0].idLop,
                 SelectGradeColumn,
                 formData
             );
-            //console.log("File", res);
             if (res === "File uploaded successfully!") {
                 sessionStorage.setItem("Tab", "score");
                 window.location.reload();

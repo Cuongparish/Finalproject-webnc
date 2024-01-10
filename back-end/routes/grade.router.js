@@ -46,7 +46,7 @@ router.post(
 );
 
 // bang diem cua cac hoc sinh trong  lop hoc
-router.get("/grade/listClass/:idLop", gradeController.getGradesBoard);
+router.get("/grade/listClass/:idLop/:idUser", gradeController.getGradesBoard);
 
 // nhap diem cho  hoc sinh
 router.post("/grade/inputScore", gradeController.addScore_Student_inClass);

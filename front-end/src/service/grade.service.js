@@ -82,9 +82,9 @@ const ImportToExcel_StudentList = async (idLop, formData) => {
   }
 };
 
-const GetGradeBoard = async (idLop) => {
+const GetGradeBoard = async (idLop, idUser) => {
   return axios
-    .get(`${API_URL}/api/v1/user/grade/listClass/${idLop}`)
+    .get(`${API_URL}/api/v1/user/grade/listClass/${idLop}/${idUser}`)
     .then((res) => {
       //console.log("res: ", res);
       return res.data;
