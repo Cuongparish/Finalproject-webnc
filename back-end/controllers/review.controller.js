@@ -162,8 +162,7 @@ const reviewC = {
         }
       }
 
-      // thông báo đến học sinh
-      let Notify_NoiDung_Student = `Cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop} đã khóa, bạn không thể phúc khảo nữa`;
+      // lấy malop
       var idd;
       const { rows: idLop } = await classM.getAll();
 
@@ -175,6 +174,9 @@ const reviewC = {
         }
       }
 
+      // thông báo đến học sinh
+      let Notify_NoiDung_Student = `Cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop} đã dừng nhận phúc khảo`;
+
       const { rows: studentRows } = await classM.getStudent_inClass(idd);
 
       if (studentRows && studentRows.length < 0) {
@@ -184,6 +186,19 @@ const reviewC = {
       }
       let idPK = null;
       for (const user of studentRows) {
+        await notifyM.addNotify(
+          req.params.idLop,
+          Notify_NoiDung_Student,
+          req.body.ThoiGian,
+          user.idUser,
+          idPK
+        );
+      }
+
+      // thông báo đến giáo viên
+      const { rows: teacherRows } = await classM.getTeacher_inClass(idd);
+
+      for (const user of teacherRows) {
         await notifyM.addNotify(
           req.params.idLop,
           Notify_NoiDung_Student,
@@ -209,6 +224,116 @@ const reviewC = {
         errors: [
           {
             msg: "Lỗi",
+          },
+        ],
+      });
+    }
+  },
+
+  // trả lời qua lại đơn phúc khảo
+  //(req.params.idPhucKhao, req.body.idUser, req.body.TraoDoi,
+  //req.body.ThoiGian, req.params.idLop, req.body.idCotDiem)
+  repliesReview: async (req, res) => {
+    if (
+      !req.params.idPhucKhao ||
+      !req.body.idUser ||
+      !req.body.TraoDoi ||
+      !req.body.ThoiGian ||
+      !req.params.idLop ||
+      !req.body.idCotDiem
+    ) {
+      return res.json({ msg: "Dữ liệu trống" });
+    }
+    try {
+      // tra loi
+      reviewM.repliesReview(
+        req.params.idPhucKhao,
+        req.body.idUser,
+        req.body.TraoDoi,
+        req.body.ThoiGian
+      );
+
+      // lấy malop
+      var idd;
+      const { rows: idLop } = await classM.getAll();
+
+      for (const id of idLop) {
+        if (id.idLop == req.body.idLop) {
+          idd = id.MaLop;
+          console.log(idd);
+          break;
+        }
+      }
+
+      //lấy tên lớp học
+      const NameClass = await classM.getNameClass(req.params.idLop);
+      // console.log(NameClass.rows[0].TenLop);
+
+      // lấy tên cột điểm
+      const NameGradeComposition = await gradeM.getAll_GradeComposition();
+      for (const grade of NameGradeComposition.rows) {
+        // console.log(grade.idCotDiem);
+        if (grade.idCotDiem == req.body.idCotDiem) {
+          var TenCotDiem = grade.TenCotDiem;
+        }
+      }
+
+      // kiểm tra xem idUser nhập nội dung trả lời đơn phúc khảo là hs hay gv của lớp học này
+      const { rows: studentRows } = await classM.getStudent_inClass(idd);
+      let hs = false;
+      let ten;
+      for (let user of studentRows) {
+        if (user.idUser == req.body.idUser) {
+          hs = true;
+          ten = user.FullName;
+        }
+      }
+      // nếu idUser này là giáo viên
+      if (hs == false) {
+        // lấy học sinh tạo đơn phúc khảo
+        const notify = await notifyM.getAll();
+        for (const user of notify.rows) {
+          if (req.params.idPhucKhao == user.idPhucKhao) {
+            var idUser_Cre_Review = user.idUser;
+          }
+        }
+
+        // thông báo đến học sinh
+        let Notify_NoiDung_Student = `Giáo viên ${ten} đã phản hồi đơn phúc khảo của bạn của cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
+
+        let idPK = null;
+        await notifyM.addNotify(
+          req.params.idLop,
+          Notify_NoiDung_Student,
+          req.body.ThoiGian,
+          idUser_Cre_Review,
+          req.params.idPhucKhao
+        );
+      }
+
+      //nếu idUser là học sinh
+      if (hs == true) {
+        // thông báo đến giáo viên
+        const { rows: teacherRows } = await classM.getTeacher_inClass(idd);
+
+        for (const user of teacherRows) {
+          let Notify_NoiDung_Teacher = `Học sinh ${user.FullName} đã phản hồi đơn phúc khảo, của cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
+          await notifyM.addNotify(
+            req.params.idLop,
+            Notify_NoiDung_Teacher,
+            req.body.ThoiGian,
+            user.idUser,
+            req.params.idPhucKhao
+          );
+        }
+      }
+      return res.json({ msg: "Success" });
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        errors: [
+          {
+            msg: "Invalid credentials",
           },
         ],
       });

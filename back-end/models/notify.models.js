@@ -1,6 +1,16 @@
 const postgre = require("./database");
 const moment = require("moment");
 module.exports = {
+  getAll: async (req, res) => {
+    const sql = `SELECT*
+              FROM "ThongBao" tb
+              ORDER BY tb."idThongBao" ASC;`;
+    const { rows } = await postgre.query(sql);
+    rows.forEach((element) => {
+      element.ThoiGian = moment(element.ThoiGian).format("HH:mm:ss DD-MM-YYYY");
+    });
+    return { rows };
+  },
   //done
   getNotify: async (req, res) => {
     const sql = `SELECT

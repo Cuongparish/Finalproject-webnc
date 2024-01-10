@@ -12,4 +12,9 @@ router.post("/review/detailReview", reviewC.getDetailReview);
 // đóng đơn phúc khảo
 router.post("/review/closeReview/:idLop", reviewC.closeReview);
 
+// trả lời đơn phúc khảo
+//(req.params.idPhucKhao, req.body.idUser, req.body.TraoDoi,
+//req.body.ThoiGian, req.params.idLop, req.body.idCotDiem)
+router.post("/review/replies/:idLop/:idPhucKhao", reviewC.repliesReview);
+
 module.exports = router;
