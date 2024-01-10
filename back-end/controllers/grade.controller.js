@@ -172,7 +172,7 @@ const gradeC = {
 
       let checkRole = false;
       for (const user of Teacher) {
-        if (user.idUser == req.body.idUser) {
+        if (user.idUser == req.params.idUser) {
           checkRole = true;
         }
       }
@@ -194,7 +194,7 @@ const gradeC = {
 
         let final_header = [];
         for (let i = 0; i < new_header.length; i++) {
-          console.log(new_header[i].Khoa);
+          //console.log(new_header[i].Khoa);
           if (new_header[i].Khoa == 1) {
             final_header.push(new_header[i]);
           }

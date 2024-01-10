@@ -1,12 +1,19 @@
 import { React, useState, useEffect } from "react";
 import { Row, Col, Table, Modal, FloatingLabel, Card, Button, Form } from "react-bootstrap";
 
+import GradeService from "../service/grade.service";
 
 import '../App.css';
 
 const ScoreTable_Student = (props) => {
+    const user = props.user;
+    const StudentId = props.studentid;
+
     const GradeStructures = props.gradestructure;
-    const ListStudent = props.liststudent;
+    //const [ListStudent, setListStudent] = useState(props.liststudent);
+
+    const [StudentHaveScore, setStudentHaveScore] = useState([]);
+
     const [TotalPercent, setTotalPercent] = useState(0);
 
     const CaculateTotalPercent = () => {
@@ -15,6 +22,27 @@ const ScoreTable_Student = (props) => {
             total += parseInt(GradeStructure.PhanTramDiem, 10);
         });
         setTotalPercent(total);
+    }
+
+    const GetGradeBoard = async () => {
+        try {
+            await GradeService.GetGradeBoard(GradeStructures[0].idLop, user.idUser).then(
+                (res) => {
+                    //console.log(res);
+                    if (res.data) {
+                        if (res.data && res.data[1]?.data) {
+                            const studentWithScore = res.data[1].data.find(item => item.StudentId === StudentId);
+                            setStudentHaveScore(studentWithScore);
+                        }
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     const [show_request, setShowRequest] = useState(false);
@@ -26,7 +54,8 @@ const ScoreTable_Student = (props) => {
 
     useEffect(() => {
         CaculateTotalPercent();
-    }, [GradeStructures]);
+        GetGradeBoard();
+    }, [props.gradestructure[0].idLop]);
 
     return (
         <>
@@ -46,24 +75,32 @@ const ScoreTable_Student = (props) => {
                             ))}
                             <td className="align-middle" style={{ width: '10%' }}>
                                 <div>Tổng kết</div>
-                                <div>{TotalPercent}</div>
+                                <div>{TotalPercent}%</div>
                             </td>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* data start */}
                         <tr>
-                            {ListStudent?.map((Student, index) => (
-                                <>
-                                    <td className="text-center">{Student.FullName}</td>
-                                    <td className="text-center">{Student.StudentId}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </>
-                            ))}
+                            <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{StudentHaveScore?.FullName}</td>
+                            <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{StudentHaveScore?.StudentId}</td>
+                            {/* {StudentHaveScore?.Diem.map((grade, gradeIndex) => (
+                                <td key={gradeIndex} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                                    {grade}/10
+                                </td>
+                            ))} */}
+                            {StudentHaveScore && StudentHaveScore.Diem ? (
+                                GradeStructures?.map((GradeStructure, gradeIndex) => (
+                                    <td key={gradeIndex} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                                        {StudentHaveScore.Diem[gradeIndex]}
+                                    </td>
+                                ))
+                            ) : (
+                                <td colSpan={GradeStructures.length}>
+                                    Giáo viên chưa public cột điểm nào
+                                </td>
+                            )}
+                            <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{StudentHaveScore?.total}</td>
                         </tr>
-                        {/* data end */}
                     </tbody>
                 </Table>
             </Row>

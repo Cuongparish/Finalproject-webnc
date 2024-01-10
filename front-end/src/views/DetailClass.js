@@ -117,6 +117,7 @@ const DetailClass = (props) => {
   const [DataGradeStructure, setDataGradeStructure] = useState([]);
   const [HadCreateGradeStructer, setHadCreateGradeStructer] = useState(false);
   const [UserRoleInClass, setUserRoleInClass] = useState();
+  const [UserStudentId, setUserStudentId] = useState();
 
   //----------------------------------------Màn hình bảng tin
   const GetDetailClass = async () => {
@@ -126,6 +127,10 @@ const DetailClass = (props) => {
           if (res) {
             setDetailClass(res[0].data[0]);
             setUserRoleInClass(res[1].role);
+            if (res[1].role === "Student") {
+              if (res[1].StudentId)
+                setUserStudentId(res[1].StudentId);
+            }
           }
         },
         (error) => {
@@ -450,10 +455,13 @@ const DetailClass = (props) => {
                   <ScoreTable
                     gradestructure={DataGradeStructure}
                     liststudent={StudentInClass}
+                    user={user}
                   />
                 ) : (<ScoreTable_Student
                   gradestructure={DataGradeStructure}
                   liststudent={StudentInClass}
+                  user={user}
+                  studentid={UserStudentId}
                 />
                 ) : UserRoleInClass === "Teacher" ? (
                   <Row className="h-100 g-0 d-flex justify-content-center align-items-center">
