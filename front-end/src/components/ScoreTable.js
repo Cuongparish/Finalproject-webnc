@@ -9,14 +9,19 @@ import GradeService from "../service/grade.service";
 import '../App.css';
 
 const ScoreTable = (props) => {
-    const GradeStructures = props.gradestructure;
-    const ListStudent = props.liststudent;
+    //const GradeStructures = props.gradestructure;
+    //const ListStudent = props.liststudent;
+    const [GradeStructures, setGradeStructures] = useState(props.gradestructure)
+    const [ListStudent, setListStudent] = useState(props.liststudent)
+
+    const [ListStudentHaveScore, setListStudentHaveScore] = useState([]);
+
     const [TotalPercent, setTotalPercent] = useState(0);
     const [SelectGradeColumn, setSelectGradeColumn] = useState(GradeStructures[0].TenCotDiem);
 
     const [GradeBoard, setGradeBoard] = useState([]);
 
-    const [GradeError, setGradeError] = useState(false);
+    const [gradeErrors, setGradeErrors] = useState(Array.from({ length: GradeStructures.length }, () => false));
 
     const [Type, setType] = useState("xlsx");
     const [selectedFile, setSelectedFile] = useState(null);
@@ -29,8 +34,27 @@ const ScoreTable = (props) => {
         setTotalPercent(total);
     }
 
+    const GetGradeBoard = async () => {
+        try {
+            await GradeService.GetGradeBoard(GradeStructures[0].idLop).then(
+                (res) => {
+                    //console.log("Grade board: ", res);
+                    if (res.data) {
+                        if (res.data && res.data[1]?.data) {
+                            setListStudentHaveScore(res.data[1].data);
+                        }
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const handleGradeChange = (grade, idHocSinh, idCotDiem, idLop) => {
-        //const diem = parseInt(grade.target.value); // Chuyển giá trị nhập vào thành số
         // Tìm xem mục cho học sinh và tiêu chí này có tồn tại trong GradeBoard không
         const existingEntryIndex = GradeBoard.findIndex(
             entry =>
@@ -51,14 +75,16 @@ const ScoreTable = (props) => {
                 { idHocSinh, idCotDiem, idLop, Diem: grade }
             ]);
         }
-        console.log(GradeBoard);
+        //console.log(GradeBoard);
     };
 
     const handleSave = async () => {
         try {
             await GradeService.InputGradeStudent(GradeBoard).then(
                 (res) => {
-                    console.log("res:", res);
+                    //console.log("res:", res);
+                    sessionStorage.setItem("Tab", "score");
+                    window.location.reload();
                 },
                 (err) => {
                     console.log(err);
@@ -134,9 +160,19 @@ const ScoreTable = (props) => {
         }
     };
 
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
+    const defaultGrades = ListStudent?.map((Student) => {
+        const studentWithScore = ListStudentHaveScore.find(item => item.StudentId === Student.StudentId);
+        return studentWithScore ? studentWithScore.Diem : GradeStructures.map(() => '');
+    });
+
     useEffect(() => {
         CaculateTotalPercent();
-    }, [GradeStructures]);
+        GetGradeBoard();
+    }, [props.gradestructure[0].idLop]);
 
     return (
         <>
@@ -163,36 +199,46 @@ const ScoreTable = (props) => {
                         {/* data start */}
                         {ListStudent?.map((Student, studentIndex) => (
                             <tr key={studentIndex}>
-                                <td className="text-center">{Student.FullName}</td>
-                                <td className="text-center">{Student.StudentId}</td>
+                                <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{Student.FullName}</td>
+                                <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{Student.StudentId}</td>
                                 {GradeStructures?.map((GradeStructure, gradeIndex) => (
                                     <td key={gradeIndex} className="text-center">
-                                        <input
+                                        <Form.Control
                                             type="number"
-                                            className="form-control"
                                             min={0}
                                             max={10}
-                                            placeholder="/10"
+                                            placeholder='/10'
+                                            defaultValue={
+                                                defaultGrades[studentIndex][gradeIndex] !== ''
+                                                    ? defaultGrades[studentIndex][gradeIndex]
+                                                    : undefined
+                                            }
                                             onChange={(event) => {
-                                                const grade = parseFloat(event.target.value, 10);
-                                                if (grade >= 0 && grade <= 10) {
+                                                const grade = event.target.value !== '' ? parseFloat(event.target.value, 10) : null;
+                                                if (event.target.value === '') {
+                                                    // Nếu người dùng xóa giá trị, thiết lập defaultValue là undefined để hiển thị placeholder
+                                                    event.target.defaultValue = undefined;
+                                                } else if (grade !== null && grade >= 0 && grade <= 10) {
                                                     handleGradeChange(
                                                         grade,
                                                         Student.idHocSinh,
                                                         GradeStructure.idCotDiem,
                                                         GradeStructure.idLop
                                                     );
-                                                    setGradeError(false);
-                                                }
-                                                else {
-                                                    setGradeError(true);
+                                                    const newGradeErrors = [...gradeErrors];
+                                                    newGradeErrors[gradeIndex] = false; // Đánh dấu ô input đúng
+                                                    setGradeErrors(newGradeErrors);
+                                                } else {
+                                                    const newGradeErrors = [...gradeErrors];
+                                                    newGradeErrors[gradeIndex] = true; // Đánh dấu ô input sai
+                                                    setGradeErrors(newGradeErrors);
                                                 }
                                             }}
                                         />
-                                        {GradeError && <p style={{ color: 'red' }}>Số điểm không phù hợp</p>}
+                                        {gradeErrors[gradeIndex] && <p style={{ color: 'red' }}>Số điểm không phù hợp</p>}
                                     </td>
                                 ))}
-                                <td className="text-center"></td>
+                                <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{ListStudentHaveScore[studentIndex]?.total}</td>
                             </tr>
                         ))}
                         {/* data end */}
@@ -231,9 +277,23 @@ const ScoreTable = (props) => {
                 </Col>
 
                 <Col sm={2}>
-                    <a className="btn btn-info">
-                        <RxUpdate className="mx-1" /> Upload điểm
-                    </a>
+                    <Form>
+                        <Form.Group controlId="formFile" className="mb-3">
+                            <Form.Label>Select file to upload:</Form.Label>
+                            <Form.Control
+                                type="file"
+                                onChange={handleFileChange}
+                                style={{ width: '300px' }} // Điều chỉnh chiều rộng của input
+                            />
+                        </Form.Group>
+                        <Button
+                            variant="primary"
+                            //onClick={handleUploadGradeBoard}
+                            style={{ width: '200px' }} // Điều chỉnh chiều rộng của nút
+                        >
+                            Upload Grade Board
+                        </Button>
+                    </Form>
                 </Col>
 
                 <Col sm={2}>
