@@ -123,11 +123,9 @@ const DetailClass = (props) => {
     try {
       await ClassService.GetDetailClass(malop, user.idUser).then(
         (res) => {
-          //console.log("res-detail-class: ", res );
           if (res) {
             setDetailClass(res[0].data[0]);
             setUserRoleInClass(res[1].role);
-            //console.log("user-role: ", UserRoleInClass);
           }
         },
         (error) => {
@@ -255,17 +253,6 @@ const DetailClass = (props) => {
       await GradeService.GetGradeStructure(DetailClass.idLop).then(
         (res) => {
           if (res.data) {
-            // const newData = res.data.map((element, index) => {
-            //   return {
-            //     idCotDiem: element.idCotDiem,
-            //     TenCotDiem: element.TenCotDiem,
-            //     PhanTramDiem: element.PhanTramDiem,
-            //   };
-            // });
-
-            // if (newData.length > 0) {
-            //   setDataGradeStructure(newData);
-            // }
             setDataGradeStructure(res.data);
             sethasScore(true);
           }
