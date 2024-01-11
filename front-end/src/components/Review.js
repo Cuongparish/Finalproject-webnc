@@ -6,9 +6,9 @@ import DetailReview from "./DetailReview";
 import "../App.css";
 
 const Review = (props) => {
+    const user = props.user;
+    const review = props.review;
     const onClick = props.onClick;
-    // const user = props.user;
-    // const DetailClass = props.DetailClass;
 
     const handleReviewClick = () => {
         onClick();

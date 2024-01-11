@@ -249,7 +249,7 @@ const DetailClass = (props) => {
 
   const GetGradeStructures = async () => {
     try {
-      await GradeService.GetGradeStructure(DetailClass.idLop).then(
+      await GradeService.GetGradeStructure(DetailClass?.idLop).then(
         (res) => {
           if (res.data) {
             setDataGradeStructure(res.data);
@@ -490,7 +490,7 @@ const DetailClass = (props) => {
 
               {/* Màn hình trao đổi */}
               <Tab eventKey="communication" title="Trao đổi" className="h-100 bg-body-secondary p-2">
-                <ListReview user={user} DetailClass={DetailClass}/>
+                {DetailClass && <ListReview user={user} DetailClass={DetailClass}/> }
               </Tab>
             </Tabs>
           </div>

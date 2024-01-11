@@ -96,12 +96,16 @@ const ScoreTable_Student = (props) => {
         // Xử lý khi nút xác nhận được nhấn
         setShowAlert(false); // Đóng box thông báo sau khi xác nhận
         setShowRequest(false);
+        sessionStorage.setItem("Tab", "score");
+        window.location.reload();
     };
 
     const handleCancel = () => {
         // Xử lý khi nút hủy được nhấn
         setShowAlert(false); // Đóng box thông báo sau khi hủy
         setShowRequest(false);
+        sessionStorage.setItem("Tab", "score");
+        window.location.reload();
     };
 
     useEffect(() => {

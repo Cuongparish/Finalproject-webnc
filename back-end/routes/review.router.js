@@ -22,7 +22,7 @@ router.get("/review/listReplies/:idPhucKhao", reviewC.getRepliesReview);
 
 // danh sach cac don phuc khao cua học sinh trong 1 lớp
 router.get(
-  "/review/listReview/:idLop/:idUser/:idMaLop",
+  "/review/listReview/:idLop/:idUser/:MaLop",
   reviewC.getReview_Student_inClass
 );
 module.exports = router;

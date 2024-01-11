@@ -1,34 +1,67 @@
 import { React, useState, useEffect } from "react";
-import { Row, Col, Card } from "react-bootstrap";
 
 import Review from "./Review";
 import DetailReview from "./DetailReview";
 
+import ReviewService from "../service/review.service";
+
 import "../App.css";
 
 const ListReview = (props) => {
-    // const user = props.user;
-    // const DetailClass = props.DetailClass;
+    const user = props.user;
+    const DetailClass = props.DetailClass;
+
+    const [ListReviewData, setListReviewData] = useState([]);
+
+    const [ReviewClicked, setReviewClicked] = useState();
 
     const [showDetail, setShowDetail] = useState(false);
 
-    const handleShowDetail = () => {
+    const handleShowDetail = (review) => {
         setShowDetail(true);
+        setReviewClicked(review);
     };
 
     const handleHideDetail = () => {
         setShowDetail(false);
     };
 
+    const GetDataReview = async () => {
+        try {
+            await ReviewService.GetReview(DetailClass.idLop, user.idUser, DetailClass.MaLop).then(
+              (res) => {
+                console.log("res: ", res);
+                if (res.data) {
+                    console.log("res: ", res);
+                    setListReviewData(res.data);
+                }
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          } catch (err) {
+            console.log(err);
+          }
+    }
+
+    useEffect(() => {
+        GetDataReview();
+      }, [user]);
+
     return (
         <>
             {showDetail ? (
-                <DetailReview onClick={handleHideDetail}/>
+                <DetailReview onClick={handleHideDetail} reviewClicked={ReviewClicked} user={user}/>
             ) : (
                 <>
-                    <Review onClick={handleShowDetail} />
-                    <Review onClick={handleShowDetail} />
-                    <Review onClick={handleShowDetail} />
+                    {ListReviewData.map((review) => (
+                        <Review
+                            review={review}
+                            user={user}
+                            onClick={() => handleShowDetail(review)}
+                        />
+                    ))}
                 </>
             )}
         </>

@@ -48,7 +48,7 @@ const reviewC = {
       let Notify_NoiDung_Teacher = `Có đơn phúc khảo của lớp ${NameClass.rows[0].TenLop}`;
       const idTeacher = await classM.getIDTeacher(req.body.idLop);
       for (const teacher of idTeacher.rows) {
-        console.log(teacher.idUser);
+        //console.log(teacher.idUser);
         await notifyM.addNotify(
           req.body.idLop,
           Notify_NoiDung_Teacher,
@@ -399,20 +399,19 @@ const reviewC = {
 
       // nếu là giáo viên
       if (checkRole == true) {
-        return res.json({ msg: "Hoan thanh", data: arridPK });
+        return res.json({ msg: "Hoan thanh 1", data: arridPK });
       }
       // nếu là học sinh
       else {
         // lấy idPhucKhao của idUser
         const { rows: idPK_new } = await notifyM.getAll();
 
+        var listReview_Student = [];
         for (const idPK of idPK_new) {
           if (
             idPK.idUser == req.params.idUser &&
-            req.params.MaLop == idPK.MaLop
+            req.params.idLop == idPK.Malop
           ) {
-            var listReview_Student = [];
-
             for (const pk of arridPK) {
               if (idPK.idPhucKhao == pk.idPhucKhao) {
                 listReview_Student.push(pk);
@@ -420,7 +419,7 @@ const reviewC = {
             }
           }
         }
-        return res.json({ msg: "Hoan thanh", data: listReview_Student });
+        return res.json({ msg: "Hoan thanh 2", data: listReview_Student });
       }
     } catch (error) {
       console.log(error);
