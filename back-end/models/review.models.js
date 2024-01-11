@@ -18,12 +18,25 @@ module.exports = {
   },
 
   getAll_NoiDungTraoDoi: async () => {
-    const sql = ` select *
-                  from "NoiDungTraoDoi" 
+    const sql = ` SELECT "idPhucKhao", COUNT("idUser") AS soLuongUser
+                  FROM public."NoiDungTraoDoi"
+                  GROUP BY "idPhucKhao";
                   `;
     const { rows } = await postgre.query(sql);
     return { rows };
   },
+
+  get_User: async (idPhucKhao) => {
+    const sql = ` SELECT "ThongBao"."idUser", "User"."FullName"
+                  FROM public."ThongBao"
+                  JOIN public."User" ON "ThongBao"."idUser" = "User"."idUser"
+                  WHERE "ThongBao"."idPhucKhao" = $1
+                  LIMIT 1;
+                  `;
+    const { rows } = await postgre.query(sql, [idPhucKhao]);
+    return { rows };
+  },
+
   // tra loi don phuc khao
   repliesReview: async (idPhucKhao, idUser, TraoDoi, ThoiGian) => {
     const sql = `INSERT INTO public."NoiDungTraoDoi"(

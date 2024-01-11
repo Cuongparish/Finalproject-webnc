@@ -375,18 +375,34 @@ const reviewC = {
       let arrReview = [];
       let arrReplies = [];
       let listReview_final = [];
-      for (const review of listReview) {
-        if (review.idLop == req.params.idLop) {
-          arrReview.push(review);
-        }
-      }
+      let check = false;
 
-      for (const review of arridPK) {
-        for (const content of listContent) {
-          if (review.idPhucKhao == content.idPhucKhao) {
-            arrReplies.push(review.idPhucKhao);
+      // lọc lấy các đơn phúc khảo của lớp này
+      for (let review of listReview) {
+        if (review.idLop == req.params.idLop) {
+          // nếu review.idPhucKhao trùng với content.idPhucKhao thì dừng vòng for và review.TL = "1";
+          for (const content of listContent) {
+            if (content.idPhucKhao == review.idPhucKhao) {
+              check = true;
+              break;
+            }
+          }
+
+          const { rows: userCre } = await reviewM.get_User(review.idPhucKhao);
+          review.iduser = `${userCre[0].idUser}`;
+          review.FullName = `${userCre[0].FullName}`;
+          if (check == true) {
+            review.TL = "1";
+
+            arridPK.push(review);
+          } else {
+            review.TL = "0";
+            // review.iduser = `${userCre[0].idUser}`;
+            // review.FullName = `${userCre[0].FullName}`;
+            arridPK.push(review);
           }
         }
+        check = false;
       }
 
       // check role của idUser
@@ -400,7 +416,7 @@ const reviewC = {
 
       // nếu là giáo viên
       if (checkRole == true) {
-        return res.json({ msg: "Hoan thanh 1", data: arridPK });
+        return res.json({ msg: "Giao vien", data: arridPK });
       }
       // nếu là học sinh
       else {
@@ -420,7 +436,7 @@ const reviewC = {
             }
           }
         }
-        return res.json({ msg: "Hoan thanh 2", data: listReview_Student });
+        return res.json({ msg: "Học sinh", data: listReview_Student });
       }
     } catch (error) {
       console.log(error);
