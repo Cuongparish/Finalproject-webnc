@@ -1,6 +1,29 @@
 const postgre = require("./database");
 const moment = require("moment");
 module.exports = {
+  getAll_Review: async () => {
+    const sql = ` select* 
+                  from "PhucKhao" 
+                  `;
+    const { rows } = await postgre.query(sql);
+    return { rows };
+  },
+
+  getAll_Review_CotDiem: async () => {
+    const sql = ` select pk.*, cd."TenCotDiem"
+                  from "PhucKhao" pk, "CotDiem" cd
+                  where pk."idCotDiem" = cd."idCotDiem" and pk."idLop" = cd."idLop"`;
+    const { rows } = await postgre.query(sql);
+    return { rows };
+  },
+
+  getAll_NoiDungTraoDoi: async () => {
+    const sql = ` select *
+                  from "NoiDungTraoDoi" 
+                  `;
+    const { rows } = await postgre.query(sql);
+    return { rows };
+  },
   // tra loi don phuc khao
   repliesReview: async (idPhucKhao, idUser, TraoDoi, ThoiGian) => {
     const sql = `INSERT INTO public."NoiDungTraoDoi"(
@@ -13,7 +36,8 @@ module.exports = {
     const sql = ` select* 
                   from "NoiDungTraoDoi" ndtd, "User"
                   where ndtd."idPhucKhao"=$1 and "User"."idUser"=ndtd."idUser"`;
-    await postgre.query(sql, [idPhucKhao]);
+    const { rows } = await postgre.query(sql, [idPhucKhao]);
+    return { rows };
   },
 
   //--------------------------------------Teacher------------------------

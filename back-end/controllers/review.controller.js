@@ -362,6 +362,77 @@ const reviewC = {
       });
     }
   },
+
+  // các đơn phúc khảo của học sinh trong 1 lớp học (req.params.idLop, params.idUser, params.MaLop)
+  getReview_Student_inClass: async (req, res) => {
+    try {
+      // lấy tất cả các đơn phúc khảo của lớp này
+      const { rows: listReview } = await reviewM.getAll_Review_CotDiem();
+      const { rows: listContent } = await reviewM.getAll_NoiDungTraoDoi();
+
+      let temp = 0;
+      let arridPK = [];
+      let arrReplies = [];
+      let listReview_final = [];
+      for (const review of listReview) {
+        if (review.idLop == req.params.idLop) {
+          arridPK.push(review);
+        }
+      }
+
+      for (const review of arridPK) {
+        for (const content of listContent) {
+          if (review.idPhucKhao == content.idPhucKhao) {
+            arridPK.push(review.idPhucKhao);
+          }
+        }
+      }
+
+      // check role của idUser
+      const { rows: Teacher } = await classM.getIDTeacher(req.params.idLop);
+      let checkRole = false;
+      for (const user of Teacher) {
+        if (user.idUser == req.params.idUser) {
+          checkRole = true;
+        }
+      }
+
+      // nếu là giáo viên
+      if (checkRole == true) {
+        return res.json({ msg: "Hoan thanh", data: arridPK });
+      }
+      // nếu là học sinh
+      else {
+        // lấy idPhucKhao của idUser
+        const { rows: idPK_new } = await notifyM.getAll();
+
+        for (const idPK of idPK_new) {
+          if (
+            idPK.idUser == req.params.idUser &&
+            req.params.MaLop == idPK.MaLop
+          ) {
+            var listReview_Student = [];
+
+            for (const pk of arridPK) {
+              if (idPK.idPhucKhao == pk.idPhucKhao) {
+                listReview_Student.push(pk);
+              }
+            }
+          }
+        }
+        return res.json({ msg: "Hoan thanh", data: listReview_Student });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        errors: [
+          {
+            msg: "Invalid credentials",
+          },
+        ],
+      });
+    }
+  },
 };
 
 module.exports = reviewC;
