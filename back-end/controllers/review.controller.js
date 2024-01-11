@@ -41,7 +41,7 @@ const reviewC = {
         Notify_NoiDung_Student,
         now,
         req.body.idUser,
-        idPK.rows[0].idLop
+        idPK.rows[0].idPhucKhao
       );
 
       //Tạo thông báo đến các giáo viên trong lớp
@@ -54,7 +54,7 @@ const reviewC = {
           Notify_NoiDung_Teacher,
           now,
           teacher.idUser,
-          idPK.rows[0].idLop
+          idPK.rows[0].idPhucKhao
         );
       }
 

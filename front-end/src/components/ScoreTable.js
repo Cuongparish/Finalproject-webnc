@@ -1,9 +1,9 @@
 import { React, useState, useEffect } from "react";
 import { Row, Col, Table, Form, FloatingLabel, Button, Modal, Card, Tabs, Tab } from "react-bootstrap";
 import { IoSettings } from "react-icons/io5";
-import { RxUpdate } from "react-icons/rx";
 import { TbDatabaseExport, TbDatabaseImport } from "react-icons/tb";
 import { FaTable } from "react-icons/fa6";
+import { FaSave } from "react-icons/fa";
 
 import GradeService from "../service/grade.service";
 
@@ -16,7 +16,7 @@ const ScoreTable = (props) => {
     const [show_setting, setShowSetting] = useState(false);
     const handleShowSettingClose = () => setShowSetting(false);
     const handleShowSettingOpen = () => setShowSetting(true);
-    
+
     const [score_options, setScoreOptions] = useState(false);
     const handleScoreOptionsClose = () => setScoreOptions(false);
     const handleScoreOptionsOpen = () => setScoreOptions(true);
@@ -177,68 +177,68 @@ const ScoreTable = (props) => {
 
     const [GradeStructure, setGradeStructure] = useState([
         <Row key={0} className="mx-2 mb-0 justify-content-center">
-          <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
-            <FloatingLabel
-              controlId={`add_score_0`}
-              label="Tên cột điểm"
-              className="mb-3"
-            >
-              <Form.Control
-                id={`add_score_0`}
-                type="text"
-                placeholder="Exercise"
-              //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
-              />
-            </FloatingLabel>
-            <FloatingLabel controlId={`add_score_percentage_0`} label="% cột điểm">
-              <Form.Control
-                id={`add_score_percentage_0`}
-                type="number"
-                placeholder="5%"
-              //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
-              />
-            </FloatingLabel>
-          </Card>
+            <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
+                <FloatingLabel
+                    controlId={`add_score_0`}
+                    label="Tên cột điểm"
+                    className="mb-3"
+                >
+                    <Form.Control
+                        id={`add_score_0`}
+                        type="text"
+                        placeholder="Exercise"
+                    //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
+                    />
+                </FloatingLabel>
+                <FloatingLabel controlId={`add_score_percentage_0`} label="% cột điểm">
+                    <Form.Control
+                        id={`add_score_percentage_0`}
+                        type="number"
+                        placeholder="5%"
+                    //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
+                    />
+                </FloatingLabel>
+            </Card>
         </Row>,
     ]);
     //-----------------------------------------Tạo grade structure
-  const addGradeStructure = () => {
-    const newGradeStructure = (
-        <Row key={0} className="mx-2 mb-0 justify-content-center">
-            <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
-            <FloatingLabel
-                controlId={`add_score_${GradeStructure.length}`}
-                label="Tên cột điểm"
-                className="mb-3"
-            >
-                <Form.Control
-                id={`add_score_${GradeStructure.length}`}
-                type="text"
-                placeholder="Exercise"
-                // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
-                />
-            </FloatingLabel>
-            <FloatingLabel
-                controlId={`add_score_percentage_${GradeStructure.length}`}
-                label="% cột điểm"
-            >
-                <Form.Control
-                id={`add_score_percentage_${GradeStructure.length}`}
-                type="number"
-                placeholder="5%"
-                // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
-                />
-            </FloatingLabel>
-            </Card>
-        </Row>
-    );
+    const addGradeStructure = () => {
+        const newGradeStructure = (
+            <Row key={0} className="mx-2 mb-0 justify-content-center">
+                <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
+                    <FloatingLabel
+                        controlId={`add_score_${GradeStructure.length}`}
+                        label="Tên cột điểm"
+                        className="mb-3"
+                    >
+                        <Form.Control
+                            id={`add_score_${GradeStructure.length}`}
+                            type="text"
+                            placeholder="Exercise"
+                        // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
+                        />
+                    </FloatingLabel>
+                    <FloatingLabel
+                        controlId={`add_score_percentage_${GradeStructure.length}`}
+                        label="% cột điểm"
+                    >
+                        <Form.Control
+                            id={`add_score_percentage_${GradeStructure.length}`}
+                            type="number"
+                            placeholder="5%"
+                        // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
+                        />
+                    </FloatingLabel>
+                </Card>
+            </Row>
+        );
 
-    setGradeStructure([...GradeStructure, newGradeStructure]);
+        setGradeStructure([...GradeStructure, newGradeStructure]);
     };
 
     const RemoveGradeStructure = (indexToRemove) => {
         const updatedGradeStructure = GradeStructure.filter(
-        (_, index) => index !== indexToRemove
+            (_, index) => index !== indexToRemove
         );
         setGradeStructure(updatedGradeStructure);
     };
@@ -324,20 +324,16 @@ const ScoreTable = (props) => {
             <Row className="justify-content-end text-end mb-3 px-3">
                 <Col sm={2}>
                     <a className="btn btn-info" onClick={handleSave}>
-                        <RxUpdate className="mx-1" /> Lưu bảng điểm
+                        <FaSave className="mx-1" /> Lưu bảng điểm
                     </a>
                 </Col>
-            </Row>
 
-            <Row className="justify-content-end text-end mb-3 px-3">
                 <Col sm={2}>
                     <a onClick={handleShowSettingOpen} className="btn btn-danger">
                         <IoSettings className="mx-1" /> Cài đặt
                     </a>
                 </Col>
-            </Row>
-            
-            <Row className="justify-content-end text-end mb-3 px-3">
+
                 <Col sm={2}>
                     <a onClick={handleScoreOptionsOpen} className="btn btn-success">
                         <FaTable className="mx-1" /> Điểm
@@ -381,7 +377,7 @@ const ScoreTable = (props) => {
                                     <option>Chốt điểm</option>
                                 </Form.Select>
                             </FloatingLabel>
-                            
+
                         </Card>
                     </Row>
                 </Modal.Body>
@@ -407,6 +403,20 @@ const ScoreTable = (props) => {
                                 className="mb-3"
                             >
                                 <Tab eventKey="export_score" title="Export bảng điểm">
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="fw-bold mb-2">Chọn cột điểm để import:</Form.Label>
+                                        <Form.Select
+                                            className="border-2 border-black"
+                                            value={SelectGradeColumn}
+                                            onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                        >
+                                            {GradeStructures?.map((GradeStructure, index) => (
+                                                <option>{GradeStructure.TenCotDiem}</option>
+                                            ))}
+                                            <option>Tất Cả</option>
+                                        </Form.Select>
+                                    </Form.Group>
+
                                     <Form.Group className="mb-3">
                                         <Form.Label className="fw-bold mb-2">Chọn loại file để export:</Form.Label>
                                         <Form.Select
@@ -441,14 +451,16 @@ const ScoreTable = (props) => {
                                             <option>Tất Cả</option>
                                         </Form.Select>
                                     </Form.Group>
+
                                     <Form.Group className="mb-3">
                                         <Form.Label className="fw-bold mb-2">Input file:</Form.Label>
                                         <Form.Control type="file" className="border-2 border-black" />
                                     </Form.Group>
+
                                     <Button
                                         className="border-2 border-black mb-3"
                                         variant="warning"
-                                        // onClick={handleDownloadGradeBoard}
+                                    // onClick={handleDownloadGradeBoard}
                                     >
                                         <TbDatabaseImport className="mx-1" />Import bảng điểm
                                     </Button>
@@ -459,24 +471,24 @@ const ScoreTable = (props) => {
                                             {gradestructure}
                                             <Row className="mx-2 mb-3 justify-content-center">
                                                 <Button
-                                                variant="danger"
-                                                size="sm"
-                                                onClick={() => RemoveGradeStructure(index)}
-                                                style={{
-                                                    borderRadius: "0 0 10px 10px",
-                                                    width: "100%",
-                                                    height: "40px",
-                                                    fontSize: "24px",
-                                                    lineHeight: "24px",
-                                                    fontWeight: "bold",
-                                                    boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
-                                                    display: "inline-flex",
-                                                    justifyContent: "center",
-                                                    alignItems: "center",
-                                                    cursor: "pointer",
-                                                }}
+                                                    variant="danger"
+                                                    size="sm"
+                                                    onClick={() => RemoveGradeStructure(index)}
+                                                    style={{
+                                                        borderRadius: "0 0 10px 10px",
+                                                        width: "100%",
+                                                        height: "40px",
+                                                        fontSize: "24px",
+                                                        lineHeight: "24px",
+                                                        fontWeight: "bold",
+                                                        boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
+                                                        display: "inline-flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        cursor: "pointer",
+                                                    }}
                                                 >
-                                                -
+                                                    -
                                                 </Button>
                                             </Row>
                                         </div> // Wrap in a container like div
@@ -489,24 +501,24 @@ const ScoreTable = (props) => {
                                                 size="sm"
                                                 onClick={addGradeStructure}
                                                 style={{
-                                                borderRadius: "50%",
-                                                width: "40px",
-                                                height: "40px",
-                                                fontSize: "24px",
-                                                lineHeight: "24px",
-                                                fontWeight: "bold",
-                                                boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
-                                                display: "inline-flex",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                cursor: "pointer",
+                                                    borderRadius: "50%",
+                                                    width: "40px",
+                                                    height: "40px",
+                                                    fontSize: "24px",
+                                                    lineHeight: "24px",
+                                                    fontWeight: "bold",
+                                                    boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
+                                                    display: "inline-flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    cursor: "pointer",
                                                 }}
                                             >
                                                 +
                                             </Button>
                                         </Col>
                                     </Row>
-                                    
+
                                     <Row className="mx-2 mb-3 justify-content-end">
                                         <Col xs={2} className="p-0 text-center">
                                             <Button
@@ -514,12 +526,12 @@ const ScoreTable = (props) => {
                                                 size="sm"
                                                 // onClick={addGradeStructure}
                                                 style={{
-                                                width: "100%",
-                                                height: "40px",
-                                                fontSize: "18px",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                cursor: "pointer",
+                                                    width: "100%",
+                                                    height: "40px",
+                                                    fontSize: "18px",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    cursor: "pointer",
                                                 }}
                                             >
                                                 Xác nhận

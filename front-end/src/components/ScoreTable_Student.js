@@ -1,20 +1,36 @@
 import { React, useState, useEffect } from "react";
 import { Row, Col, Table, Modal, FloatingLabel, Card, Button, Form } from "react-bootstrap";
 
+import AlertBox from "./AlertBox";
+
 import GradeService from "../service/grade.service";
+import ReviewService from "../service/review.service";
 
 import '../App.css';
 
 const ScoreTable_Student = (props) => {
     const user = props.user;
     const StudentId = props.studentid;
-
     const GradeStructures = props.gradestructure;
-    //const [ListStudent, setListStudent] = useState(props.liststudent);
 
-    const [StudentHaveScore, setStudentHaveScore] = useState([]);
+    const [showAlert, setShowAlert] = useState(false);
+    const [message, setMessage] = useState();
+
+    const [StudentHaveScore, setStudentHaveScore] = useState();
+    const [GradeStructuresPublic, setGradeStructuresPublic] = useState([]);
 
     const [TotalPercent, setTotalPercent] = useState(0);
+
+    const [show_request, setShowRequest] = useState(false);
+    const handleShowRequestClose = () => setShowRequest(false);
+    const handleShowRequestOpen = () => setShowRequest(true);
+
+    const [SelectGradeColumn, setSelectGradeColumn] = useState("");
+    const [GradeCurrent, setGradeCurrent] = useState(0);
+    const [GradeExpect, setGradeExpect] = useState();
+    const [Reason, setReason] = useState("");
+
+    const [gradeErrors, setGradeErrors] = useState(false);
 
     const CaculateTotalPercent = () => {
         let total = 0;
@@ -28,11 +44,16 @@ const ScoreTable_Student = (props) => {
         try {
             await GradeService.GetGradeBoard(GradeStructures[0].idLop, user.idUser).then(
                 (res) => {
-                    //console.log(res);
                     if (res.data) {
+                        if (res.data && res.data[0]?.data) {
+                            setGradeStructuresPublic(res.data[0].data)
+                            setSelectGradeColumn(res.data[0].data[0]);
+                        }
+
                         if (res.data && res.data[1]?.data) {
                             const studentWithScore = res.data[1].data.find(item => item.StudentId === StudentId);
-                            setStudentHaveScore(studentWithScore);
+                            setStudentHaveScore(studentWithScore);  
+                            setGradeCurrent(studentWithScore.Diem[0]);
                         }
                     }
                 },
@@ -45,12 +66,42 @@ const ScoreTable_Student = (props) => {
         }
     }
 
-    const [show_request, setShowRequest] = useState(false);
-    const handleShowRequestClose = () => setShowRequest(false);
-    const handleShowRequestOpen = () => setShowRequest(true);
+    const handleSendReview = async () => {
+        try {
+            await ReviewService.CreateReview(user.idUser, GradeStructures[0].idLop, SelectGradeColumn.idCotDiem, GradeExpect, Reason)
+                .then(
+                    (res) => {
+                        if(res.msg === "Success")
+                        {
+                            setMessage("Gửi thành công");
+                            setShowAlert(true);
+                        }
+                        else
+                        {
+                            setMessage("Có lỗi xảy ra, vui lòng thử lại");
+                            setShowAlert(true);
+                        }
+                    },
+                    (error) => {
+                        console.log(error);
+                    }
+                );
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
-    // const [SelectGradeColumn, setSelectGradeColumn] = useState(GradeStructures[0].TenCotDiem ?? "");
-    const [SelectGradeColumn, setSelectGradeColumn] = useState("");
+    const handleConfirm = () => {
+        // Xử lý khi nút xác nhận được nhấn
+        setShowAlert(false); // Đóng box thông báo sau khi xác nhận
+        setShowRequest(false);
+    };
+
+    const handleCancel = () => {
+        // Xử lý khi nút hủy được nhấn
+        setShowAlert(false); // Đóng box thông báo sau khi hủy
+        setShowRequest(false);
+    };
 
     useEffect(() => {
         CaculateTotalPercent();
@@ -83,11 +134,6 @@ const ScoreTable_Student = (props) => {
                         <tr>
                             <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{StudentHaveScore?.FullName}</td>
                             <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{StudentHaveScore?.StudentId}</td>
-                            {/* {StudentHaveScore?.Diem.map((grade, gradeIndex) => (
-                                <td key={gradeIndex} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                                    {grade}/10
-                                </td>
-                            ))} */}
                             {StudentHaveScore && StudentHaveScore.Diem ? (
                                 GradeStructures?.map((GradeStructure, gradeIndex) => (
                                     <td key={gradeIndex} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
@@ -124,25 +170,33 @@ const ScoreTable_Student = (props) => {
                             <FloatingLabel label="Cột điểm" className="mb-3">
                                 <Form.Select
                                     className="border-2 border-black"
-                                    value={SelectGradeColumn}
-                                    onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                    value={SelectGradeColumn.TenCotDiem}
+                                    onChange={(e) => {
+                                        const GradeIndex = GradeStructuresPublic.findIndex(
+                                            GradeStructure => GradeStructure.TenCotDiem === e.target.value
+                                        );
+                                        const GradeColumn = GradeStructuresPublic.find(
+                                            GradeStructure => GradeStructure.TenCotDiem === e.target.value
+                                        );
+                                        setSelectGradeColumn(GradeColumn);
+                                        setGradeCurrent(StudentHaveScore.Diem[GradeIndex]);
+                                    }}
                                 >
-                                    {GradeStructures?.map((GradeStructure, index) => (
+                                    {GradeStructuresPublic?.map((GradeStructure, index) => (
                                         <option>{GradeStructure.TenCotDiem}</option>
                                     ))}
-                                    <option>Tất Cả</option>
                                 </Form.Select>
                             </FloatingLabel>
                             <FloatingLabel
                                 controlId="current_score"
-                                label="Điểm kỳ vọng"
+                                label="Điểm hiện tại"
                                 className="mb-3"
                             >
                                 <Form.Control
                                     id="current_score"
                                     disabled
                                     type="number"
-                                    defaultValue="7.5"
+                                    value={GradeCurrent}
                                 />
                             </FloatingLabel>
                             <FloatingLabel
@@ -156,9 +210,18 @@ const ScoreTable_Student = (props) => {
                                     min="0"
                                     max="10"
                                     step="0.25"
-                                    // defaultValue={StudentId}
-                                    // onChange={(e) => setStudentId(e.target.value)}
+                                    placeholder='/10'
+                                    onChange={(event) => {
+                                        const grade = parseFloat(event.target.value, 10);
+                                        if (grade !== null && grade >= 0 && grade <= 10) {
+                                            setGradeExpect(grade);
+                                            setGradeErrors(false);
+                                        } else {
+                                            setGradeErrors(true);
+                                        }
+                                    }}
                                 />
+                                {gradeErrors && <p style={{ color: 'red' }}>Số điểm không phù hợp</p>}
                             </FloatingLabel>
                             <FloatingLabel
                                 controlId="reason"
@@ -169,6 +232,9 @@ const ScoreTable_Student = (props) => {
                                     id="reason"
                                     as="textarea"
                                     style={{ height: "100px" }}
+                                    onChange={(event) => {
+                                        setReason(event.target.value);
+                                    }}
                                 />
                             </FloatingLabel>
                         </Card>
@@ -178,11 +244,18 @@ const ScoreTable_Student = (props) => {
                     <Button variant="secondary" onClick={handleShowRequestClose}>
                         Hủy
                     </Button>
-                    <Button variant="primary">
+                    <Button variant="primary" onClick={handleSendReview}>
                         Gửi
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            <AlertBox
+                show={showAlert}
+                message={message}
+                onHide={handleCancel}
+                onConfirm={handleConfirm}
+            />
         </>
     );
 };

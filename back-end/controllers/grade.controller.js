@@ -187,6 +187,7 @@ const gradeC = {
           Key
         );
         const new_header = header.map((comp) => ({
+          idCotDiem: comp.idCotDiem,
           TenCotDiem: comp.TenCotDiem,
           PhanTramDiem: comp.PhanTramDiem,
           Khoa: comp.Khoa,

@@ -27,15 +27,6 @@ const DetailClass = (props) => {
   const { malop } = useParams();
   const user = props.user;
   const tab = sessionStorage.getItem("Tab");
-  // const user = {
-  //   idUser: "1",
-  //   Email:  "phamtruongkhoa2000@gmail.com",
-  //   FullName: "Phạm Trường Khoa",
-  //   DOB: "2000-07-31",
-  //   Sex: "Male",
-  //   Phone: "0123456789",
-  //   StudentId: "18120419"
-  // };
 
   const [DetailClass, setDetailClass] = useState();
 
@@ -459,7 +450,6 @@ const DetailClass = (props) => {
                   />
                 ) : (<ScoreTable_Student
                   gradestructure={DataGradeStructure}
-                  liststudent={StudentInClass}
                   user={user}
                   studentid={UserStudentId}
                 />
