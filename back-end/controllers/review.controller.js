@@ -258,13 +258,7 @@ const reviewC = {
   //req.body.ThoiGian, req.params.idLop, req.body.idCotDiem)
   repliesReview: async (req, res) => {
     const now = DateTime.now();
-    if (
-      !req.params.idPhucKhao ||
-      !req.body.idUser ||
-      !req.body.TraoDoi ||
-      !req.params.idLop ||
-      !req.body.idCotDiem
-    ) {
+    if (!req.body.idUser || !req.body.TraoDoi || !req.body.idCotDiem) {
       return res.json({ msg: "Dữ liệu trống" });
     }
     try {
@@ -281,9 +275,9 @@ const reviewC = {
       const { rows: idLop } = await classM.getAll();
 
       for (const id of idLop) {
-        if (id.idLop == req.body.idLop) {
+        if (id.idLop == req.params.idLop) {
           idd = id.MaLop;
-          console.log(idd);
+          // console.log(idd);
           break;
         }
       }
@@ -294,6 +288,7 @@ const reviewC = {
 
       // lấy tên cột điểm
       const NameGradeComposition = await gradeM.getAll_GradeComposition();
+      // console.log(NameGradeComposition);
       for (const grade of NameGradeComposition.rows) {
         // console.log(grade.idCotDiem);
         if (grade.idCotDiem == req.body.idCotDiem) {
@@ -302,15 +297,20 @@ const reviewC = {
       }
 
       // kiểm tra xem idUser nhập nội dung trả lời đơn phúc khảo là hs hay gv của lớp học này
-      const { rows: studentRows } = await classM.getStudent_inClass(idd);
+      const studentRows = await classM.getStudent_inClass(idd);
+      // console.log(studentRows);
       let hs = false;
       let ten;
-      for (let user of studentRows) {
+      // console.log(idd);
+      for (const user of studentRows.rows) {
+        // console.log(user.FullName);
         if (user.idUser == req.body.idUser) {
           hs = true;
           ten = user.FullName;
+          // console.log(user.FullName);
         }
       }
+
       // nếu idUser này là giáo viên
       if (hs == false) {
         // lấy học sinh tạo đơn phúc khảo
