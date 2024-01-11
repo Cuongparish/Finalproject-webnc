@@ -90,7 +90,7 @@ const reviewC = {
 
       // lấy FullName, StudentId, idHocSinh
       const { rows: part2 } = await accountM.getbyID(req.body.idUser);
-      console.log(part2[0].idHocSinh);
+      //console.log(part2[0].idHocSinh);
       temp = part2[0].FullName;
       data.push({ FullName: temp });
 
@@ -174,7 +174,7 @@ const reviewC = {
       const now = DateTime.now();
       //lấy tên lớp học
       const NameClass = await classM.getNameClass(req.params.idLop);
-      console.log(NameClass.rows[0].TenLop);
+      //console.log(NameClass.rows[0].TenLop);
 
       // lấy tên cột điểm
       const NameGradeComposition = await gradeM.getAll_GradeComposition();
@@ -192,7 +192,7 @@ const reviewC = {
       for (const id of idLop) {
         if (id.idLop == req.params.idLop) {
           idd = id.MaLop;
-          console.log(idd);
+          //console.log(idd);
           break;
         }
       }
@@ -277,7 +277,6 @@ const reviewC = {
       for (const id of idLop) {
         if (id.idLop == req.params.idLop) {
           idd = id.MaLop;
-          // console.log(idd);
           break;
         }
       }
@@ -389,16 +388,16 @@ const reviewC = {
           }
 
           const { rows: userCre } = await reviewM.get_User(review.idPhucKhao);
-          review.iduser = `${userCre[0].idUser}`;
-          review.FullName = `${userCre[0].FullName}`;
+
           if (check == true) {
             review.TL = "1";
-
+            review.idUser = `${userCre[0].idUser}`;
+            review.FullName = `${userCre[0].FullName}`;
             arridPK.push(review);
           } else {
             review.TL = "0";
-            // review.iduser = `${userCre[0].idUser}`;
-            // review.FullName = `${userCre[0].FullName}`;
+            review.idUser = `${userCre[0].idUser}`;
+            review.FullName = `${userCre[0].FullName}`;
             arridPK.push(review);
           }
         }

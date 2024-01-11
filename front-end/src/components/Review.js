@@ -6,7 +6,6 @@ import DetailReview from "./DetailReview";
 import "../App.css";
 
 const Review = (props) => {
-    const user = props.user;
     const review = props.review;
     const onClick = props.onClick;
 
@@ -26,9 +25,9 @@ const Review = (props) => {
                 <Col sm={11}>
                     <Card className="border-0 bg-white rounded-0">
                         <Card.Body>
-                            <Card.Title className="fw-bold text-primary">Phúc khảo điểm abcxyz</Card.Title>
+                            <Card.Title className="fw-bold text-primary">Phúc khảo điểm {review?.TenCotDiem}</Card.Title>
                             <Card.Text>
-                                phúc khảo bởi học sinh xyzabc
+                                Phúc khảo bởi học sinh {review?.FullName}
                             </Card.Text>
                         </Card.Body>
                     </Card>

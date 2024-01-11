@@ -28,11 +28,10 @@ const ListReview = (props) => {
 
     const GetDataReview = async () => {
         try {
-            await ReviewService.GetReview(DetailClass.idLop, user.idUser, DetailClass.MaLop).then(
+            await ReviewService.GetReview(DetailClass.idLop, user.idUser).then(
               (res) => {
-                console.log("res: ", res);
+                console.log(res);
                 if (res.data) {
-                    console.log("res: ", res);
                     setListReviewData(res.data);
                 }
               },
@@ -58,7 +57,6 @@ const ListReview = (props) => {
                     {ListReviewData.map((review) => (
                         <Review
                             review={review}
-                            user={user}
                             onClick={() => handleShowDetail(review)}
                         />
                     ))}
