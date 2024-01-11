@@ -52,8 +52,11 @@ const ScoreTable_Student = (props) => {
 
                         if (res.data && res.data[1]?.data) {
                             const studentWithScore = res.data[1].data.find(item => item.StudentId === StudentId);
-                            setStudentHaveScore(studentWithScore);  
-                            setGradeCurrent(studentWithScore.Diem[0]);
+                            setStudentHaveScore(studentWithScore);
+                            const GradeIndex = res.data[0].data.findIndex(
+                                GradeStructure => GradeStructure.AcpPhucKhao === 1
+                            );
+                            setGradeCurrent(studentWithScore.Diem[GradeIndex]);
                         }
                     }
                 },
@@ -71,13 +74,11 @@ const ScoreTable_Student = (props) => {
             await ReviewService.CreateReview(user.idUser, GradeStructures[0].idLop, SelectGradeColumn.idCotDiem, GradeExpect, Reason)
                 .then(
                     (res) => {
-                        if(res.msg === "Success")
-                        {
+                        if (res.msg === "Success") {
                             setMessage("Gửi thành công");
                             setShowAlert(true);
                         }
-                        else
-                        {
+                        else {
                             setMessage("Có lỗi xảy ra, vui lòng thử lại");
                             setShowAlert(true);
                         }
@@ -167,7 +168,7 @@ const ScoreTable_Student = (props) => {
                 <Modal.Body>
                     <Row className="mb-0 justify-content-center">
                         <Card className="border-0">
-                            <FloatingLabel label="Cột điểm" className="mb-3">
+                            <FloatingLabel label="Cột điểm có thể phúc khảo" className="mb-3">
                                 <Form.Select
                                     className="border-2 border-black"
                                     value={SelectGradeColumn.TenCotDiem}
@@ -182,9 +183,11 @@ const ScoreTable_Student = (props) => {
                                         setGradeCurrent(StudentHaveScore.Diem[GradeIndex]);
                                     }}
                                 >
-                                    {GradeStructuresPublic?.map((GradeStructure, index) => (
-                                        <option>{GradeStructure.TenCotDiem}</option>
-                                    ))}
+                                    {GradeStructuresPublic
+                                        .filter((GradeStructure) => GradeStructure.AcpPhucKhao === 1)
+                                        .map((GradeStructure, index) => (
+                                            <option key={index}>{GradeStructure.TenCotDiem}</option>
+                                        ))}
                                 </Form.Select>
                             </FloatingLabel>
                             <FloatingLabel

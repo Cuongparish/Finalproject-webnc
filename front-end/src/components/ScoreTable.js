@@ -5,7 +5,10 @@ import { TbDatabaseExport, TbDatabaseImport } from "react-icons/tb";
 import { FaTable } from "react-icons/fa6";
 import { FaSave } from "react-icons/fa";
 
+import AlertBox from "./AlertBox"
+
 import GradeService from "../service/grade.service";
+import ReviewService from "../service/review.service"
 
 import '../App.css';
 
@@ -13,6 +16,13 @@ const ScoreTable = (props) => {
     //const GradeStructures = props.gradestructure;
     //const ListStudent = props.liststudent;
     const user = props.user;
+    const ListStudent = props.liststudent
+
+    const GradeStructures = props.gradestructure;
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [message, setMessage] = useState();
+
     const [show_setting, setShowSetting] = useState(false);
     const handleShowSettingClose = () => setShowSetting(false);
     const handleShowSettingOpen = () => setShowSetting(true);
@@ -21,13 +31,13 @@ const ScoreTable = (props) => {
     const handleScoreOptionsClose = () => setScoreOptions(false);
     const handleScoreOptionsOpen = () => setScoreOptions(true);
 
-    const [GradeStructures, setGradeStructures] = useState(props.gradestructure)
-    const [ListStudent, setListStudent] = useState(props.liststudent)
-
     const [ListStudentHaveScore, setListStudentHaveScore] = useState([]);
 
     const [TotalPercent, setTotalPercent] = useState(0);
     const [SelectGradeColumn, setSelectGradeColumn] = useState(GradeStructures[0].TenCotDiem);
+
+    const [SelectPublic, setSelectPublic] = useState(GradeStructures[0].Khoa === 0 ? "Ẩn" : "Công bố");
+    const [SelectReview, setSelectReview] = useState(GradeStructures[0].AcpPhucKhao === 0 ? "Khóa phúc khảo" : "Cho phúc khảo");
 
     const [GradeBoard, setGradeBoard] = useState([]);
 
@@ -35,6 +45,43 @@ const ScoreTable = (props) => {
 
     const [Type, setType] = useState("xlsx");
     const [selectedFile, setSelectedFile] = useState(null);
+
+    const [GradeStructure, setGradeStructure] = useState([
+        <Row key={0} className="mx-2 mb-0 justify-content-center">
+            <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
+                <FloatingLabel
+                    controlId={`add_score_0`}
+                    label="Tên cột điểm"
+                    className="mb-3"
+                >
+                    <Form.Control
+                        id={`add_score_0`}
+                        type="text"
+                        placeholder="Exercise"
+                    //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
+                    />
+                </FloatingLabel>
+                <FloatingLabel controlId={`add_score_percentage_0`} label="% cột điểm">
+                    <Form.Control
+                        id={`add_score_percentage_0`}
+                        type="number"
+                        placeholder="5%"
+                    //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
+                    />
+                </FloatingLabel>
+            </Card>
+        </Row>,
+    ]);
+
+    const handleConfirm = () => {
+        // Xử lý khi nút xác nhận được nhấn
+        setShowAlert(false); // Đóng box thông báo sau khi xác nhận
+    };
+
+    const handleCancel = () => {
+        // Xử lý khi nút hủy được nhấn
+        setShowAlert(false); // Đóng box thông báo sau khi hủy
+    };
 
     const CaculateTotalPercent = () => {
         let total = 0;
@@ -175,32 +222,92 @@ const ScoreTable = (props) => {
         return studentWithScore ? studentWithScore.Diem : GradeStructures.map(() => '');
     });
 
-    const [GradeStructure, setGradeStructure] = useState([
-        <Row key={0} className="mx-2 mb-0 justify-content-center">
-            <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
-                <FloatingLabel
-                    controlId={`add_score_0`}
-                    label="Tên cột điểm"
-                    className="mb-3"
-                >
-                    <Form.Control
-                        id={`add_score_0`}
-                        type="text"
-                        placeholder="Exercise"
-                    //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
-                    />
-                </FloatingLabel>
-                <FloatingLabel controlId={`add_score_percentage_0`} label="% cột điểm">
-                    <Form.Control
-                        id={`add_score_percentage_0`}
-                        type="number"
-                        placeholder="5%"
-                    //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
-                    />
-                </FloatingLabel>
-            </Card>
-        </Row>,
-    ]);
+    const handleGradeColumnChange = (selectedGradeColumn) => {
+        // Tìm GradeStructure tương ứng với cột điểm được chọn
+        const selectedGradeStructure = GradeStructures.find(grade => grade.TenCotDiem === selectedGradeColumn);
+
+        // Cập nhật giá trị của SelectPublic và SelectReview dựa trên GradeStructure mới
+        setSelectPublic(selectedGradeStructure.Khoa === 0 ? "Ẩn" : "Công bố");
+        setSelectReview(selectedGradeStructure.AcpPhucKhao === 0 ? "Khóa phúc khảo" : "Cho phúc khảo");
+
+        // Cập nhật giá trị của SelectGradeColumn
+        setSelectGradeColumn(selectedGradeColumn);
+    };
+
+    const handleGradePublicChange = (selectedGradePublic) => {
+        if (selectedGradePublic === "Công bố") {
+            setSelectReview("Cho phúc khảo");
+            setSelectPublic(selectedGradePublic);
+        }
+        else {
+            setSelectReview("Khóa phúc khảo");
+            setSelectPublic(selectedGradePublic);
+        }
+    }
+
+    const handleGradeReviewChange = (selectedGradeReview) => {
+        if (selectedGradeReview === "Cho phúc khảo") {
+            setSelectPublic("Công bố");
+            setSelectReview(selectedGradeReview);
+        }
+        else {
+            setSelectReview(selectedGradeReview);
+        }
+    }
+
+    const handleSettingGradeBoard = async () => {
+        const Khoa = SelectPublic === "Ẩn" ? 0 : 1;
+        const AcpPhucKhao = SelectReview === "Khóa phúc khảo" ? 0 : 1;
+
+        const selectedGradeStructure = GradeStructures.find(grade => grade.TenCotDiem === SelectGradeColumn);
+
+        if (Khoa === 1 && AcpPhucKhao === 1) {
+            //Xử lý public điểm
+            try {
+                await GradeService.PublicGradeBoard(
+                    selectedGradeStructure.idLop,
+                    selectedGradeStructure.idCotDiem,
+                    selectedGradeStructure.TenCotDiem,
+                    selectedGradeStructure.PhanTramDiem).then(
+                        (res) => {
+                            //console.log("res:", res);
+                            if (res.msg === "Đã công bố thành công và được phép phúc khảo thành phần điểm") {
+                                setMessage("Public điểm thành công");
+                                setShowAlert(true);
+                            }
+                        },
+                        (err) => {
+                            console.log(err);
+                        }
+                    );
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else if (Khoa === 1 && AcpPhucKhao === 0) {
+            //xử lý khóa phúc khảo
+            try {
+                await ReviewService.LockReview(
+                    selectedGradeStructure.idLop,
+                    selectedGradeStructure.idCotDiem).then(
+                        (res) => {
+                            //console.log("res:", res);
+                            if (res.msg === "Cập nhật không cho phúc khảo nữa") {
+                                setMessage("Bạn đã khóa phúc khảo");
+                                setShowAlert(true);
+                            }
+                        },
+                        (err) => {
+                            console.log(err);
+                        }
+                    );
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
+
     //-----------------------------------------Tạo grade structure
     const addGradeStructure = () => {
         const newGradeStructure = (
@@ -353,31 +460,36 @@ const ScoreTable = (props) => {
                                 <Form.Select
                                     className="border-2 border-black"
                                     value={SelectGradeColumn}
-                                    onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                    onChange={(e) => handleGradeColumnChange(e.target.value)}
                                 >
                                     {GradeStructures?.map((GradeStructure, index) => (
                                         <option>{GradeStructure.TenCotDiem}</option>
                                     ))}
-                                    <option>Tất Cả</option>
                                 </Form.Select>
                             </FloatingLabel>
+
                             <FloatingLabel controlId="public_score" label="Công bố điểm" className="mb-3">
                                 <Form.Select
-                                // onChange={(e) => setSex(e.target.value)}
+                                    value={SelectPublic}
+                                    onChange={(e) => handleGradePublicChange(e.target.value)}
                                 >
                                     <option>Công bố</option>
                                     <option>Ẩn</option>
                                 </Form.Select>
                             </FloatingLabel>
+
                             <FloatingLabel controlId="review_opt" label="Phúc khảo" className="mb-3">
                                 <Form.Select
-                                // onChange={(e) => setSex(e.target.value)}
+                                    value={SelectReview}
+                                    onChange={(e) => handleGradeReviewChange(e.target.value)}
                                 >
                                     <option>Cho phúc khảo</option>
-                                    <option>Chốt điểm</option>
+                                    <option>Khóa phúc khảo</option>
                                 </Form.Select>
                             </FloatingLabel>
-
+                            {SelectPublic === "Ẩn" && SelectReview === "Cho phúc khảo" && (
+                                <p style={{ color: "red" }}>Bạn không thể ẩn công bố</p>
+                            )}
                         </Card>
                     </Row>
                 </Modal.Body>
@@ -385,7 +497,7 @@ const ScoreTable = (props) => {
                     <Button variant="secondary" onClick={handleShowSettingClose}>
                         Hủy
                     </Button>
-                    <Button variant="primary">Thêm mới</Button>
+                    <Button variant="primary" onClick={handleSettingGradeBoard}>Lưu</Button>
                 </Modal.Footer>
             </Modal>
 
@@ -402,6 +514,7 @@ const ScoreTable = (props) => {
                                 id="uncontrolled-tab-example"
                                 className="mb-3"
                             >
+                                {/* Export Bảng điểm */}
                                 <Tab eventKey="export_score" title="Export bảng điểm">
                                     <Form.Group className="mb-3">
                                         <Form.Label className="fw-bold mb-2">Chọn cột điểm để import:</Form.Label>
@@ -437,6 +550,8 @@ const ScoreTable = (props) => {
                                         </Button>
                                     </Form.Group>
                                 </Tab>
+                                
+                                {/* Import Bảng điểm */}
                                 <Tab eventKey="import_score" title="Import bảng điểm">
                                     <Form.Group className="mb-3">
                                         <Form.Label className="fw-bold mb-2">Chọn cột điểm để import:</Form.Label>
@@ -465,6 +580,8 @@ const ScoreTable = (props) => {
                                         <TbDatabaseImport className="mx-1" />Import bảng điểm
                                     </Button>
                                 </Tab>
+                                
+                                {/* Update Bảng điểm */}
                                 <Tab eventKey="update_score" title="Update bảng điểm">
                                     {GradeStructure.map((gradestructure, index) => (
                                         <div key={index}>
@@ -544,6 +661,13 @@ const ScoreTable = (props) => {
                     </Row>
                 </Modal.Body>
             </Modal>
+
+            <AlertBox
+                show={showAlert}
+                message={message}
+                onHide={handleCancel}
+                onConfirm={handleConfirm}
+            />
         </>
     );
 };
