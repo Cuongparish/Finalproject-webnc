@@ -3,9 +3,9 @@ import axios from "axios";
 const API_URL = "https://finalproject-webnc.vercel.app";
 //const API_URL = "http://localhost:5000";
 
-const GetReview = (idLop, idUser, MaLop) => {
+const GetReview = (idLop, idUser) => {
     return axios
-        .get(`${API_URL}/api/v1/user/review/listReview/${idLop}/${idUser}/${MaLop}`)
+        .get(`${API_URL}/api/v1/user/review/listReview/${idLop}/${idUser}`)
         .then((res) => {
             //console.log("res: ", res);
             return res.data;
@@ -28,7 +28,25 @@ const GetDetailReview = (idUser, idPhucKhao) => {
             //console.log("res: ", res);
             return res.data;
         });
-}
+};
+
+const GetReplies = (idPhucKhao) => {
+    return axios
+        .get(`${API_URL}/api/v1/user/review/listReplies/${idPhucKhao}`)
+        .then((res) => {
+            //console.log("res: ", res);
+            return res.data;
+        });
+};
+
+const SendReply = (idLop, idPhucKhao, idUser, idCotDiem, TraoDoi) => {
+    return axios
+        .post(`${API_URL}/api/v1/user/review/replies/${idLop}/${idPhucKhao}`, {idUser, idCotDiem, TraoDoi})
+        .then((res) => {
+            //console.log("res: ", res);
+            return res.data;
+        });
+};
 
 const LockReview = (idLop, idCotDiem) => {
     return axios
@@ -44,6 +62,8 @@ const ReviewService = {
     CreateReview,
     GetDetailReview,
     LockReview,
+    GetReplies,
+    SendReply,
 };
 
 export default ReviewService;
