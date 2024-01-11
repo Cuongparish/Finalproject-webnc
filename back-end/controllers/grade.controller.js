@@ -510,7 +510,7 @@ const gradeC = {
       const now = DateTime.now();
       for (const user of student) {
         await notifyM.addNotify(
-          req.body.Malop,
+          req.params.idLop,
           NoiDung,
           now,
           user.idUser,
@@ -522,7 +522,7 @@ const gradeC = {
       const { rows: teacher } = await classM.getTeacher_inClass(req.body.malop);
       for (const user of teacher) {
         await notifyM.addNotify(
-          req.body.Malop,
+          req.params.idLop,
           NoiDung,
           now,
           user.idUser,

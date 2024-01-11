@@ -16,7 +16,8 @@ module.exports = {
     const sql = `SELECT
                   tb.*,
                   lh."TenLop",
-                  lh."Phong"
+                  lh."Phong", 
+                  lh."MaLop" as "m_Lop"
               FROM
                   "ThongBao" tb
               JOIN

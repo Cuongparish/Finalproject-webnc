@@ -372,18 +372,19 @@ const reviewC = {
 
       let temp = 0;
       let arridPK = [];
+      let arrReview = [];
       let arrReplies = [];
       let listReview_final = [];
       for (const review of listReview) {
         if (review.idLop == req.params.idLop) {
-          arridPK.push(review);
+          arrReview.push(review);
         }
       }
 
       for (const review of arridPK) {
         for (const content of listContent) {
           if (review.idPhucKhao == content.idPhucKhao) {
-            arridPK.push(review.idPhucKhao);
+            arrReplies.push(review.idPhucKhao);
           }
         }
       }
