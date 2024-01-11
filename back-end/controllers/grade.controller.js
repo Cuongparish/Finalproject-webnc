@@ -118,16 +118,16 @@ const gradeC = {
     if (!req.body.TenCotDiem || !req.body.PhanTramDiem || !req.body.idCotDiem) {
       return res.json({ msg: "Theo dữ liệu req.body" });
     }
-    let AcpPhucKhao = 0;
-    let Khoa = 0;
+    // let AcpPhucKhao = 0;
+    // let Khoa = 0;
     try {
       const { rows } = await gradeM.updatePercentScore_inClass(
         req.body.TenCotDiem,
         req.body.PhanTramDiem,
         req.params.idLop,
         req.body.idCotDiem,
-        Khoa,
-        AcpPhucKhao
+        req.body.Khoa,
+        req.body.AcpPhucKhao
       );
       res.json({ msg: "Cập nhật thành công thành phần điểm", data: rows });
     } catch (error) {
@@ -191,6 +191,7 @@ const gradeC = {
           TenCotDiem: comp.TenCotDiem,
           PhanTramDiem: comp.PhanTramDiem,
           Khoa: comp.Khoa,
+          AcpPhucKhao: comp.AcpPhucKhao
         }));
 
         let final_header = [];

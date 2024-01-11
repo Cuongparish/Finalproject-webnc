@@ -77,7 +77,7 @@ router.get(
 );
 
 // cho phép học sinh xem điểm + phúc khảo 1 thành phần
-router.get(
+router.post(
   "/grade/publicScoreinClass/:idLop",
   gradeController.publicScore_inClass
 );
