@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://finalproject-webnc.vercel.app";
-//const API_URL = "http://localhost:5000";
+// const API_URL = "https://finalproject-webnc.vercel.app";
+const API_URL = "http://localhost:5000";
 
 const GetGradeStructure = (idLop) => {
   return axios
@@ -32,14 +32,21 @@ const DelGradeStructure = (idLop, TenCotDiem) => {
     });
 };
 
-const UpdateGradeStructure = (idLop, TenCotDiem, PhanTramDiem, idCotDiem, Khoa, AcpPhucKhao) => {
+const UpdateGradeStructure = (
+  idLop,
+  TenCotDiem,
+  PhanTramDiem,
+  idCotDiem,
+  Khoa,
+  AcpPhucKhao
+) => {
   return axios
     .put(`${API_URL}/api/v1/user/grade/updatePercentScore/${idLop}`, {
       TenCotDiem,
       PhanTramDiem,
       idCotDiem,
       Khoa,
-      AcpPhucKhao
+      AcpPhucKhao,
     })
     .then((res) => {
       //console.log("res: ", res);
@@ -177,12 +184,15 @@ const ExportToExcel_GradeBoard = async (idLop, type) => {
 
 const PublicGradeBoard = (idLop, idCotDiem, TenCotDiem, PhanTramDiem) => {
   return axios
-    .post(`${API_URL}/api/v1/user/grade/publicScoreinClass/${idLop}`, { idCotDiem, TenCotDiem, PhanTramDiem })
+    .post(`${API_URL}/api/v1/user/grade/publicScoreinClass/${idLop}`, {
+      idCotDiem,
+      TenCotDiem,
+      PhanTramDiem,
+    })
     .then((res) => {
       return res.data;
     });
-}
-
+};
 
 const GradeService = {
   CreateGradeStructure,

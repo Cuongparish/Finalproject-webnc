@@ -291,7 +291,7 @@ module.exports = {
 
   getGrade_Student_inClass: async (idHocSinh, idCotDiem, idLop) => {
     const sql = `
-    SELECT *
+    SELECT "BangDiemThanhPhan"."idCotDiem"
     FROM
     "BangDiemThanhPhan"
     WHERE

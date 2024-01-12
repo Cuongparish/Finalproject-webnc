@@ -163,7 +163,7 @@ const gradeC = {
   getGradesBoard: async (req, res) => {
     try {
       let Key;
-
+      console.log(req.params.idLop);
       const { rows: header } = await gradeM.getPercentScore_inClass(
         req.params.idLop
       );
@@ -191,7 +191,7 @@ const gradeC = {
           TenCotDiem: comp.TenCotDiem,
           PhanTramDiem: comp.PhanTramDiem,
           Khoa: comp.Khoa,
-          AcpPhucKhao: comp.AcpPhucKhao
+          AcpPhucKhao: comp.AcpPhucKhao,
         }));
 
         let final_header = [];
@@ -223,6 +223,7 @@ const gradeC = {
 
         data.push({ msg: "header", data: final_header });
         data.push({ msg: "Grade_Board", data: gradeBoard });
+
         return res.json({ data });
       }
       // bảng điểm của giáo viên
@@ -261,6 +262,7 @@ const gradeC = {
 
         data.push({ msg: "header", data: final_header });
         data.push({ msg: "Grade_Board", data: gradeBoard });
+        console.log(gradeBoard);
         return res.json({ data });
       }
     } catch (error) {
@@ -291,17 +293,34 @@ const gradeC = {
           score.idLop
         );
 
-        //nếu chưa có điểm thì thêm
-        if (!Diem) {
-          await gradeM.inputGrade_Student_inClass(
+        //
+        // if (!Diem) {
+        //   await gradeM.inputGrade_Student_inClass(
+        //     score.idHocSinh,
+        //     score.idCotDiem,
+        //     score.idLop,
+        //     score.Diem
+        //   );
+        //
+        // } else {
+        //   await gradeM.updateGrade_Student_inClass(
+        //     score.idHocSinh,
+        //     score.idCotDiem,
+        //     score.idLop,
+        //     score.Diem
+        //   );
+
+        //sửa điểm hoặc xóa điểm
+        if (Diem.length > 0) {
+          await gradeM.updateGrade_Student_inClass(
             score.idHocSinh,
             score.idCotDiem,
             score.idLop,
             score.Diem
           );
-          //sửa điểm hoặc xóa điểm
+          //nếu chưa có điểm thì thêm
         } else {
-          await gradeM.updateGrade_Student_inClass(
+          await gradeM.inputGrade_Student_inClass(
             score.idHocSinh,
             score.idCotDiem,
             score.idLop,
