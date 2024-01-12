@@ -185,7 +185,12 @@ const TableUser = (props) => {
         e.preventDefault();
 
         // Kiểm tra StudentId mới với danh sách người dùng
-        const isStudentIdDuplicate = AllUser.some(user => user.StudentId === StudentId && user.idUser !== DetailUser.idUser && user.StudentId !== "");
+        const isStudentIdDuplicate = AllUser.some(user => 
+            user.StudentId === StudentId &&
+            user.idUser !== DetailUser.idUser &&
+            user.StudentId !== "" &&
+            user.StudentId !== null
+        );
 
         if (isStudentIdDuplicate) {
             // Nếu StudentId mới trùng lặp với người dùng khác, hiển thị thông báo lỗi và không đóng modal
