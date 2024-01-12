@@ -7,7 +7,6 @@ import { TbDatabaseImport } from "react-icons/tb";
 
 import AlertBox from "./AlertBox";
 
-import AccountService from "../service/account.service";
 import AdminService from "../service/admin.service";
 
 import "../App.css";
@@ -58,8 +57,6 @@ const TableUser = (props) => {
     const [showAlert, setShowAlert] = useState(false);
     const [Message, setMessage] = useState();
 
-    const [UserIdSelect, setUserIdSelect] = useState();
-
     const [Sex, setSex] = useState();
     const [DOB, setDOB] = useState();
     const [Phone, setPhone] = useState();
@@ -70,11 +67,6 @@ const TableUser = (props) => {
 
     const [show_detail, setShowDetail] = useState(false);
     const handleShowDetailClose = () => setShowDetail(false);
-    const handleShowDetailOpen = (idUser) => {
-        //GetDataUser(idUser);
-        setUserIdSelect(idUser);
-        setShowDetail(true);
-    }
 
     const [add_user, setAddUser] = useState(false);
     const handleAddUserClose = () => setAddUser(false);
@@ -82,32 +74,27 @@ const TableUser = (props) => {
 
     const [searchTerm, setSearchTerm] = useState('');
 
-    const GetDataUser = async () => {
-        try {
-            await AccountService.GetAccount(UserIdSelect).then(
-                (res) => {
-                    //console.log(res.data[0]);
-                    setDetailUser(res.data[0]);
-                    const parts = res.data[0].DOB.split('-');
-                    let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                    setDetailUser((prevDetailUser) => ({
-                        ...prevDetailUser,
-                        DOB: formattedDate
-                    }));
-                    setSex(res.data[0].Sex);
-                    setDOB(formattedDate);
-                    setPhone(res.data[0].Phone);
-                    setFullName(res.data[0].FullName);
-                    setStudentId(res.data[0].StudentId);
-                },
-                (err) => {
-                    console.log(err);
-                }
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const handleShowDetailOpen = (idUser) => {
+
+        const userSelect = AllUser.find(user => user.idUser === idUser);
+        setDetailUser(userSelect);
+
+        const parts = userSelect.DOB.split('-');
+        let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+        setDetailUser((prevDetailUser) => ({
+            ...prevDetailUser,
+            DOB: formattedDate
+        }));
+
+        setSex(userSelect.Sex);
+        setDOB(userSelect.DOB);
+        setFullName(userSelect.FullName);
+        setStudentId(userSelect.StudentId);
+        setPhone(userSelect.Phone);
+
+        setShowDetail(true);
+    }
 
     const GetAllUser = async () => {
         try {
@@ -198,20 +185,15 @@ const TableUser = (props) => {
         e.preventDefault();
 
         // Kiểm tra StudentId mới với danh sách người dùng
-        const isStudentIdDuplicate = AllUser.some(user => user.StudentId === StudentId && user.idUser !== DetailUser.idUser);
+        const isStudentIdDuplicate = AllUser.some(user => user.StudentId === StudentId && user.idUser !== DetailUser.idUser && user.StudentId !== "");
 
         if (isStudentIdDuplicate) {
             // Nếu StudentId mới trùng lặp với người dùng khác, hiển thị thông báo lỗi và không đóng modal
             setStudentIdError(true);
             return;
         }
-        
-        if(StudentId === "")
-        {
-            setStudentId(null);
-        }
-        if(DetailUser.idUser === null)
-        {
+
+        if (DetailUser.idUser === null) {
             setShowDetail(false);
             return;
         }
@@ -348,13 +330,6 @@ const TableUser = (props) => {
             //console.log("get user");
         }
     }, [AllUser]);
-
-    useEffect(() => {
-        if(UserIdSelect)
-        {
-            GetDataUser();
-        }
-    }, [UserIdSelect])
 
     return (
         <>

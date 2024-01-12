@@ -491,7 +491,7 @@ const DetailClass = (props) => {
               </Tab>
 
               {/* Màn hình trao đổi */}
-              <Tab eventKey="communication" title="Trao đổi" className="h-100 bg-body-secondary p-2">
+              <Tab eventKey="communication" title="Trao đổi" className="h-100 bg-body-white p-2">
                 {DetailClass && <ListReview user={user} DetailClass={DetailClass}/> }
               </Tab>
             </Tabs>
