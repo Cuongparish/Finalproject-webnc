@@ -284,7 +284,7 @@ const gradeC = {
       return res.json({ msg: "Theo dữ liệu req.body" });
     }
     let AllScore = req.body.Data;
-    //console.log(AllScore);
+    // console.log(AllScore);
     try {
       for (score of AllScore) {
         const { rows: Diem } = await gradeM.getGrade_Student_inClass(

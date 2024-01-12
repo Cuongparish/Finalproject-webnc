@@ -211,7 +211,8 @@ CREATE TABLE IF NOT EXISTS public."NoiDungTraoDoi"
     "idUser" integer NOT NULL,
     "TraoDoi" character varying COLLATE pg_catalog."default" NOT NULL,
     "ThoiGian" timestamp without time zone,
-    CONSTRAINT "NoiDungTraoDoi_pkey" PRIMARY KEY ("idPhucKhao", "idUser"),
+    "idND" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 100 MINVALUE 1 MAXVALUE 99999 CACHE 1 ),
+    CONSTRAINT "NoiDungTraoDoi_pkey" PRIMARY KEY ("idPhucKhao", "idND", "idUser"),
     CONSTRAINT "FK_TraoDoi_PhucKhao" FOREIGN KEY ("idPhucKhao")
         REFERENCES public."PhucKhao" ("idPhucKhao") MATCH SIMPLE
         ON UPDATE NO ACTION

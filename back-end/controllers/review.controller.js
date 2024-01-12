@@ -121,6 +121,8 @@ const reviewC = {
         part1[0].idLop
       );
 
+      console.log(part1);
+      console.log(part2);
       temp = part4[0].Diem;
       data.push({ Diem_hien_tai: temp });
 
@@ -320,8 +322,16 @@ const reviewC = {
           }
         }
 
+        const { rows: teacherRows } = await classM.getTeacher_inClass(idd);
+
+        for (const user of teacherRows) {
+          if (user.idUser == req.body.idUser) {
+            var ten_gv = user.FullName;
+            break;
+          }
+        }
         // thông báo đến học sinh
-        let Notify_NoiDung_Student = `Giáo viên ${ten} đã phản hồi đơn phúc khảo của bạn của cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
+        let Notify_NoiDung_Student = `Giáo viên ${ten_gv} đã phản hồi đơn phúc khảo của bạn của cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
 
         let idPK = null;
         await notifyM.addNotify(
@@ -339,7 +349,7 @@ const reviewC = {
         const { rows: teacherRows } = await classM.getTeacher_inClass(idd);
 
         for (const user of teacherRows) {
-          let Notify_NoiDung_Teacher = `Học sinh ${user.FullName} đã phản hồi đơn phúc khảo, của cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
+          let Notify_NoiDung_Teacher = `Học sinh ${ten} đã phản hồi đơn phúc khảo, của cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
           await notifyM.addNotify(
             req.params.idLop,
             Notify_NoiDung_Teacher,
