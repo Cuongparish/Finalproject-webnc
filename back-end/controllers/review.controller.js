@@ -331,7 +331,7 @@ const reviewC = {
           }
         }
         // thông báo đến học sinh
-        let Notify_NoiDung_Student = `Giáo viên ${ten_gv} đã phản hồi đơn phúc khảo của bạn của cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
+        let Notify_NoiDung_Student = `Giáo viên ${ten_gv} đã phản hồi đơn phúc khảo của bạn tại cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
 
         let idPK = null;
         await notifyM.addNotify(
@@ -349,7 +349,7 @@ const reviewC = {
         const { rows: teacherRows } = await classM.getTeacher_inClass(idd);
 
         for (const user of teacherRows) {
-          let Notify_NoiDung_Teacher = `Học sinh ${ten} đã phản hồi đơn phúc khảo, của cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
+          let Notify_NoiDung_Teacher = `Học sinh ${ten} đã phản hồi đơn phúc khảo, tại cột điểm ${TenCotDiem} của lớp ${NameClass.rows[0].TenLop}`;
           await notifyM.addNotify(
             req.params.idLop,
             Notify_NoiDung_Teacher,

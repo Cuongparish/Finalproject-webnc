@@ -152,7 +152,7 @@ const Profile = (props) => {
               md={{ span: 2, offset: 1 }}
               className="d-flex justify-content-end align-items-center"
             >
-              <Notification />
+              <Notification user={user}/>
 
               <a href="/profile" className="mx-2 btn-member">
                 {user?.FullName}

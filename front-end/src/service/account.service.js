@@ -36,9 +36,17 @@ const UpdateAccount = (
     });
 };
 
+const GetNotification = (idUser) => {
+  return axios.get(`${API_URL}/api/v1/user/notify/${idUser}`).then((res) => {
+    //console.log(res.data.data.rows[0]);
+    return res.data;
+  });
+}
+
 const AccountService = {
   GetAccount,
   UpdateAccount,
+  GetNotification,
 };
 
 export default AccountService;

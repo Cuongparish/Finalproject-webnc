@@ -14,7 +14,6 @@ import ClassService from "../service/class.service";
 
 const Home = (props) => {
     const user = props.user;
-    //console.log(user);
 
     const [TenLop, setTenLop] = useState();
     const [ChuDe, setChuDe] = useState();
@@ -136,7 +135,6 @@ const Home = (props) => {
             // If both arrays are null, set mergedArray to an empty array
             setClasses([]);
         }
-        console.log(Classes);
     }, [TeacherClasses, StudentClasses]);
 
     const [join_show, setJoinShow] = useState(false);
@@ -162,7 +160,7 @@ const Home = (props) => {
                     <h3 className='mb-0'>Grade Management</h3>
                 </Col>
                 <Col xs md={{ span: 2, offset: 1 }} className='d-flex justify-content-end align-items-center'>
-                    <Notification />
+                    <Notification user={user} />
 
                     <Dropdown as={Col}>
                         <Dropdown.Toggle split id="dropdown-split-basic">

@@ -2,12 +2,8 @@ import { React} from "react";
 import { Row, Col, Image, Tabs, Tab } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
 
-
 import AuthService from "../service/auth.service";
-// import AccountService from "../service/account.service";
-// import AdminService from "../service/admin.service";
 
-import Notification from "../components/Notification";
 import TableUser from "../components/TableUser";
 import TableClass from "../components/TableClass";
 
@@ -42,8 +38,6 @@ const AdminManagement = (props) => {
           md={{ span: 2, offset: 1 }}
           className="d-flex justify-content-end align-items-center"
         >
-          <Notification />
-
           <a href="/admin" className="mx-2 btn-member">
             {admin?.FullName}
           </a>
