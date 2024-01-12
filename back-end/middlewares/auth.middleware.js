@@ -21,12 +21,17 @@ passport.use(
       const user = profile._json;
       if (user) {
         const finduser = await socialUser.getbyEmail(user.email);
-        console.log(finduser);
+        
         if (finduser.rows.length === 0) {
-          socialUser.addUser(user.email);
+          socialUser.addUser(user.email, user.name);
+          const newuser = await socialUser.getbyEmail(user.email);
+
+          callback(null, newuser);
+          return;
         }
+
+        callback(null, finduser);
       }
-      callback(null, profile);
     }
   )
 );

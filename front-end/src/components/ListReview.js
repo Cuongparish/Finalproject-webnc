@@ -29,29 +29,44 @@ const ListReview = (props) => {
     const GetDataReview = async () => {
         try {
             await ReviewService.GetReview(DetailClass.idLop, user.idUser).then(
-              (res) => {
-                console.log(res);
-                if (res.data) {
-                    setListReviewData(res.data);
+                (res) => {
+                    //console.log(res);
+                    if (res.data) {
+                        setListReviewData(res.data);
+                    }
+                },
+                (error) => {
+                    console.log(error);
                 }
-              },
-              (error) => {
-                console.log(error);
-              }
             );
-          } catch (err) {
+        } catch (err) {
             console.log(err);
-          }
+        }
     }
 
     useEffect(() => {
         GetDataReview();
-      }, [user]);
+    }, [user]);
+
+    useEffect(() => {
+        if (sessionStorage.getItem("idPhucKhao")) {
+            const idPhucKhao = sessionStorage.getItem("idPhucKhao");
+            
+            // Tìm review trong mảng ListReviewData với idPhucKhao tương ứng
+            const foundReview = ListReviewData.find(review => String(review.idPhucKhao) === idPhucKhao);
+
+            if(foundReview)
+            {
+                setReviewClicked(foundReview);
+                setShowDetail(true);
+            }
+        }
+    }, [ListReviewData])
 
     return (
         <>
             {showDetail ? (
-                <DetailReview onClick={handleHideDetail} reviewClicked={ReviewClicked} user={user}/>
+                <DetailReview onClick={handleHideDetail} reviewClicked={ReviewClicked} user={user} />
             ) : (
                 <>
                     {ListReviewData.map((review) => (

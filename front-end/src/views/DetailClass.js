@@ -371,6 +371,7 @@ const DetailClass = (props) => {
                     gradestructure={DataGradeStructure}
                     liststudent={StudentInClass}
                     user={user}
+                    detailclass={DetailClass}
                   />
                 ) : (<ScoreTable_Student
                   gradestructure={DataGradeStructure}

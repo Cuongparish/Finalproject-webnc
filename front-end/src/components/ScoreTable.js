@@ -16,8 +16,8 @@ const ScoreTable = (props) => {
     //const GradeStructures = props.gradestructure;
     //const ListStudent = props.liststudent;
     const user = props.user;
-    const ListStudent = props.liststudent
-
+    const ListStudent = props.liststudent;
+    const DetailClass = props.detailclass;
     const GradeStructures = props.gradestructure;
 
     const [showAlert, setShowAlert] = useState(false);
@@ -73,7 +73,6 @@ const ScoreTable = (props) => {
             await GradeService.GetGradeBoard(GradeStructures[0].idLop, user.idUser).then(
                 (res) => {
                     if (res.data) {
-                        console.log(res.data[1].data);
                         if (res.data && res.data[1]?.data) {
                             setListStudentHaveScore(res.data[1].data);
                         }
@@ -121,7 +120,6 @@ const ScoreTable = (props) => {
         try {
             await GradeService.InputGradeStudent(GradeBoard).then(
                 (res) => {
-                    //console.log("res:", res);
                     sessionStorage.setItem("Tab", "score");
                     window.location.reload();
                 },
@@ -322,9 +320,9 @@ const ScoreTable = (props) => {
                     selectedGradeStructure.idLop,
                     selectedGradeStructure.idCotDiem,
                     selectedGradeStructure.TenCotDiem,
-                    selectedGradeStructure.PhanTramDiem).then(
+                    selectedGradeStructure.PhanTramDiem,
+                    DetailClass.MaLop).then(
                         (res) => {
-                            //console.log("res:", res);
                             if (res.msg === "Đã công bố thành công và được phép phúc khảo thành phần điểm") {
                                 setMessage("Public điểm thành công");
                                 setShowAlert(true);
@@ -345,8 +343,8 @@ const ScoreTable = (props) => {
                     selectedGradeStructure.idLop,
                     selectedGradeStructure.idCotDiem).then(
                         (res) => {
-                            //console.log("res:", res);
-                            if (res.msg === "Cập nhật không cho phúc khảo nữa") {
+                            console.log("res:", res);
+                            if (res.msg === "cập nhật không cho phúc khảo nữa") {
                                 setMessage("Bạn đã khóa phúc khảo");
                                 setShowAlert(true);
                             }
