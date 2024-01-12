@@ -49,7 +49,7 @@ module.exports = {
 
     let number = 0;
     for (const score of percentScores) {
-      console.log(score);
+      //console.log(score);
       const { rows } = await postgre.query(
         'INSERT INTO public."CotDiem"("idLop", "TenCotDiem", "PhanTramDiem", "Khoa", "AcpPhucKhao") VALUES ($1, $2, $3, $4, $5) RETURNING *;',
         [req.params.idLop, score.TenCotDiem, score.PhanTramDiem, number, number]

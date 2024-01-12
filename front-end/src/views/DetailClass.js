@@ -94,6 +94,7 @@ const DetailClass = (props) => {
             <Form.Control
               id={`add_score_percentage_0`}
               type="number"
+              step={0}
               placeholder="5%"
             //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
             />
@@ -213,6 +214,7 @@ const DetailClass = (props) => {
   const saveDataGradeStructure = () => {
     setDataGradeStructure(
       GradeStructure.map((item, index) => ({
+        idLop: DetailClass.idLop,
         TenCotDiem: document.getElementById(`add_score_${index}`).value,
         PhanTramDiem: document.getElementById(`add_score_percentage_${index}`).value,
         Khoa: 0,

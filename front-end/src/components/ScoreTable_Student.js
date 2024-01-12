@@ -175,7 +175,7 @@ const ScoreTable_Student = (props) => {
                             <FloatingLabel label="Cột điểm có thể phúc khảo" className="mb-3">
                                 <Form.Select
                                     className="border-2 border-black"
-                                    value={SelectGradeColumn.TenCotDiem}
+                                    value={SelectGradeColumn?.TenCotDiem}
                                     onChange={(e) => {
                                         const GradeIndex = GradeStructuresPublic.findIndex(
                                             GradeStructure => GradeStructure.TenCotDiem === e.target.value
@@ -190,7 +190,7 @@ const ScoreTable_Student = (props) => {
                                     {GradeStructuresPublic
                                         .filter((GradeStructure) => GradeStructure.AcpPhucKhao === 1)
                                         .map((GradeStructure, index) => (
-                                            <option key={index}>{GradeStructure.TenCotDiem}</option>
+                                            <option key={index}>{GradeStructure?.TenCotDiem}</option>
                                         ))}
                                 </Form.Select>
                             </FloatingLabel>

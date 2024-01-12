@@ -163,7 +163,7 @@ const gradeC = {
   getGradesBoard: async (req, res) => {
     try {
       let Key;
-      console.log(req.params.idLop);
+      //console.log(req.params.idLop);
       const { rows: header } = await gradeM.getPercentScore_inClass(
         req.params.idLop
       );
@@ -221,7 +221,7 @@ const gradeC = {
           sum = 0;
         }
 
-        data.push({ msg: "header", data: final_header });
+        data.push({ msg: "header_hocsinh", data: final_header });
         data.push({ msg: "Grade_Board", data: gradeBoard });
 
         return res.json({ data });
@@ -262,7 +262,7 @@ const gradeC = {
 
         data.push({ msg: "header", data: final_header });
         data.push({ msg: "Grade_Board", data: gradeBoard });
-        console.log(gradeBoard);
+        //console.log(gradeBoard);
         return res.json({ data });
       }
     } catch (error) {
@@ -284,7 +284,7 @@ const gradeC = {
       return res.json({ msg: "Theo dữ liệu req.body" });
     }
     let AllScore = req.body.Data;
-    console.log(AllScore);
+    //console.log(AllScore);
     try {
       for (score of AllScore) {
         const { rows: Diem } = await gradeM.getGrade_Student_inClass(

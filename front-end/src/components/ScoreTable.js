@@ -46,33 +46,6 @@ const ScoreTable = (props) => {
     const [Type, setType] = useState("xlsx");
     const [selectedFile, setSelectedFile] = useState(null);
 
-    const [GradeStructure, setGradeStructure] = useState([
-        <Row key={0} className="mx-2 mb-0 justify-content-center">
-            <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
-                <FloatingLabel
-                    controlId={`add_score_0`}
-                    label="Tên cột điểm"
-                    className="mb-3"
-                >
-                    <Form.Control
-                        id={`add_score_0`}
-                        type="text"
-                        placeholder="Exercise"
-                    //onChange={(event) => handleInputChange(0, 'tencotdiem', event.target.value)}
-                    />
-                </FloatingLabel>
-                <FloatingLabel controlId={`add_score_percentage_0`} label="% cột điểm">
-                    <Form.Control
-                        id={`add_score_percentage_0`}
-                        type="number"
-                        placeholder="5%"
-                    //onChange={(event) => handleInputChange(0, 'phantramdiem', event.target.value)}
-                    />
-                </FloatingLabel>
-            </Card>
-        </Row>,
-    ]);
-
     const handleConfirm = () => {
         // Xử lý khi nút xác nhận được nhấn
         setShowAlert(false); // Đóng box thông báo sau khi xác nhận
@@ -96,6 +69,7 @@ const ScoreTable = (props) => {
             await GradeService.GetGradeBoard(GradeStructures[0].idLop, user.idUser).then(
                 (res) => {
                     if (res.data) {
+                        console.log(res.data[1].data);
                         if (res.data && res.data[1]?.data) {
                             setListStudentHaveScore(res.data[1].data);
                         }
@@ -309,46 +283,46 @@ const ScoreTable = (props) => {
 
 
     //-----------------------------------------Tạo grade structure
-    const addGradeStructure = () => {
-        const newGradeStructure = (
-            <Row key={0} className="mx-2 mb-0 justify-content-center">
-                <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
-                    <FloatingLabel
-                        controlId={`add_score_${GradeStructure.length}`}
-                        label="Tên cột điểm"
-                        className="mb-3"
-                    >
-                        <Form.Control
-                            id={`add_score_${GradeStructure.length}`}
-                            type="text"
-                            placeholder="Exercise"
-                        // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
-                        />
-                    </FloatingLabel>
-                    <FloatingLabel
-                        controlId={`add_score_percentage_${GradeStructure.length}`}
-                        label="% cột điểm"
-                    >
-                        <Form.Control
-                            id={`add_score_percentage_${GradeStructure.length}`}
-                            type="number"
-                            placeholder="5%"
-                        // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
-                        />
-                    </FloatingLabel>
-                </Card>
-            </Row>
-        );
+    // const addGradeStructure = () => {
+    //     const newGradeStructure = (
+    //         <Row key={0} className="mx-2 mb-0 justify-content-center">
+    //             <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
+    //                 <FloatingLabel
+    //                     controlId={`add_score_${GradeStructure.length}`}
+    //                     label="Tên cột điểm"
+    //                     className="mb-3"
+    //                 >
+    //                     <Form.Control
+    //                         id={`add_score_${GradeStructure.length}`}
+    //                         type="text"
+    //                         placeholder="Exercise"
+    //                     // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
+    //                     />
+    //                 </FloatingLabel>
+    //                 <FloatingLabel
+    //                     controlId={`add_score_percentage_${GradeStructure.length}`}
+    //                     label="% cột điểm"
+    //                 >
+    //                     <Form.Control
+    //                         id={`add_score_percentage_${GradeStructure.length}`}
+    //                         type="number"
+    //                         placeholder="5%"
+    //                     // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
+    //                     />
+    //                 </FloatingLabel>
+    //             </Card>
+    //         </Row>
+    //     );
 
-        setGradeStructure([...GradeStructure, newGradeStructure]);
-    };
+    //     setGradeStructure([...GradeStructure, newGradeStructure]);
+    // };
 
-    const RemoveGradeStructure = (indexToRemove) => {
-        const updatedGradeStructure = GradeStructure.filter(
-            (_, index) => index !== indexToRemove
-        );
-        setGradeStructure(updatedGradeStructure);
-    };
+    // const RemoveGradeStructure = (indexToRemove) => {
+    //     const updatedGradeStructure = GradeStructure.filter(
+    //         (_, index) => index !== indexToRemove
+    //     );
+    //     setGradeStructure(updatedGradeStructure);
+    // };
 
 
     useEffect(() => {
@@ -517,7 +491,7 @@ const ScoreTable = (props) => {
                                 {/* Export Bảng điểm */}
                                 <Tab eventKey="export_score" title="Export bảng điểm">
                                     <Form.Group className="mb-3">
-                                        <Form.Label className="fw-bold mb-2">Chọn cột điểm để import:</Form.Label>
+                                        <Form.Label className="fw-bold mb-2">Chọn cột điểm để export:</Form.Label>
                                         <Form.Select
                                             className="border-2 border-black"
                                             value={SelectGradeColumn}
@@ -563,7 +537,6 @@ const ScoreTable = (props) => {
                                             {GradeStructures?.map((GradeStructure, index) => (
                                                 <option>{GradeStructure.TenCotDiem}</option>
                                             ))}
-                                            <option>Tất Cả</option>
                                         </Form.Select>
                                     </Form.Group>
 
@@ -583,7 +556,7 @@ const ScoreTable = (props) => {
                                 
                                 {/* Update Bảng điểm */}
                                 <Tab eventKey="update_score" title="Update bảng điểm">
-                                    {GradeStructure.map((gradestructure, index) => (
+                                    {/* {GradeStructure.map((gradestructure, index) => (
                                         <div key={index}>
                                             {gradestructure}
                                             <Row className="mx-2 mb-3 justify-content-center">
@@ -654,7 +627,39 @@ const ScoreTable = (props) => {
                                                 Xác nhận
                                             </Button>
                                         </Col>
-                                    </Row>
+                                    </Row> */}
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="fw-bold mb-2">Chọn cột điểm để sửa:</Form.Label>
+                                        <Form.Select
+                                            className="border-2 border-black"
+                                            value={SelectGradeColumn}
+                                            onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                        >
+                                            {GradeStructures?.map((GradeStructure, index) => (
+                                                <option>{GradeStructure.TenCotDiem}</option>
+                                            ))}
+                                        </Form.Select>
+                                    </Form.Group>
+
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="fw-bold mb-2">Tên cột điểm</Form.Label>
+                                        <Form.Control
+                                            defaultValue={Type}
+                                            onChange={(e) => setType(e.target.value)}
+                                            className="border-2 border-black mb-3"
+                                        >
+                                            <option>xlsx</option>
+                                            <option>csv</option>
+                                        </Form.Control>
+
+                                        <Button
+                                            className="border-2 border-black mb-3"
+                                            variant="success"
+                                            onClick={handleDownloadGradeBoard}
+                                        >
+                                            <TbDatabaseExport className="mx-1" />Export bảng điểm
+                                        </Button>
+                                    </Form.Group>
                                 </Tab>
                             </Tabs>
                         </Card>

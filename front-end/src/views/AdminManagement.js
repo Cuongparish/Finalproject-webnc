@@ -44,7 +44,7 @@ const AdminManagement = (props) => {
         >
           <Notification />
 
-          <a href="/profile" className="mx-2 btn-member">
+          <a href="/admin" className="mx-2 btn-member">
             {admin?.FullName}
           </a>
           <a
