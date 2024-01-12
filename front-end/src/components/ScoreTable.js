@@ -34,7 +34,7 @@ const ScoreTable = (props) => {
     const [ListStudentHaveScore, setListStudentHaveScore] = useState([]);
 
     const [TotalPercent, setTotalPercent] = useState(0);
-    const [SelectGradeColumn, setSelectGradeColumn] = useState(GradeStructures[0].TenCotDiem);
+    const [SelectGradeColumn, setSelectGradeColumn] = useState(GradeStructures[0]);
 
     const [SelectPublic, setSelectPublic] = useState(GradeStructures[0].Khoa === 0 ? "Ẩn" : "Công bố");
     const [SelectReview, setSelectReview] = useState(GradeStructures[0].AcpPhucKhao === 0 ? "Khóa phúc khảo" : "Cho phúc khảo");
@@ -45,6 +45,10 @@ const ScoreTable = (props) => {
 
     const [Type, setType] = useState("xlsx");
     const [selectedFile, setSelectedFile] = useState(null);
+
+    const [Action, setAction] = useState("Cập nhật")
+    const [NewNameGradeColumn, setNewNameGradeColumn] = useState(SelectGradeColumn.TenCotDiem);
+    const [NewPercentScore, setNewPercentScore] = useState(SelectGradeColumn.PhanTramDiem);
 
     const handleConfirm = () => {
         // Xử lý khi nút xác nhận được nhấn
@@ -83,6 +87,11 @@ const ScoreTable = (props) => {
             console.log(err);
         }
     }
+
+    const defaultGrades = ListStudent?.map((Student) => {
+        const studentWithScore = ListStudentHaveScore.find(item => item.StudentId === Student.StudentId);
+        return studentWithScore ? studentWithScore.Diem : GradeStructures.map(() => '');
+    });
 
     const handleGradeChange = (grade, idHocSinh, idCotDiem, idLop) => {
         // Tìm xem mục cho học sinh và tiêu chí này có tồn tại trong GradeBoard không
@@ -127,7 +136,7 @@ const ScoreTable = (props) => {
 
     const handleDownloadGradeBoard = async () => {
         try {
-            if (SelectGradeColumn === "Tất Cả") {
+            if (SelectGradeColumn.TenCotDiem === "Tất Cả") {
                 const blobData = await GradeService.ExportToExcel_GradeBoard(
                     GradeStructures[0].idLop,
                     Type
@@ -147,7 +156,7 @@ const ScoreTable = (props) => {
             else {
                 const blobData = await GradeService.ExportToExcel_GradeColumn(
                     GradeStructures[0].idLop,
-                    SelectGradeColumn,
+                    SelectGradeColumn.TenCotDiem,
                     Type
                 );
                 //console.log(blobData);
@@ -155,7 +164,7 @@ const ScoreTable = (props) => {
 
                 const link = document.createElement("a");
                 link.href = url;
-                link.setAttribute("download", `Bảng Điểm Cột ${SelectGradeColumn}.${Type}`); // Đặt tên file
+                link.setAttribute("download", `Bảng Điểm Cột ${SelectGradeColumn.TenCotDiem}.${Type}`); // Đặt tên file
                 document.body.appendChild(link);
 
                 link.click();
@@ -168,17 +177,24 @@ const ScoreTable = (props) => {
         }
     };
 
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
     const handleUploadGradeBoard = async () => {
         if (selectedFile) {
             const formData = new FormData();
             formData.append("file", selectedFile);
 
+            console.log(SelectGradeColumn.idLop, SelectGradeColumn.TenCotDiem)
+
             const res = await GradeService.ImportToExcel_GradeColumn(
-                GradeStructures[0].idLop,
-                SelectGradeColumn,
+                SelectGradeColumn.idLop,
+                SelectGradeColumn.TenCotDiem,
                 formData
             );
-            if (res === "File uploaded successfully!") {
+            //console.log(res);
+            if (res.msg === "File uploaded successfully!") {
                 sessionStorage.setItem("Tab", "score");
                 window.location.reload();
             }
@@ -187,14 +203,78 @@ const ScoreTable = (props) => {
         }
     };
 
-    const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]);
-    };
+    const handleUpdateGradeBoard = async () => {
+        if (Action === "Cập nhật") {
+            try {
+                await GradeService.UpdateGradeStructure(
+                    SelectGradeColumn.idLop,
+                    NewNameGradeColumn,
+                    NewPercentScore,
+                    SelectGradeColumn.idCotDiem,
+                    SelectGradeColumn.Khoa,
+                    SelectGradeColumn.AcpPhucKhao).then(
+                        (res) => {
+                            sessionStorage.setItem("Tab", "score");
+                            window.location.reload();
+                        },
+                        (err) => {
+                            console.log(err);
+                        }
+                    );
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else if (Action === "Xóa") {
+            const GradeIndex = GradeStructures.findIndex( GradeStructure => GradeStructure.TenCotDiem === SelectGradeColumn.TenCotDiem )
+            const StudentGrade = defaultGrades[0][GradeIndex];
+            if(StudentGrade)
+            {
+                setMessage("Cột điểm đã chấm, không thể xóa !!!");
+                setShowAlert(true);
+            }
+            else
+            {
+                try {
+                    await GradeService.DelGradeStructure(SelectGradeColumn.idLop, SelectGradeColumn.TenCotDiem).then(
+                            (res) => {
+                                //console.log(res);
+                                sessionStorage.setItem("Tab", "score");
+                                window.location.reload();
+                            },
+                            (err) => {
+                                console.log(err);
+                            }
+                        );
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        else if (Action === "Thêm mới") {
+            const Data = {
+                TenCotDiem: NewNameGradeColumn,
+                PhanTramDiem: NewPercentScore
+            }
 
-    const defaultGrades = ListStudent?.map((Student) => {
-        const studentWithScore = ListStudentHaveScore.find(item => item.StudentId === Student.StudentId);
-        return studentWithScore ? studentWithScore.Diem : GradeStructures.map(() => '');
-    });
+            const ArrData = [];
+            ArrData.push(Data);
+
+            try {
+                await GradeService.CreateGradeStructure(GradeStructures[0].idLop, ArrData).then(
+                        (res) => {
+                            sessionStorage.setItem("Tab", "score");
+                            window.location.reload();
+                        },
+                        (err) => {
+                            console.log(err);
+                        }
+                    );
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 
     const handleGradeColumnChange = (selectedGradeColumn) => {
         // Tìm GradeStructure tương ứng với cột điểm được chọn
@@ -205,7 +285,7 @@ const ScoreTable = (props) => {
         setSelectReview(selectedGradeStructure.AcpPhucKhao === 0 ? "Khóa phúc khảo" : "Cho phúc khảo");
 
         // Cập nhật giá trị của SelectGradeColumn
-        setSelectGradeColumn(selectedGradeColumn);
+        setSelectGradeColumn(selectedGradeStructure);
     };
 
     const handleGradePublicChange = (selectedGradePublic) => {
@@ -233,7 +313,7 @@ const ScoreTable = (props) => {
         const Khoa = SelectPublic === "Ẩn" ? 0 : 1;
         const AcpPhucKhao = SelectReview === "Khóa phúc khảo" ? 0 : 1;
 
-        const selectedGradeStructure = GradeStructures.find(grade => grade.TenCotDiem === SelectGradeColumn);
+        const selectedGradeStructure = GradeStructures.find(grade => grade.TenCotDiem === SelectGradeColumn.TenCotDiem);
 
         if (Khoa === 1 && AcpPhucKhao === 1) {
             //Xử lý public điểm
@@ -280,50 +360,6 @@ const ScoreTable = (props) => {
             }
         }
     }
-
-
-    //-----------------------------------------Tạo grade structure
-    // const addGradeStructure = () => {
-    //     const newGradeStructure = (
-    //         <Row key={0} className="mx-2 mb-0 justify-content-center">
-    //             <Card className="p-2" style={{ borderRadius: "10px 10px 0 0" }}>
-    //                 <FloatingLabel
-    //                     controlId={`add_score_${GradeStructure.length}`}
-    //                     label="Tên cột điểm"
-    //                     className="mb-3"
-    //                 >
-    //                     <Form.Control
-    //                         id={`add_score_${GradeStructure.length}`}
-    //                         type="text"
-    //                         placeholder="Exercise"
-    //                     // onChange={(event) => handleInputChange(GradeStructure.length, 'tencotdiem', event.target.value)}
-    //                     />
-    //                 </FloatingLabel>
-    //                 <FloatingLabel
-    //                     controlId={`add_score_percentage_${GradeStructure.length}`}
-    //                     label="% cột điểm"
-    //                 >
-    //                     <Form.Control
-    //                         id={`add_score_percentage_${GradeStructure.length}`}
-    //                         type="number"
-    //                         placeholder="5%"
-    //                     // onChange={(event) => handleInputChange(GradeStructure.length, 'phantramdiem', event.target.value)}
-    //                     />
-    //                 </FloatingLabel>
-    //             </Card>
-    //         </Row>
-    //     );
-
-    //     setGradeStructure([...GradeStructure, newGradeStructure]);
-    // };
-
-    // const RemoveGradeStructure = (indexToRemove) => {
-    //     const updatedGradeStructure = GradeStructure.filter(
-    //         (_, index) => index !== indexToRemove
-    //     );
-    //     setGradeStructure(updatedGradeStructure);
-    // };
-
 
     useEffect(() => {
         CaculateTotalPercent();
@@ -433,11 +469,11 @@ const ScoreTable = (props) => {
                             <FloatingLabel controlId="name_score" label="Tên cột điểm" className="mb-3">
                                 <Form.Select
                                     className="border-2 border-black"
-                                    value={SelectGradeColumn}
+                                    value={SelectGradeColumn?.TenCotDiem}
                                     onChange={(e) => handleGradeColumnChange(e.target.value)}
                                 >
                                     {GradeStructures?.map((GradeStructure, index) => (
-                                        <option>{GradeStructure.TenCotDiem}</option>
+                                        <option>{GradeStructure?.TenCotDiem}</option>
                                     ))}
                                 </Form.Select>
                             </FloatingLabel>
@@ -494,11 +530,21 @@ const ScoreTable = (props) => {
                                         <Form.Label className="fw-bold mb-2">Chọn cột điểm để export:</Form.Label>
                                         <Form.Select
                                             className="border-2 border-black"
-                                            value={SelectGradeColumn}
-                                            onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                            value={SelectGradeColumn?.TenCotDiem}
+                                            onChange={(e) => {
+                                                if (e.target.value === "Tất Cả") {
+                                                    setSelectGradeColumn({ TenCotDiem: "Tất Cả" });
+                                                }
+                                                else {
+                                                    const GradeColumn = GradeStructures.find(
+                                                        GradeStructure => GradeStructure.TenCotDiem === e.target.value
+                                                    );
+                                                    setSelectGradeColumn(GradeColumn);
+                                                }
+                                            }}
                                         >
                                             {GradeStructures?.map((GradeStructure, index) => (
-                                                <option>{GradeStructure.TenCotDiem}</option>
+                                                <option>{GradeStructure?.TenCotDiem}</option>
                                             ))}
                                             <option>Tất Cả</option>
                                         </Form.Select>
@@ -524,141 +570,102 @@ const ScoreTable = (props) => {
                                         </Button>
                                     </Form.Group>
                                 </Tab>
-                                
+
                                 {/* Import Bảng điểm */}
                                 <Tab eventKey="import_score" title="Import bảng điểm">
                                     <Form.Group className="mb-3">
                                         <Form.Label className="fw-bold mb-2">Chọn cột điểm để import:</Form.Label>
                                         <Form.Select
                                             className="border-2 border-black"
-                                            value={SelectGradeColumn}
-                                            onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                            value={SelectGradeColumn?.TenCotDiem}
+                                            onChange={(e) => {
+                                                const GradeColumn = GradeStructures.find(
+                                                    GradeStructure => GradeStructure.TenCotDiem === e.target.value
+                                                );
+                                                setSelectGradeColumn(GradeColumn);
+                                            }}
                                         >
                                             {GradeStructures?.map((GradeStructure, index) => (
-                                                <option>{GradeStructure.TenCotDiem}</option>
+                                                <option>{GradeStructure?.TenCotDiem}</option>
                                             ))}
                                         </Form.Select>
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
                                         <Form.Label className="fw-bold mb-2">Input file:</Form.Label>
-                                        <Form.Control type="file" className="border-2 border-black" />
+                                        <Form.Control type="file" className="border-2 border-black" onChange={handleFileChange} />
                                     </Form.Group>
 
                                     <Button
                                         className="border-2 border-black mb-3"
                                         variant="warning"
-                                    // onClick={handleDownloadGradeBoard}
+                                        onClick={handleUploadGradeBoard}
                                     >
                                         <TbDatabaseImport className="mx-1" />Import bảng điểm
                                     </Button>
                                 </Tab>
-                                
+
                                 {/* Update Bảng điểm */}
                                 <Tab eventKey="update_score" title="Update bảng điểm">
-                                    {/* {GradeStructure.map((gradestructure, index) => (
-                                        <div key={index}>
-                                            {gradestructure}
-                                            <Row className="mx-2 mb-3 justify-content-center">
-                                                <Button
-                                                    variant="danger"
-                                                    size="sm"
-                                                    onClick={() => RemoveGradeStructure(index)}
-                                                    style={{
-                                                        borderRadius: "0 0 10px 10px",
-                                                        width: "100%",
-                                                        height: "40px",
-                                                        fontSize: "24px",
-                                                        lineHeight: "24px",
-                                                        fontWeight: "bold",
-                                                        boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
-                                                        display: "inline-flex",
-                                                        justifyContent: "center",
-                                                        alignItems: "center",
-                                                        cursor: "pointer",
-                                                    }}
-                                                >
-                                                    -
-                                                </Button>
-                                            </Row>
-                                        </div> // Wrap in a container like div
-                                    ))}
-
-                                    <Row className="mb-3 justify-content-center">
-                                        <Col xs={12} className="text-center">
-                                            <Button
-                                                variant="primary"
-                                                size="sm"
-                                                onClick={addGradeStructure}
-                                                style={{
-                                                    borderRadius: "50%",
-                                                    width: "40px",
-                                                    height: "40px",
-                                                    fontSize: "24px",
-                                                    lineHeight: "24px",
-                                                    fontWeight: "bold",
-                                                    boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
-                                                    display: "inline-flex",
-                                                    justifyContent: "center",
-                                                    alignItems: "center",
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                +
-                                            </Button>
-                                        </Col>
-                                    </Row>
-
-                                    <Row className="mx-2 mb-3 justify-content-end">
-                                        <Col xs={2} className="p-0 text-center">
-                                            <Button
-                                                variant="success"
-                                                size="sm"
-                                                // onClick={addGradeStructure}
-                                                style={{
-                                                    width: "100%",
-                                                    height: "40px",
-                                                    fontSize: "18px",
-                                                    justifyContent: "center",
-                                                    alignItems: "center",
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                Xác nhận
-                                            </Button>
-                                        </Col>
-                                    </Row> */}
                                     <Form.Group className="mb-3">
-                                        <Form.Label className="fw-bold mb-2">Chọn cột điểm để sửa:</Form.Label>
+                                        <Form.Label className="fw-bold mb-2">Chọn cột điểm để cập nhật:</Form.Label>
                                         <Form.Select
-                                            className="border-2 border-black"
-                                            value={SelectGradeColumn}
-                                            onChange={(e) => setSelectGradeColumn(e.target.value)}
+                                            disabled={Action === "Thêm mới"}
+                                            className="border-2 border-black mb-3"
+                                            value={SelectGradeColumn?.TenCotDiem}
+                                            onChange={(e) => {
+                                                const GradeColumn = GradeStructures.find(
+                                                    GradeStructure => GradeStructure.TenCotDiem === e.target.value
+                                                );
+                                                setSelectGradeColumn(GradeColumn);
+                                            }}
                                         >
                                             {GradeStructures?.map((GradeStructure, index) => (
-                                                <option>{GradeStructure.TenCotDiem}</option>
+                                                <option>{GradeStructure?.TenCotDiem}</option>
                                             ))}
+                                        </Form.Select>
+
+                                        <Form.Label className="fw-bold mb-2">Chọn hoạt động:</Form.Label>
+                                        <Form.Select
+                                            className="border-2 border-black mb-3"
+                                            defaultValue={Action}
+                                            onChange={(e) => setAction(e.target.value)}
+                                        >
+                                            <option>Cập nhật</option>
+                                            <option>Xóa</option>
+                                            <option>Thêm mới</option>
                                         </Form.Select>
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
-                                        <Form.Label className="fw-bold mb-2">Tên cột điểm</Form.Label>
+                                        <Form.Label className="fw-bold mb-2">Tên cột điểm mới: </Form.Label>
                                         <Form.Control
-                                            defaultValue={Type}
-                                            onChange={(e) => setType(e.target.value)}
+                                            disabled={Action === "Xóa"}
+                                            id="newname"
+                                            type="text"
+                                            placeholder={SelectGradeColumn?.TenCotDiem}
+                                            onChange={(e) => setNewNameGradeColumn(e.target.value)}
                                             className="border-2 border-black mb-3"
-                                        >
-                                            <option>xlsx</option>
-                                            <option>csv</option>
-                                        </Form.Control>
+                                        />
+
+                                        <Form.Label className="fw-bold mb-2">Phần trăm điểm mới: </Form.Label>
+                                        <Form.Control
+                                            disabled={Action === "Xóa"}
+                                            id="newpercent"
+                                            type="text"
+                                            placeholder={SelectGradeColumn?.PhanTramDiem}
+                                            onChange={(e) => setNewPercentScore(e.target.value)}
+                                            className="border-2 border-black mb-3"
+                                        />
 
                                         <Button
                                             className="border-2 border-black mb-3"
                                             variant="success"
-                                            onClick={handleDownloadGradeBoard}
+                                            onClick={handleUpdateGradeBoard}
                                         >
-                                            <TbDatabaseExport className="mx-1" />Export bảng điểm
+                                            <TbDatabaseExport className="mx-1" />Cập nhật
                                         </Button>
+                                        <p>Lưu ý: Vui lòng nhập đầy đủ thông tin</p>
                                     </Form.Group>
                                 </Tab>
                             </Tabs>

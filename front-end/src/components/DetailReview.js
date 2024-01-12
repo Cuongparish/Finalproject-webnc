@@ -59,11 +59,19 @@ const DetailReview = (props) => {
     }
 
     const handleSendReply = async () => {
-        console.log(Content);
         try {
+            const newReply = {
+                FullName: user.FullName, // Đã có object user trong đó có fullname
+                ThoiGian: new Date(), // Ngày giờ hiện tại
+                TraoDoi: Content // Lấy từ Content
+            };
+
             await ReviewService.SendReply(review.idLop, review.idPhucKhao, user.idUser, review.idCotDiem, Content).then(
                 (res) => {
-                    console.log("res-send-reply: ", res);
+                    if (res) {
+                        setReplies(prevReplies => [...prevReplies, newReply]);
+                        setContent("");
+                    }
                 },
                 (error) => {
                     console.log(error);
@@ -184,6 +192,9 @@ const DetailReview = (props) => {
                             <Form.Control
                                 as="textarea"
                                 placeholder="Viết phản hồi ..."
+                                value={
+                                    Content !== "" ? Content : undefined
+                                }
                                 onChange={(e) => setContent(e.target.value)}
                             />
                             <Button className="my-2 float-end" variant="primary" onClick={handleSendReply}>Gửi</Button>

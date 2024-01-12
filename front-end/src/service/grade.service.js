@@ -23,7 +23,7 @@ const CreateGradeStructure = (idLop, Data) => {
 
 const DelGradeStructure = (idLop, TenCotDiem) => {
   return axios
-    .delete(`${API_URL}/api/v1/user/grade/delPercentScore/${idLop}`, {
+    .post(`${API_URL}/api/v1/user/grade/delPercentScore/${idLop}`, {
       TenCotDiem,
     })
     .then((res) => {
@@ -127,18 +127,16 @@ const ExportToExcel_GradeColumn = async (idLop, TenCotDiem, type) => {
 const ImportToExcel_GradeColumn = async (idLop, TenCotDiem, formData) => {
   try {
     const response = await axios.post(
-      `${API_URL}/api/v1/user/grade/importtoExcel_Score/`,
+      `${API_URL}/api/v1/user/grade/importtoExcel_Score/${idLop}/${TenCotDiem}`,
       formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        idLop,
-        TenCotDiem,
       }
     );
     // Xử lý phản hồi từ server nếu cần
-    console.log("Server response:", response.data);
+    //console.log("Server response:", response.data);
     return response.data;
   } catch (error) {
     // Xử lý lỗi

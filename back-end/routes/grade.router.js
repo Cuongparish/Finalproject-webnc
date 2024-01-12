@@ -21,7 +21,7 @@ router.post(
 );
 
 // xoa 1 thanh phan diem
-router.delete(
+router.post(
   "/grade/delPercentScore/:idLop",
   gradeController.delPercentScore_inClass
 );
@@ -59,7 +59,7 @@ router.get(
 
 //tai len file danh sach diem 1 thanh phan cua tat ca hoc sinh
 router.post(
-  "/grade/importtoExcel_Score/",
+  "/grade/importtoExcel_Score/:idLop/:TenCotDiem",
   upload.single("file"),
   gradeController.importtoExcel_Score
 );

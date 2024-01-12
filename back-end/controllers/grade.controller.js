@@ -293,23 +293,6 @@ const gradeC = {
           score.idLop
         );
 
-        //
-        // if (!Diem) {
-        //   await gradeM.inputGrade_Student_inClass(
-        //     score.idHocSinh,
-        //     score.idCotDiem,
-        //     score.idLop,
-        //     score.Diem
-        //   );
-        //
-        // } else {
-        //   await gradeM.updateGrade_Student_inClass(
-        //     score.idHocSinh,
-        //     score.idCotDiem,
-        //     score.idLop,
-        //     score.Diem
-        //   );
-
         //sửa điểm hoặc xóa điểm
         if (Diem.length > 0) {
           await gradeM.updateGrade_Student_inClass(
@@ -358,8 +341,8 @@ const gradeC = {
     try {
       const { rows } = await gradeM.importtoExcel_Score(
         req.file,
-        req.body.idLop,
-        req.body.TenCotDiem
+        req.params.idLop,
+        req.params.TenCotDiem
       );
       res.json({ msg: "File uploaded successfully!", data: rows });
     } catch (error) {
@@ -370,12 +353,13 @@ const gradeC = {
 
   exporttoExcel_FullScore: async (req, res) => {
     try {
+      const Khoa = 1;
       const { rows: header } = await gradeM.getPercentScore_inClass(
         req.params.idLop
       );
       const { rows: gradeBoard } = await gradeM.getGradesBoard_inClass(
-        req,
-        res
+        req.params.idLop,
+        Khoa
       );
       var data = [];
       let sum = 0;

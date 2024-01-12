@@ -32,7 +32,7 @@ module.exports = {
 
   getPercentScore_inClass: async (idLop) => {
     const { rows } = await postgre.query(
-      'select * from "CotDiem" where "idLop"=$1',
+      'select * from "CotDiem" where "idLop"=$1 order by "idCotDiem" ASC',
       [idLop]
     );
     return { rows };
@@ -384,7 +384,7 @@ module.exports = {
     res.end();
   },
 
-  importtoExcel_Score: async (file, idLop, TenCotDiem, Diem, StudentId) => {
+  importtoExcel_Score: async (file, idLop, TenCotDiem) => {
     const fileBuffer = file.buffer;
     let data = [];
     let data1 = [];
@@ -429,7 +429,6 @@ module.exports = {
             student["Diem"] = column;
           }
         }
-
         data.push(student);
       }
     } else if (fileExtension === "csv") {
@@ -456,7 +455,6 @@ module.exports = {
     }
 
     // In dữ liệu ra console
-    // console.log(data);
     let buggg = [];
     for (const row of data) {
       let rows = await postgre.query(
