@@ -98,8 +98,7 @@ const banAccountC = {
       }
 
       // dùng để unmapping
-      if(id.length > 0)
-      {
+      if (id.length > 0) {
         await banAccountM.changeStateStudentID(
           id[0].idHocSinh,
           req.body.StudentId
@@ -207,7 +206,7 @@ const banAccountC = {
       } else {
         throw new Error("Unsupported file format");
       }
-      await gradeM.importtoExcel_StudentList(data);
+      await banAccountM.mapStudentID(data);
       res.send("File uploaded successfully!");
     } catch (error) {
       console.error(error);
