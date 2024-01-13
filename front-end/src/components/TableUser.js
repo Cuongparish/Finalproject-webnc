@@ -405,18 +405,17 @@ const TableUser = (props) => {
                                 <Form.Control
                                     id="fullname"
                                     type="text"
-                                    defaultValue={DetailUser?.FullName}
+                                    defaultValue={FullName}
                                     onChange={(e) => setFullName(e.target.value)}
                                 />
                             </FloatingLabel>
                             <FloatingLabel controlId="gender" label="Gender" className="mb-3">
                                 <Form.Select
-                                    defaultValue={DetailUser?.Sex}
+                                    defaultValue={Sex}
                                     onChange={(e) => setSex(e.target.value)}
                                 >
                                     <option>Male</option>
                                     <option>Female</option>
-                                    <option>Other</option>
                                 </Form.Select>
                             </FloatingLabel>
                             <FloatingLabel controlId="mail" label="Email" className="mb-3">
@@ -443,7 +442,7 @@ const TableUser = (props) => {
                                 <Form.Control
                                     id="phone"
                                     type="tel"
-                                    defaultValue={DetailUser?.Phone}
+                                    defaultValue={Phone}
                                     onChange={(e) => setPhone(e.target.value)}
                                 />
                             </FloatingLabel>

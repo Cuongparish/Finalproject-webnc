@@ -84,7 +84,6 @@ const banAccountC = {
   changeStateStudentID: async (req, res) => {
     try {
       const id = await banAccountM.getIDHS(req.body.idUser);
-      console.log(id[0].idHocSinh);
 
       // kiểm tra xem StudentId này đã có người sử dụng hay chưa
       const { rows } = await accountM.getAll();
@@ -99,14 +98,16 @@ const banAccountC = {
       }
 
       // dùng để unmapping
-      await banAccountM.changeStateStudentID(
-        id[0].idHocSinh,
-        req.body.StudentId
-      );
-
+      if(id.length > 0)
+      {
+        await banAccountM.changeStateStudentID(
+          id[0].idHocSinh,
+          req.body.StudentId
+        );
+      }
       // dùng để remapping
       await accountM.editUser(
-        req.body.IdUser,
+        req.body.idUser,
         req.body.Email,
         req.body.Pw,
         req.body.FullName,
