@@ -144,7 +144,10 @@ const banAccountC = {
       let sum = 0;
 
       // Kiểm tra định dạng file bằng cách kiểm tra đuôi mở rộng
-      const fileExtension = req.file.originalname.split(".").pop().toLowerCase();
+      const fileExtension = req.file.originalname
+        .split(".")
+        .pop()
+        .toLowerCase();
 
       if (fileExtension === "xlsx") {
         // Sử dụng exceljs để đọc dữ liệu từ file xlsx

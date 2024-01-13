@@ -56,6 +56,32 @@ module.exports = {
     return { rows };
   },
 
+  getidLop_Student_inClass: async (malop) => {
+    const { rows } = await postgre.query(
+      `SELECT "User".*, "HocSinh"."idHocSinh", "HocSinh"."StudentId"
+      FROM "HocSinh"
+      JOIN "HocSinhLopHoc" ON "HocSinh"."idHocSinh" = "HocSinhLopHoc"."idHocSinh"
+      JOIN "LopHoc" ON "HocSinhLopHoc"."idLop" = "LopHoc"."idLop"
+      JOIN "User" ON "HocSinh"."idUser" = "User"."idUser" 
+      WHERE "LopHoc"."idLop" = $1;`,
+      [malop]
+    );
+    return { rows };
+  },
+
+  getidLop_Teacher_inClass: async (malop) => {
+    const { rows } = await postgre.query(
+      `SELECT "User".*
+      FROM "GiaoVien"
+      JOIN "GiaoVienLopHoc" ON "GiaoVien"."idGiaoVien" = "GiaoVienLopHoc"."idGiaoVien"
+      JOIN "LopHoc" ON "GiaoVienLopHoc"."idLop" = "LopHoc"."idLop"
+      JOIN "User" ON "GiaoVien"."idUser" = "User"."idUser" 
+      WHERE "LopHoc"."idLop" = $1;`,
+      [malop]
+    );
+    return { rows };
+  },
+
   getTeacher_inClass: async (malop) => {
     const { rows } = await postgre.query(
       `SELECT "User".*

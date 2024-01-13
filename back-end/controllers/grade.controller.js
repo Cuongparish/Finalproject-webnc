@@ -510,7 +510,9 @@ const gradeC = {
       const NameClass = await classM.getNameClass(req.params.idLop);
       // gửi thông báo đến các học sinh rằng đã có điểm 1 thành phần
       let NoiDung = `Điểm ${req.body.TenCotDiem} của lớp ${NameClass.rows[0].TenLop} đã được công bố `;
-      const { rows: student } = await classM.getStudent_inClass(req.body.malop);
+      const { rows: student } = await classM.getidLop_Student_inClass(
+        req.params.idLop
+      );
       const now = DateTime.now();
       for (const user of student) {
         await notifyM.addNotify(
@@ -523,7 +525,9 @@ const gradeC = {
       }
 
       // gửi thông báo đến các giáo viên còn lại rằng đã có điểm 1 thành phần
-      const { rows: teacher } = await classM.getTeacher_inClass(req.body.malop);
+      const { rows: teacher } = await classM.getidLop_Teacher_inClass(
+        req.params.idLop
+      );
       for (const user of teacher) {
         await notifyM.addNotify(
           req.params.idLop,
