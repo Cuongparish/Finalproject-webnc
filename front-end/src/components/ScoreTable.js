@@ -224,26 +224,24 @@ const ScoreTable = (props) => {
             }
         }
         else if (Action === "Xóa") {
-            const GradeIndex = GradeStructures.findIndex( GradeStructure => GradeStructure.TenCotDiem === SelectGradeColumn.TenCotDiem )
+            const GradeIndex = GradeStructures.findIndex(GradeStructure => GradeStructure.TenCotDiem === SelectGradeColumn.TenCotDiem)
             const StudentGrade = defaultGrades[0][GradeIndex];
-            if(StudentGrade)
-            {
+            if (StudentGrade) {
                 setMessage("Cột điểm đã chấm, không thể xóa !!!");
                 setShowAlert(true);
             }
-            else
-            {
+            else {
                 try {
                     await GradeService.DelGradeStructure(SelectGradeColumn.idLop, SelectGradeColumn.TenCotDiem).then(
-                            (res) => {
-                                //console.log(res);
-                                sessionStorage.setItem("Tab", "score");
-                                window.location.reload();
-                            },
-                            (err) => {
-                                console.log(err);
-                            }
-                        );
+                        (res) => {
+                            //console.log(res);
+                            sessionStorage.setItem("Tab", "score");
+                            window.location.reload();
+                        },
+                        (err) => {
+                            console.log(err);
+                        }
+                    );
                 } catch (error) {
                     console.log(error);
                 }
@@ -260,14 +258,14 @@ const ScoreTable = (props) => {
 
             try {
                 await GradeService.CreateGradeStructure(GradeStructures[0].idLop, ArrData).then(
-                        (res) => {
-                            sessionStorage.setItem("Tab", "score");
-                            window.location.reload();
-                        },
-                        (err) => {
-                            console.log(err);
-                        }
-                    );
+                    (res) => {
+                        sessionStorage.setItem("Tab", "score");
+                        window.location.reload();
+                    },
+                    (err) => {
+                        console.log(err);
+                    }
+                );
             } catch (error) {
                 console.log(error);
             }
@@ -428,7 +426,12 @@ const ScoreTable = (props) => {
                                         {gradeErrors[gradeIndex] && <p style={{ color: 'red' }}>Số điểm không phù hợp</p>}
                                     </td>
                                 ))}
-                                <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{ListStudentHaveScore[studentIndex]?.total}</td>
+                                <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                                    {(() => {
+                                        const student = ListStudentHaveScore.find(item => item.StudentId === Student.StudentId);
+                                        return student && student.total;
+                                    })()}
+                                </td>
                             </tr>
                         ))}
                         {/* data end */}
