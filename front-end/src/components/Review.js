@@ -1,7 +1,5 @@
-import { React, useState, useEffect } from "react";
+import { React } from "react";
 import { Row, Col, Card } from "react-bootstrap";
-
-import DetailReview from "./DetailReview";
 
 import "../App.css";
 

@@ -4,6 +4,8 @@ const classM = require("../models/class.models.js");
 const accountM = require("../models/account.models.js");
 const gradeM = require("../models/grade.models.js");
 const banAccountM = require("../models/banAccount.models.js");
+const excel = require("exceljs");
+const fastcsv = require("fast-csv");
 
 const banAccountC = {
   // --------------------------------user
@@ -143,7 +145,7 @@ const banAccountC = {
       let sum = 0;
 
       // Kiểm tra định dạng file bằng cách kiểm tra đuôi mở rộng
-      const fileExtension = file.originalname.split(".").pop().toLowerCase();
+      const fileExtension = req.file.originalname.split(".").pop().toLowerCase();
 
       if (fileExtension === "xlsx") {
         // Sử dụng exceljs để đọc dữ liệu từ file xlsx

@@ -31,7 +31,7 @@ module.exports = {
                   FROM public."ThongBao"
                   JOIN public."User" ON "ThongBao"."idUser" = "User"."idUser"
                   WHERE "ThongBao"."idPhucKhao" = $1
-                  LIMIT 1;
+                  ORDER BY "ThongBao"."idThongBao" ASC;
                   `;
     const { rows } = await postgre.query(sql, [idPhucKhao]);
     return { rows };

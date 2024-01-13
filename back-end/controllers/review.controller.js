@@ -114,6 +114,7 @@ const reviewC = {
         }
       }
 
+      //console.log(part1, part2);
       // lấy điểm
       const { rows: part4 } = await gradeM.getScore_inClass(
         part2[0].idHocSinh,
@@ -121,8 +122,8 @@ const reviewC = {
         part1[0].idLop
       );
 
-      console.log(part1);
-      console.log(part2);
+      // console.log(part1);
+      // console.log(part2);
       temp = part4[0].Diem;
       data.push({ Diem_hien_tai: temp });
 
@@ -386,6 +387,15 @@ const reviewC = {
       let listReview_final = [];
       let check = false;
 
+      // check role của idUser
+      const { rows: Teacher } = await classM.getIDTeacher(req.params.idLop);
+      let checkRole = false;
+      for (const user of Teacher) {
+        if (user.idUser == req.params.idUser) {
+          checkRole = true;
+        }
+      }
+
       // lọc lấy các đơn phúc khảo của lớp này
       for (let review of listReview) {
         if (review.idLop == req.params.idLop) {
@@ -398,6 +408,9 @@ const reviewC = {
           }
 
           const { rows: userCre } = await reviewM.get_User(review.idPhucKhao);
+
+          // console.log("userCre:", userCre);
+          // console.log(review);
 
           if (check == true) {
             review.TL = "1";
@@ -412,15 +425,6 @@ const reviewC = {
           }
         }
         check = false;
-      }
-
-      // check role của idUser
-      const { rows: Teacher } = await classM.getIDTeacher(req.params.idLop);
-      let checkRole = false;
-      for (const user of Teacher) {
-        if (user.idUser == req.params.idUser) {
-          checkRole = true;
-        }
       }
 
       // nếu là giáo viên

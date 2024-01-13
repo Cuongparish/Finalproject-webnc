@@ -30,7 +30,7 @@ const ListReview = (props) => {
         try {
             await ReviewService.GetReview(DetailClass.idLop, user.idUser).then(
                 (res) => {
-                    //console.log(res);
+                    console.log(res);
                     if (res.data) {
                         setListReviewData(res.data);
                     }

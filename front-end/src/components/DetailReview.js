@@ -26,7 +26,7 @@ const DetailReview = (props) => {
         try {
             await ReviewService.GetDetailReview(review.idUser, review.idPhucKhao).then(
                 (res) => {
-                    console.log("res-detail: ", res);
+                    //console.log("res-detail: ", res);
                     if (res.data) {
                         setDetailReview(res.data);
                     }
@@ -44,7 +44,7 @@ const DetailReview = (props) => {
         try {
             await ReviewService.GetReplies(review.idPhucKhao).then(
                 (res) => {
-                    console.log("res: ", res);
+                    //console.log("res: ", res);
                     if (res.data) {
                         setReplies(res.data);
                     }

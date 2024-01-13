@@ -74,6 +74,8 @@ const TableUser = (props) => {
 
     const [searchTerm, setSearchTerm] = useState('');
 
+    const [selectedFile, setSelectedFile] = useState(null);
+
     const handleShowDetailOpen = (idUser) => {
 
         const userSelect = AllUser.find(user => user.idUser === idUser);
@@ -185,7 +187,7 @@ const TableUser = (props) => {
         e.preventDefault();
 
         // Kiểm tra StudentId mới với danh sách người dùng
-        const isStudentIdDuplicate = AllUser.some(user => 
+        const isStudentIdDuplicate = AllUser.some(user =>
             user.StudentId === StudentId &&
             user.idUser !== DetailUser.idUser &&
             user.StudentId !== "" &&
@@ -229,6 +231,28 @@ const TableUser = (props) => {
             );
         } catch (error) {
             console.log(error)
+        }
+    };
+
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
+    const handleUploadStudentIdList = async () => {
+        if (selectedFile) {
+            //console.log("selectedFiled: ", selectedFile);
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+            //console.log("formdata: ", formData);
+
+            const res = await AdminService.ImportExcel(formData);
+
+            //console.log("File", res);
+            if (res === "File uploaded successfully!") {
+                window.location.reload();
+            }
+        } else {
+            console.log("Please select a file to upload");
         }
     };
 
@@ -349,7 +373,7 @@ const TableUser = (props) => {
                 subHeader
                 subHeaderComponent={
                     <Row className="w-100 d-flex g-0 align-items-center justify-content-between px-2 mb-3">
-                        <Col sm={5}>
+                        <Col sm={3}>
                             <input
                                 type="text"
                                 placeholder="Search email here"
@@ -367,10 +391,20 @@ const TableUser = (props) => {
                             </Button>
                         </Col>
                         <Col sm={2}>
+                            <Form.Group controlId="formFile" className="mb-3">
+                                {/* <Form.Label>Select file to upload:</Form.Label> */}
+                                <Form.Control
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    style={{ width: '300px' }} // Điều chỉnh chiều rộng của input
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={2}>
                             <Button
                                 variant="success"
                                 className="btn d-flex align-items-center justify-content-center text-white btn-upload-user"
-                            // onClick={handleUpload}
+                                onClick={handleUploadStudentIdList}
                             >
                                 <TbDatabaseImport className="mx-2" /> Upload CSV/XLSX
                             </Button>

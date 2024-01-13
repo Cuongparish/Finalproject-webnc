@@ -26,16 +26,7 @@ const UnBanAccount = (idUser) => {
   });
 };
 
-const ManualMapping = (
-  idUser,
-  Email,
-  Pw,
-  FullName,
-  DOB,
-  Sex,
-  Phone,
-  StudentId
-) => {
+const ManualMapping = (idUser, Email, Pw, FullName, DOB, Sex, Phone, StudentId) => {
   return axios
     .put(`${API_URL}/api/v1/user/ban/manualMapID`, {
       idUser,
@@ -52,6 +43,26 @@ const ManualMapping = (
       return res.data;
     });
 };
+
+const ImportExcel = async (formData) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/api/v1/user/ban/manualMapID`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    // Xử lý phản hồi từ server nếu cần
+    //console.log("Server response:", response.data);
+    return response.data;
+  } catch (error) {
+    // Xử lý lỗi
+    console.error("Error uploading file:", error);
+  }
+}
 
 //--------------------------------------------------------------------
 
@@ -85,6 +96,7 @@ const AdminService = {
   ManualMapping,
   GetClass,
   ChangeStateClass,
+  ImportExcel,
 };
 
 export default AdminService;
