@@ -300,16 +300,14 @@ const reviewC = {
 
       // kiểm tra xem idUser nhập nội dung trả lời đơn phúc khảo là hs hay gv của lớp học này
       const studentRows = await classM.getStudent_inClass(idd);
-      // console.log(studentRows);
+
       let hs = false;
       let ten;
-      // console.log(idd);
+
       for (const user of studentRows.rows) {
-        // console.log(user.FullName);
         if (user.idUser == req.body.idUser) {
           hs = true;
           ten = user.FullName;
-          // console.log(user.FullName);
         }
       }
 
@@ -320,6 +318,7 @@ const reviewC = {
         for (const user of notify.rows) {
           if (req.params.idPhucKhao == user.idPhucKhao) {
             var idUser_Cre_Review = user.idUser;
+            break;
           }
         }
 
@@ -328,7 +327,6 @@ const reviewC = {
         for (const user of teacherRows) {
           if (user.idUser == req.body.idUser) {
             var ten_gv = user.FullName;
-            break;
           }
         }
         // thông báo đến học sinh
