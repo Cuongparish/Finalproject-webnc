@@ -46,6 +46,7 @@ const Profile = (props) => {
             setnewuser(() => {
               const partss = DOB.split('-');
               const formatDate = `${partss[2]}-${partss[1]}-${partss[0]}`;
+              newuser.FullName = FullName;
               newuser.DOB = formatDate;
               newuser.Sex = Sex;
               newuser.Phone = Phone;
@@ -92,14 +93,14 @@ const Profile = (props) => {
   const handleConfirm = () => {
     // Xử lý khi nút xác nhận được nhấn
     console.log('Đã xác nhận');
-    //window.location.reload();
+    window.location.reload();
     setShowAlert(false); // Đóng box thông báo sau khi xác nhận
   };
 
   const handleCancel = () => {
     // Xử lý khi nút hủy được nhấn
     console.log('Đã hủy');
-    //window.location.reload();
+    window.location.reload();
     setShowAlert(false); // Đóng box thông báo sau khi hủy
   };
 
